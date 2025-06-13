@@ -3,48 +3,88 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    private SpriteRenderer _spriteRenderer;
+    public float returnSpeed;
+    public Canvas textCanvas;
+    public SpriteRenderer spriteRenderer;
+    
+    private Camera _camera;
+    
+    private bool _isReturning = false;
+    private bool _isDragging = false;
+    private Vector3 _startPosition;
 
     private void Awake()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _camera = Camera.main;
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
+    
+    private void Update()
     {
-        //detectar zona de accion para jugar carta
+        if (_isReturning)
+        {
+            ReturnStartPosition();
+        }
+
+        if (_isDragging)
+        {
+            FollowMousePosition();
+        }
     }
 
     private void OnMouseDown()
     {
-        
+        _isDragging = true;
+        _isReturning = false;
     }
 
     private void OnMouseUp()
     {
-        //resetear la posicion de la carta
+        _isReturning = true;
+        _isDragging = false;
     }
 
-    private void OnMouseEnter()
+    private void FollowMousePosition()
     {
-        //ejecutar animacion
+        Vector3 mousePoint = _camera.ScreenToWorldPoint(Input.mousePosition);
+        mousePoint.z = 0;
+        transform.position = mousePoint;
     }
 
-    private void OnMouseExit()
+    public void SetCardStartPosition()
     {
-        //detener animacion
+        _startPosition = transform.position;
+    }
+
+    public void SetCardOrder(int cardOrder)
+    {
+        spriteRenderer.sortingOrder = cardOrder;
+        textCanvas.sortingOrder = cardOrder + 1;
+    }
+
+    private void ReturnStartPosition()
+    {
+        transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
+        if (transform.position == _startPosition)
+        {
+            _isReturning = false;
+        }
     }
 
     public void ChangeColor(bool correct)
     {
         if (correct)
-            _spriteRenderer.color = Color.green;
+            spriteRenderer.color = Color.green;
         else
-            _spriteRenderer.color = Color.red;
+            spriteRenderer.color = Color.red;
     }
 
     public void GenerateNewCard()
     {
         
+    }
+
+    public void SetReturning(bool isReturning)
+    {
+        _isReturning = isReturning;
     }
 }
