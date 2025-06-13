@@ -69,6 +69,17 @@ public class Card : MonoBehaviour
             _isReturning = false;
         }
     }
+    
+    public GameObject[] PutCardInZone(GameObject[] cardsInZone, int cardsInZoneIndex)
+    {
+        _isReturning = false;
+        GetComponent<Collider2D>().enabled = false;
+        
+        transform.Find("DropZone").gameObject.SetActive(false);
+        transform.position = cardsInZone[cardsInZoneIndex].transform.position;
+        transform.localScale = new Vector3(0.6f, 0.6f, 0);
+        return cardsInZone;
+    }
 
     public void ChangeColor(bool correct)
     {

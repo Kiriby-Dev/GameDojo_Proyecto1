@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     private GameObject[] _cardsInZone;
-    private int _cardsInZoneCount = 0;
+    private int _cardsInZoneIndex = 0;
     private bool _isDropping;
     private bool _activeZone;
     private Card _selectedCard;
@@ -37,26 +37,20 @@ public class ActionZone : MonoBehaviour
 
     private void DropCard()
     {
-        if(_cardsInZoneCount >= _cardsInZone.Length) return;
+        if(_cardsInZoneIndex >= _cardsInZone.Length) return;
         if (!_isDropping) return;
         _activeZone = false;
         
         if(_selectedCard && _selectedCard.gameObject)
         {
-            PutCardInZone();
+            AddCardInZone();
         }
     }
 
-    private void PutCardInZone()
+    private void AddCardInZone()
     {
-        _selectedCard.SetReturning(false);
-        _selectedCard.gameObject.GetComponent<Collider2D>().enabled = false;
-        
-        Transform card = _selectedCard.gameObject.transform;
-        card.Find("DropZone").gameObject.SetActive(false);
-        card.position = _cardsInZone[_cardsInZoneCount].transform.position;
-        card.localScale = new Vector3(0.6f, 0.6f, 0);
-        _cardsInZoneCount++;
+        _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cardsInZoneIndex);
+        _cardsInZoneIndex++;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
