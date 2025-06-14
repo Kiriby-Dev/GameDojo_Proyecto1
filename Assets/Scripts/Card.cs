@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Card : MonoBehaviour
 {
@@ -89,13 +91,10 @@ public class Card : MonoBehaviour
             spriteRenderer.color = Color.red;
     }
 
-    public void GenerateNewCard()
+    public void GenerateCardValue()
     {
-        
-    }
-
-    public void SetReturning(bool isReturning)
-    {
-        _isReturning = isReturning;
+        TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
+        int number = Random.Range(1,3);
+        cardText.text = "+" + number;
     }
 }

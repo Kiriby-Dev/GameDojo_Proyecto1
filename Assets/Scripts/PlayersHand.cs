@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayersHand : MonoBehaviour
 {
+    public GameManager gameManager;
+    
     private int _cardsCount;
     private float _cardSize = 2.5f;
     private float _startPosition;
@@ -13,7 +15,7 @@ public class PlayersHand : MonoBehaviour
 
     public void Recalculate()
     {
-        _cardsCount = transform.childCount;
+        _cardsCount = gameManager.CardsCountInHand();
 
         SetCardsOrder();
         SetPositions();
@@ -58,10 +60,5 @@ public class PlayersHand : MonoBehaviour
             currentCard.GetComponent<Card>().SetCardStartPosition();
             i++;
         }
-    }
-
-    private void DiscardCard()
-    {
-        
     }
 }

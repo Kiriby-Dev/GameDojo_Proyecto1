@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class ActionZone : MonoBehaviour
 {
+    public GameManager gameManager;
+    
     private GameObject[] _cardsInZone;
     private int _cardsInZoneIndex = 0;
+    private Card _selectedCard;
+    
     private bool _isDropping;
     private bool _activeZone;
-    private Card _selectedCard;
     
     private void Start()
     {
@@ -43,7 +46,11 @@ public class ActionZone : MonoBehaviour
         
         if(_selectedCard && _selectedCard.gameObject)
         {
-            AddCardInZone();
+            string _phase = gameManager.CheckPhase();
+            if (_phase == "Discard")
+                Destroy(_selectedCard.gameObject);
+            if (_phase == "Colocation")
+                AddCardInZone();
         }
     }
 
