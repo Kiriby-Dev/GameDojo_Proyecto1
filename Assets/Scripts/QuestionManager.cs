@@ -46,15 +46,18 @@ public class QuestionManager : MonoBehaviour
             GameObject card = actionZone.GetActualCardZone(i);
             if (card)
             {
-                string difficulty = card.GetComponentInChildren<TextMeshProUGUI>().text;
-                SelectQuestion(int.Parse(difficulty.Substring(1)));
+                int difficulty = int.Parse(card.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1));
+                SelectQuestion(difficulty);
                 yield return new WaitUntil(() => PlayerSelectAnswer());
                 
                 Card cardScript = card.GetComponentInChildren<Card>();
                 if (cardScript)
                 {
                     if (_playerAnswersCorrectly)
+                    {
                         cardScript.ChangeColor(true);
+                        AddStats(card, difficulty);
+                    }
                     else
                         cardScript.ChangeColor(false);
                 }
@@ -63,6 +66,16 @@ public class QuestionManager : MonoBehaviour
                 yield return new WaitForSeconds(1f);
             }
         }
+    }
+
+    private void AddStats(GameObject card, int value)
+    {
+        Player player = gameManager.GetPlayer();
+        Transform zone = card.transform.parent;
+        if (zone.name == "AttackZone")
+            player.AddAttack(value);
+        if (zone.name == "DefenseZone")
+            player.AddDefense(value);
     }
 
     public void OnAnswerSelected(Button clickedButton)

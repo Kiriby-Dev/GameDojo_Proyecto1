@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public GameObject playersHand;
     public GameObject card;
     public QuestionManager questionManager;
+    public Player player;
+    public Enemy enemy;
 
     [Header("UI")] 
     public TextMeshProUGUI phaseText;
@@ -60,6 +62,7 @@ public class GameManager : MonoBehaviour
                 GameObject go = Instantiate(card, playersHand.transform);
                 go.GetComponent<Card>().GenerateCardValue();
             }
+            enemy.GenerateStats();
             playersHandScript.Recalculate();
             _isTurnOver = false;
         }
@@ -100,4 +103,5 @@ public class GameManager : MonoBehaviour
     public PlayersHand GetPlayersHand() => playersHandScript;
     public ActionZone GetAttackZone() => _attackActionZone;
     public ActionZone GetDefenseZone() => _defenseActionZone;
+    public Player GetPlayer() => player;
 }
