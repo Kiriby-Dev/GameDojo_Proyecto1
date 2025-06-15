@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
+    public QuestionManager questionManager;
     
     private GameObject[] _cardsInZone;
-    private int _cardsInZoneIndex = 0;
+    private int _cantCardsInZone = 0;
     private Card _selectedCard;
     
     private bool _isDropping;
@@ -40,7 +42,7 @@ public class ActionZone : MonoBehaviour
 
     private void DropCard()
     {
-        if(_cardsInZoneIndex >= _cardsInZone.Length) return;
+        if(_cantCardsInZone >= _cardsInZone.Length) return;
         if (!_isDropping) return;
         _activeZone = false;
         
@@ -48,7 +50,11 @@ public class ActionZone : MonoBehaviour
         {
             string _phase = gameManager.CheckPhase();
             if (_phase == "Discard")
+            {
                 Destroy(_selectedCard.gameObject);
+                gameManager.GetPlayersHand().Recalculate();
+            }
+
             if (_phase == "Colocation")
                 AddCardInZone();
         }
@@ -56,8 +62,8 @@ public class ActionZone : MonoBehaviour
 
     private void AddCardInZone()
     {
-        _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cardsInZoneIndex);
-        _cardsInZoneIndex++;
+        _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cantCardsInZone);
+        _cantCardsInZone++;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -70,9 +76,7 @@ public class ActionZone : MonoBehaviour
     {
         _activeZone = false;
     }
-
-    private void GoThroughCards()
-    {
-        
-    }
+    
+    public int GetCantCardsInZone() => _cantCardsInZone;
+    public GameObject GetActualCard(int i) => _cardsInZone[i];
 }

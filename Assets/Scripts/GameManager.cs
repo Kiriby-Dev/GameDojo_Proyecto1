@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,6 +7,10 @@ public class GameManager : MonoBehaviour
     [Header("GameObjects")]
     public GameObject playersHand;
     public GameObject card;
+    public QuestionManager questionManager;
+
+    [Header("UI")] 
+    public TextMeshProUGUI phaseText;
     
     [Header("ActionZones")]
     public GameObject discardZone;
@@ -33,11 +38,6 @@ public class GameManager : MonoBehaviour
         ChangePhase();
     }
 
-    public bool IsTurnOver()
-    {
-        return _isTurnOver;
-    }
-
     public string CheckPhase()
     {
         return _phase;
@@ -46,12 +46,13 @@ public class GameManager : MonoBehaviour
     public void SetPhase(string phase)
     {
         _phase = phase;
+        phaseText.text = _phase;
     }
 
     private void ChangePhase()
     {
         int cantCards = CardsCountInHand();
-        if (cantCards <= 0 && IsTurnOver())
+        if (cantCards <= 0 && _isTurnOver)
         {
             SetPhase("Draw");
             for (int i = 1; i <= 5; i++)
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
                 go.GetComponent<Card>().GenerateCardValue();
             }
             playersHandScript.Recalculate();
+            _isTurnOver = false;
         }
 
         if (cantCards <= 5 && cantCards > 3)
@@ -77,10 +79,25 @@ public class GameManager : MonoBehaviour
             _attackActionZone.enabled = true;
             _defenseActionZone.enabled = true;
         }
+
+        if (cantCards <= 0 && !_isTurnOver)
+        {
+            SetPhase("Questions");
+            StartCoroutine(questionManager.StartQuestions());
+        }
+    }
+
+    public void FinishTurn()
+    {
+        _isTurnOver = true;
     }
 
     public int CardsCountInHand()
     {
         return playersHand.transform.childCount;
     }
+    
+    public PlayersHand GetPlayersHand() => playersHandScript;
+    public ActionZone GetAttackZone() => _attackActionZone;
+    public ActionZone GetDefenseZone() => _defenseActionZone;
 }

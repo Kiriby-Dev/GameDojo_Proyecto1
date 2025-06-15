@@ -80,6 +80,7 @@ public class Card : MonoBehaviour
         transform.Find("DropZone").gameObject.SetActive(false);
         transform.position = cardsInZone[cardsInZoneIndex].transform.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 0);
+        transform.SetParent(cardsInZone[cardsInZoneIndex].transform);
         return cardsInZone;
     }
 
@@ -94,7 +95,7 @@ public class Card : MonoBehaviour
     public void GenerateCardValue()
     {
         TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        int number = Random.Range(1,3);
+        int number = Random.Range(1,4);
         cardText.text = "+" + number;
     }
 }
