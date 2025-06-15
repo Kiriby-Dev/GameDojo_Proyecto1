@@ -2639,13 +2639,13 @@ MonoBehaviour:
       - m_Target: {fileID: 2076459776}
         m_TargetAssemblyTypeName: QuestionManager, Assembly-CSharp
         m_MethodName: OnAnswerSelected
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1083433135}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 3
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1083433136
@@ -2772,13 +2772,13 @@ MonoBehaviour:
       - m_Target: {fileID: 2076459776}
         m_TargetAssemblyTypeName: QuestionManager, Assembly-CSharp
         m_MethodName: OnAnswerSelected
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1109510980}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1109510981
@@ -3269,13 +3269,13 @@ MonoBehaviour:
       - m_Target: {fileID: 2076459776}
         m_TargetAssemblyTypeName: QuestionManager, Assembly-CSharp
         m_MethodName: OnAnswerSelected
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1333247332}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 4
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1333247333
@@ -4098,13 +4098,13 @@ MonoBehaviour:
       - m_Target: {fileID: 2076459776}
         m_TargetAssemblyTypeName: QuestionManager, Assembly-CSharp
         m_MethodName: OnAnswerSelected
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 2124015351}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2124015352

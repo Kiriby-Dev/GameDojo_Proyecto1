@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuestionManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class QuestionManager : MonoBehaviour
     private Questions[] _easy;
     
     private bool _playerHasAnswered = false;
+    private Questions _selectedQuestion = null;
+    private bool _playerAnswersCorrectly;
     
     private void Awake()
     {
@@ -33,7 +36,6 @@ public class QuestionManager : MonoBehaviour
         ActionZone defenseZone = gameManager.GetDefenseZone();
         yield return StartCoroutine(GoThroughCards(attackZone));
         yield return StartCoroutine(GoThroughCards(defenseZone));
-        Debug.Log("Fin del turno");
         gameManager.FinishTurn();
     }
 
@@ -41,22 +43,33 @@ public class QuestionManager : MonoBehaviour
     {
         for (int i = 0; i < actionZone.GetCantCardsInZone(); i++)
         {
-            GameObject card = actionZone.GetActualCard(i);
+            GameObject card = actionZone.GetActualCardZone(i);
             if (card)
             {
                 string difficulty = card.GetComponentInChildren<TextMeshProUGUI>().text;
                 SelectQuestion(int.Parse(difficulty.Substring(1)));
                 yield return new WaitUntil(() => PlayerSelectAnswer());
+                
+                Card cardScript = card.GetComponentInChildren<Card>();
+                if (cardScript)
+                {
+                    if (_playerAnswersCorrectly)
+                        cardScript.ChangeColor(true);
+                    else
+                        cardScript.ChangeColor(false);
+                }
+
                 _playerHasAnswered = false;
                 yield return new WaitForSeconds(1f);
             }
         }
     }
 
-    public void OnAnswerSelected()
+    public void OnAnswerSelected(Button clickedButton)
     {
+        string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
+        _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;
-        CheckAnswer();
     }
 
     public bool PlayerSelectAnswer()
@@ -64,9 +77,9 @@ public class QuestionManager : MonoBehaviour
         return _playerHasAnswered;
     }
 
-    private bool CheckAnswer()
+    private bool CheckAnswer(string selectedText)
     {
-        return true;
+        return selectedText == _selectedQuestion.GetCorrectAnswer();
     }
 
     private void SetQuestionsArrays()
@@ -85,20 +98,19 @@ public class QuestionManager : MonoBehaviour
 
     public void SelectQuestion(int difficulty)
     {
-        Questions selectedQuestion = null;
         int i = Random.Range(0, 4);
         switch (difficulty)
         {
-            case 1: selectedQuestion = _easy[i];
+            case 1: _selectedQuestion = _easy[i];
                 break;
-            case 2: selectedQuestion = _medium[i];
+            case 2: _selectedQuestion = _medium[i];
                 break;
-            case 3: selectedQuestion = _hard[i];
+            case 3: _selectedQuestion = _hard[i];
                 break;
             default: 
                 break;
         }
-        ShowQuestion(selectedQuestion);
+        ShowQuestion(_selectedQuestion);
     }
 
     private void ShowQuestion(Questions selectedQuestion)

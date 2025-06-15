@@ -7,9 +7,9 @@ public class Card : MonoBehaviour
 {
     public float returnSpeed;
     public Canvas textCanvas;
-    public SpriteRenderer spriteRenderer;
     
     private Camera _camera;
+    private SpriteRenderer _spriteRenderer;
     
     private bool _isReturning = false;
     private bool _isDragging = false;
@@ -18,6 +18,7 @@ public class Card : MonoBehaviour
     private void Awake()
     {
         _camera = Camera.main;
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
     
     private void Update()
@@ -59,7 +60,7 @@ public class Card : MonoBehaviour
 
     public void SetCardOrder(int cardOrder)
     {
-        spriteRenderer.sortingOrder = cardOrder;
+        _spriteRenderer.sortingOrder = cardOrder;
         textCanvas.sortingOrder = cardOrder + 1;
     }
 
@@ -87,9 +88,9 @@ public class Card : MonoBehaviour
     public void ChangeColor(bool correct)
     {
         if (correct)
-            spriteRenderer.color = Color.green;
+            _spriteRenderer.color = Color.green;
         else
-            spriteRenderer.color = Color.red;
+            _spriteRenderer.color = Color.red;
     }
 
     public void GenerateCardValue()

@@ -78,5 +78,5 @@ public class ActionZone : MonoBehaviour
     }
     
     public int GetCantCardsInZone() => _cantCardsInZone;
-    public GameObject GetActualCard(int i) => _cardsInZone[i];
+    public GameObject GetActualCardZone(int i) => _cardsInZone[i];
 }
