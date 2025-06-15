@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -22,7 +23,9 @@ public class GameManager : MonoBehaviour
     private ActionZone _discardActionZone;
     private ActionZone _attackActionZone;
     private ActionZone _defenseActionZone;
-    private PlayersHand playersHandScript;
+    private PlayersHand _playersHandScript;
+    private bool _waitingForQuestions = false;
+    private bool _waitingForResults = false;
     
     private bool _isTurnOver = true;
     private string _phase;
@@ -32,7 +35,7 @@ public class GameManager : MonoBehaviour
         _discardActionZone = discardZone.GetComponent<ActionZone>();
         _attackActionZone = attackZone.GetComponent<ActionZone>();
         _defenseActionZone = defenseZone.GetComponent<ActionZone>();
-        playersHandScript = playersHand.GetComponent<PlayersHand>();
+        _playersHandScript = playersHand.GetComponent<PlayersHand>();
     }
 
     private void Update()
@@ -53,7 +56,18 @@ public class GameManager : MonoBehaviour
 
     private void ChangePhase()
     {
+        if (_waitingForQuestions) return;
+        if (_waitingForResults) return;
+        
         int cantCards = CardsCountInHand();
+        
+        if (cantCards <= 0 && !_isTurnOver)
+        {
+            SetPhase("Questions");
+            _waitingForQuestions = true;
+            StartCoroutine(WaitQuestionsPhase());
+        }
+        
         if (cantCards <= 0 && _isTurnOver)
         {
             SetPhase("Draw");
@@ -63,7 +77,7 @@ public class GameManager : MonoBehaviour
                 go.GetComponent<Card>().GenerateCardValue();
             }
             enemy.GenerateStats();
-            playersHandScript.Recalculate();
+            _playersHandScript.Recalculate();
             _isTurnOver = false;
         }
 
@@ -82,12 +96,34 @@ public class GameManager : MonoBehaviour
             _attackActionZone.enabled = true;
             _defenseActionZone.enabled = true;
         }
+    }
+    
+    private IEnumerator WaitQuestionsPhase()
+    {
+        yield return StartCoroutine(questionManager.StartQuestions());
+        _waitingForQuestions = false;
+        
+        SetPhase("Resolution");
+        _waitingForResults = true;
+        StartCoroutine(WaitResolutionPhase());
+    }
+    
+    private IEnumerator WaitResolutionPhase()
+    {
+        yield return StartCoroutine(ResolveStats());
+        _waitingForResults = false;
+        FinishTurn();
+    }
 
-        if (cantCards <= 0 && !_isTurnOver)
-        {
-            SetPhase("Questions");
-            StartCoroutine(questionManager.StartQuestions());
-        }
+    private IEnumerator ResolveStats()
+    {
+        int damageDealed = enemy.GetDefense() - player.GetAttack();
+        int damageTaken = player.GetDefense() - enemy.GetAttack();
+        
+        player.TakeDamage(damageTaken);
+        enemy.TakeDamage(damageDealed);
+        
+        yield return new WaitForSeconds(2.0f);
     }
 
     public void FinishTurn()
@@ -100,7 +136,7 @@ public class GameManager : MonoBehaviour
         return playersHand.transform.childCount;
     }
     
-    public PlayersHand GetPlayersHand() => playersHandScript;
+    public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => _attackActionZone;
     public ActionZone GetDefenseZone() => _defenseActionZone;
     public Player GetPlayer() => player;

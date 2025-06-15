@@ -10,6 +10,12 @@ public class Player : MonoBehaviour
 
     private int _currentAttack;
     private int _currentDefense;
+    private HPBar hpBar;
+
+    private void Awake()
+    {
+        hpBar = GetComponentInChildren<HPBar>();
+    }
 
     private void Start()
     {
@@ -35,4 +41,12 @@ public class Player : MonoBehaviour
         _currentDefense += value;
         UpdateStats();
     }
+
+    public void TakeDamage(int value)
+    {
+        hpBar.Damage(value);
+    }
+
+    public int GetAttack() => _currentAttack;
+    public int GetDefense() => _currentDefense;
 }

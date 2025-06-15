@@ -36,7 +36,6 @@ public class QuestionManager : MonoBehaviour
         ActionZone defenseZone = gameManager.GetDefenseZone();
         yield return StartCoroutine(GoThroughCards(attackZone));
         yield return StartCoroutine(GoThroughCards(defenseZone));
-        gameManager.FinishTurn();
     }
 
     private IEnumerator GoThroughCards(ActionZone actionZone)
