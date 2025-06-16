@@ -8,6 +8,8 @@ public class Card : MonoBehaviour
     public float returnSpeed;
     public Canvas textCanvas;
     
+    public Sprite[] cardSprites;
+    
     private Camera _camera;
     private SpriteRenderer _spriteRenderer;
     
@@ -20,7 +22,13 @@ public class Card : MonoBehaviour
         _camera = Camera.main;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
-    
+
+    private void Start()
+    {
+        ChangeColor();
+        ChangeSprite();
+    }
+
     private void Update()
     {
         if (_isReturning)
@@ -85,12 +93,28 @@ public class Card : MonoBehaviour
         return cardsInZone;
     }
 
-    public void ChangeColor(bool correct)
+    public void ChangeColor(string color = "white")
     {
-        if (correct)
-            _spriteRenderer.color = Color.green;
-        else
-            _spriteRenderer.color = Color.red;
+        switch (color)
+        {
+            case "red":
+                _spriteRenderer.color = Color.red;
+                break;
+            case "yellow":
+                _spriteRenderer.color = Color.yellow;
+                break;
+            case "green":
+                _spriteRenderer.color = Color.green;
+                break;
+            case "white":
+                _spriteRenderer.color = Color.white;
+                break;
+        }
+    }
+
+    public void ChangeSprite(int i = 0)
+    {
+        _spriteRenderer.sprite = cardSprites[i];
     }
 
     public void GenerateCardValue()

@@ -29,6 +29,11 @@ public class Enemy : MonoBehaviour
         hpBar.Damage(-1 * value);
     }
     
+    public bool IsDead()
+    {
+        return hpBar.IsDead();
+    }
+    
     public int GetAttack() => _attack;
     public int GetDefense() => _defense;
 }

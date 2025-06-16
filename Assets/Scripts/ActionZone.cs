@@ -68,8 +68,17 @@ public class ActionZone : MonoBehaviour
         _cantCardsInZone = 0;
     }
 
+    private string CheckZone()
+    {
+        return gameObject.name;
+    }
+
     private void AddCardInZone()
     {
+        if (CheckZone() == "AttackZone")
+            _selectedCard.ChangeSprite(1);
+        if (CheckZone() == "DefenseZone")
+            _selectedCard.ChangeSprite(2);
         _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cantCardsInZone);
         _cantCardsInZone++;
     }

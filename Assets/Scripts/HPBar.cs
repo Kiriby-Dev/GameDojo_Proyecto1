@@ -32,4 +32,9 @@ public class HPBar : MonoBehaviour
         float fill = (float)_currentHp / (float)maxHp;
         imageBar.fillAmount = fill;
     }
+
+    public bool IsDead()
+    {
+        return _isDead;
+    }
 }

@@ -52,6 +52,11 @@ public class Player : MonoBehaviour
         hpBar.Damage(-value);
     }
 
+    public bool IsDead()
+    {
+        return hpBar.IsDead();
+    }
+
     public int GetAttack() => _currentAttack;
     public int GetDefense() => _currentDefense;
 }

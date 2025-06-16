@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")] 
     public TextMeshProUGUI phaseText;
+    public Canvas winCanvas;
+    public Canvas loseCanvas;
     
     [Header("ActionZones")]
     public GameObject discardZone;
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     
     private bool _isTurnOver = true;
     private string _phase;
+    private bool _gameOver = false;
 
     private void Awake()
     {
@@ -40,6 +43,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        CheckEndGame();
+        if (_gameOver) return;
         ChangePhase();
     }
 
@@ -98,6 +103,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void CheckEndGame()
+    {
+        if (player.IsDead())
+            GameOver(false);
+        if (enemy.IsDead())
+            GameOver(true);
+    }
+
+    private void GameOver(bool win)
+    {
+        _gameOver = true;
+        if (win)
+            winCanvas.enabled = true;
+        else
+            loseCanvas.enabled = true;
+    }
+
     private void ResetVariables()
     {
         player.ResetStats();
@@ -105,6 +127,8 @@ public class GameManager : MonoBehaviour
         questionManager.ResetBoard();
         _attackActionZone.ResetZone();
         _defenseActionZone.ResetZone();
+        winCanvas.enabled = false;
+        loseCanvas.enabled = false;
     }
 
     private IEnumerator WaitQuestionsPhase()

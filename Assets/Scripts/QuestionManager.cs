@@ -61,19 +61,21 @@ public class QuestionManager : MonoBehaviour
             if (card)
             {
                 int difficulty = int.Parse(card.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1));
+                Card cardScript = card.GetComponentInChildren<Card>();
+                
                 SelectQuestion(difficulty);
+                cardScript.ChangeColor("yellow");
                 yield return new WaitUntil(() => PlayerSelectAnswer());
                 
-                Card cardScript = card.GetComponentInChildren<Card>();
                 if (cardScript)
                 {
                     if (_playerAnswersCorrectly)
                     {
-                        cardScript.ChangeColor(true);
+                        cardScript.ChangeColor("green");
                         AddStats(card, difficulty);
                     }
                     else
-                        cardScript.ChangeColor(false);
+                        cardScript.ChangeColor("red");
                 }
 
                 _playerHasAnswered = false;
