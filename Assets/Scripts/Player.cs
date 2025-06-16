@@ -19,15 +19,20 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _currentAttack = 0;
-        _currentDefense = 0;
-        UpdateStats();
+        ResetStats();
     }
 
     private void UpdateStats()
     {
         attackText.text = _currentAttack.ToString();
         defenseText.text = _currentDefense.ToString();
+    }
+
+    public void ResetStats()
+    {
+        _currentAttack = 0;
+        _currentDefense = 0;
+        UpdateStats();
     }
 
     public void AddAttack(int value)
@@ -44,7 +49,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int value)
     {
-        hpBar.Damage(value);
+        hpBar.Damage(-value);
     }
 
     public int GetAttack() => _currentAttack;

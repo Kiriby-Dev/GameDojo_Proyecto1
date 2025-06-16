@@ -4587,6 +4587,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HPBar
       objectReference: {fileID: 0}
+    - target: {fileID: 3045500292743769928, guid: 5432e9a32c4dcd845a742237d2059557, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6439569504558212821, guid: 5432e9a32c4dcd845a742237d2059557, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

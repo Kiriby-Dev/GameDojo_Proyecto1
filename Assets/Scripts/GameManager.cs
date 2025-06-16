@@ -70,13 +70,13 @@ public class GameManager : MonoBehaviour
         
         if (cantCards <= 0 && _isTurnOver)
         {
+            ResetVariables();
             SetPhase("Draw");
             for (int i = 1; i <= 5; i++)
             {
                 GameObject go = Instantiate(card, playersHand.transform);
                 go.GetComponent<Card>().GenerateCardValue();
             }
-            enemy.GenerateStats();
             _playersHandScript.Recalculate();
             _isTurnOver = false;
         }
@@ -97,7 +97,16 @@ public class GameManager : MonoBehaviour
             _defenseActionZone.enabled = true;
         }
     }
-    
+
+    private void ResetVariables()
+    {
+        player.ResetStats();
+        enemy.GenerateStats();
+        questionManager.ResetBoard();
+        _attackActionZone.ResetZone();
+        _defenseActionZone.ResetZone();
+    }
+
     private IEnumerator WaitQuestionsPhase()
     {
         yield return StartCoroutine(questionManager.StartQuestions());
@@ -112,7 +121,7 @@ public class GameManager : MonoBehaviour
     {
         yield return StartCoroutine(ResolveStats());
         _waitingForResults = false;
-        FinishTurn();
+        _isTurnOver = true;
     }
 
     private IEnumerator ResolveStats()
@@ -120,15 +129,12 @@ public class GameManager : MonoBehaviour
         int damageDealed = enemy.GetDefense() - player.GetAttack();
         int damageTaken = player.GetDefense() - enemy.GetAttack();
         
-        player.TakeDamage(damageTaken);
-        enemy.TakeDamage(damageDealed);
+        if (damageTaken < 0)
+            player.TakeDamage(damageTaken);
+        if (damageDealed < 0)
+            enemy.TakeDamage(damageDealed);
         
         yield return new WaitForSeconds(2.0f);
-    }
-
-    public void FinishTurn()
-    {
-        _isTurnOver = true;
     }
 
     public int CardsCountInHand()

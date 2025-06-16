@@ -6,7 +6,6 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
-    public QuestionManager questionManager;
     
     private GameObject[] _cardsInZone;
     private int _cantCardsInZone = 0;
@@ -58,6 +57,15 @@ public class ActionZone : MonoBehaviour
             if (_phase == "Colocation")
                 AddCardInZone();
         }
+    }
+
+    public void ResetZone()
+    {
+        for (int i = 0; i < _cantCardsInZone; i++)
+        {
+            Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
+        }
+        _cantCardsInZone = 0;
     }
 
     private void AddCardInZone()

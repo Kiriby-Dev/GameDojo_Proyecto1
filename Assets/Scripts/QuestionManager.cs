@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class QuestionManager : MonoBehaviour
 {
@@ -23,11 +25,24 @@ public class QuestionManager : MonoBehaviour
     private bool _playerHasAnswered = false;
     private Questions _selectedQuestion = null;
     private bool _playerAnswersCorrectly;
-    
-    private void Awake()
+    private Questions _emptyQuestion;
+
+    private void Start()
     {
+        CreateEmptyQuestion();
         SetQuestionsArrays();
         LoadQuestions();
+    }
+
+    private void CreateEmptyQuestion()
+    {
+        _emptyQuestion = gameObject.AddComponent<Questions>();
+        _emptyQuestion.SetData("Pregunta", new []{"Respuesta 2", "Respuesta 3", "Respuesta 4"}, "Respuesta 1");
+    }
+
+    public void ResetBoard()
+    {
+        ShowQuestion(_emptyQuestion);
     }
 
     public IEnumerator StartQuestions()
