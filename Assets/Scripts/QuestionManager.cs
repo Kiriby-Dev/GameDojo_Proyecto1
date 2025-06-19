@@ -14,6 +14,7 @@ public class QuestionManager : MonoBehaviour
     public TextMeshProUGUI answerText2;
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
+    public TextMeshProUGUI timerText;
     
     [Header("GameObjects")]
     public GameManager gameManager;
@@ -25,7 +26,9 @@ public class QuestionManager : MonoBehaviour
     private bool _playerHasAnswered = false;
     private Questions _selectedQuestion = null;
     private bool _playerAnswersCorrectly;
+    private bool _timeRanOut = false;
     private Questions _emptyQuestion;
+    private Coroutine _countdownCoroutine;
 
     private void Start()
     {
@@ -62,11 +65,17 @@ public class QuestionManager : MonoBehaviour
             {
                 int difficulty = int.Parse(card.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1));
                 Card cardScript = card.GetComponentInChildren<Card>();
-                
+
                 SelectQuestion(difficulty);
                 cardScript.ChangeColor("yellow");
-                yield return new WaitUntil(() => PlayerSelectAnswer());
-                
+
+                _playerHasAnswered = false;
+                _countdownCoroutine = StartCoroutine(CountdownTimer(60f)); // ← Inicia el timer de 60s
+                yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
+
+                if (_countdownCoroutine != null)
+                    StopCoroutine(_countdownCoroutine);
+
                 if (cardScript)
                 {
                     if (_playerAnswersCorrectly)
@@ -75,15 +84,37 @@ public class QuestionManager : MonoBehaviour
                         AddStats(card, difficulty);
                     }
                     else
+                    {
                         cardScript.ChangeColor("red");
+                    }
                 }
 
                 _playerHasAnswered = false;
+                _timeRanOut = false;
                 yield return new WaitForSeconds(1f);
             }
         }
     }
 
+    private IEnumerator CountdownTimer(float duration)
+    {
+        float timeLeft = duration;
+        while (timeLeft > 0f && !_playerHasAnswered)
+        {
+            timerText.text = Mathf.CeilToInt(timeLeft).ToString();
+            timeLeft -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (!_playerHasAnswered)
+        {
+            _timeRanOut = true;
+            _playerAnswersCorrectly = false;
+        }
+
+        timerText.text = "";
+    }
+    
     private void AddStats(GameObject card, int value)
     {
         Player player = gameManager.GetPlayer();
@@ -99,11 +130,6 @@ public class QuestionManager : MonoBehaviour
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
         _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;
-    }
-
-    public bool PlayerSelectAnswer()
-    {
-        return _playerHasAnswered;
     }
 
     private bool CheckAnswer(string selectedText)
