@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -36,6 +33,7 @@ public class GameManager : MonoBehaviour
         CheckEndGame();
     }
 
+    //Se habilitan y deshabilitan las zonas de accion dependiendo la fase en la que estamos.
     public void UpdateZones(string gamePhase)
     {
         bool active = (gamePhase == "Discard");
@@ -45,6 +43,7 @@ public class GameManager : MonoBehaviour
         defenseZone.enabled = !active;
     }
 
+    //Se instancian las 5 cartas con valores random en la mano del jugador.
     public void DrawCards()
     {
         for (int i = 1; i <= 5; i++)
@@ -54,18 +53,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Verificamos si alguno de los personajes murio y en ese caso terminamos el juego.
     private void CheckEndGame()
     {
         if (player.IsDead())
-            GameOver(false);
+            GameOver(false);//Como murio el jugador termina el juego y perdemos
         if (enemy.IsDead())
-            GameOver(true);
+            GameOver(true);//Como murio el enemigo termina el juego y ganamos
     }
 
     private void GameOver(bool win)
     {
         _gameOver = true;
-        uiManager.GameOverCanvas(win);
+        uiManager.UpdateGameOverCanvas(win);
     }
 
     public void ResetVariables()
@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
         uiManager.ResetVisuals();
     }
     
+    //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
     public void ResolveCombat()
     {
         int damageDealed = enemy.GetDefense() - player.GetAttack();
@@ -88,11 +89,12 @@ public class GameManager : MonoBehaviour
             enemy.TakeDamage(damageDealed);
     }
 
-    public int CardsCountInHand()
+    public int CantCardsInHand()
     {
         return playersHand.transform.childCount;
     }
 
+    #region Getters
     public PhaseManager GetPhaseManager() => phaseManager;
     public QuestionManager GetQuestionManager() => questionManager;
     public UIManager GetUIManager() => uiManager;
@@ -102,4 +104,5 @@ public class GameManager : MonoBehaviour
     public Player GetPlayer() => player;
     public bool IsGameOver() => _gameOver;
     public Card GetCard() => _cardScript;
+    #endregion
 }

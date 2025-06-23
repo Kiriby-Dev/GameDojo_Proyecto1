@@ -9,8 +9,10 @@ public class QuestionData : ScriptableObject
     public string correctAnswer;
     public string[] wrongAnswers;
     public Difficulty difficulty;
-    
+
+    #region Getters
     public string GetCorrectAnswer() => correctAnswer;
     public string GetQuestion() => question;
     public string[] GetOptions() => wrongAnswers;
+    #endregion
 }

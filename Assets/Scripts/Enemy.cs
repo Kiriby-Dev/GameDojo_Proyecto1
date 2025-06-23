@@ -1,39 +1,17 @@
-using TMPro;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Character
 {
-    [Header("Enemy Stats")]
-    public TextMeshProUGUI attackText;
-    public TextMeshProUGUI defenseText;
-
-    private int _attack;
-    private int _defense;
-    private HPBar _hpBar;
-
-    private void Awake()
-    {
-        _hpBar = GetComponentInChildren<HPBar>();
-    }
+    [Header("Stats")] 
+    public int maxAttack;
+    public int minAttack;
+    public int maxDefense;
+    public int minDefense;
     
     public void GenerateStats()
     {
-        _attack = Random.Range(1, 4);
-        _defense = Random.Range(1, 4);
-        attackText.text = _attack.ToString();
-        defenseText.text = _defense.ToString();
+        CurrentAttack = Random.Range(minAttack, maxAttack + 1);
+        CurrentDefense = Random.Range(minDefense, maxDefense + 1);
+        gameManager.GetUIManager().UpdateStats(CurrentAttack , CurrentDefense, "Enemy");
     }
-    
-    public void TakeDamage(int value)
-    {
-        _hpBar.Damage(-1 * value);
-    }
-    
-    public bool IsDead()
-    {
-        return _hpBar.IsDead();
-    }
-    
-    public int GetAttack() => _attack;
-    public int GetDefense() => _defense;
 }

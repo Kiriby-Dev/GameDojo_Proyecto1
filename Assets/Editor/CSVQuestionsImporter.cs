@@ -10,11 +10,11 @@ public class CSVQuestionsImporter
         string path = EditorUtility.OpenFilePanel("Seleccionar archivo CSV", "", "csv");
         if (string.IsNullOrEmpty(path)) return;
 
-        string[] lines = File.ReadAllLines(path);
+        string[] lines = File.ReadAllLines(path); //Separa las filas (osea cada pregunta con sus correspondientes valores) y las guarda en un arreglo.
 
-        for (int i = 1; i < lines.Length; i++) // salta la cabecera
+        for (int i = 1; i < lines.Length; i++) //Saltea la primera fila pues son los títulos de las columnas.
         {
-            string[] values = lines[i].Split(',');
+            string[] values = lines[i].Split(','); //Separa las columnas y guarda los valores en un arreglo.
 
             if (values.Length < 6)
             {
@@ -22,6 +22,7 @@ public class CSVQuestionsImporter
                 continue;
             }
 
+            //Crea una nueva pregunta (scriptable object) con los valores correspondientes en cada variable.
             QuestionData newQuestion = ScriptableObject.CreateInstance<QuestionData>();
             newQuestion.question = values[0];
             newQuestion.correctAnswer = values[1];

@@ -3699,8 +3699,10 @@ MonoBehaviour:
   phaseText: {fileID: 686052633}
   winCanvas: {fileID: 1963665388}
   loseCanvas: {fileID: 105275501}
-  attackText: {fileID: 1420447037811285781}
-  defenseText: {fileID: 1247452169890779730}
+  playerAttackText: {fileID: 1420447037811285781}
+  playerDefenseText: {fileID: 1247452169890779730}
+  enemyAttackText: {fileID: 42819478912199670}
+  enemyDefenseText: {fileID: 171565850461562545}
   questionText: {fileID: 255625167}
   answerText1: {fileID: 493405900}
   answerText2: {fileID: 217564838}
@@ -4502,8 +4504,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7191d904e8ca64f8d79f0c0ce18266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackText: {fileID: 42819478912199670}
-  defenseText: {fileID: 171565850461562545}
+  gameManager: {fileID: 21674069}
+  maxAttack: 3
+  minAttack: 1
+  maxDefense: 3
+  minDefense: 1
 --- !u!1 &2076459775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4534,9 +4539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 21674069}
-  cantQuestions: 4
   timePerQuestion: 30
-  allQuestions: []
 --- !u!4 &2076459777
 Transform:
   m_ObjectHideFlags: 0

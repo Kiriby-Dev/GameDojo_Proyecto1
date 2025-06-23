@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,13 +17,13 @@ public class Card : MonoBehaviour
     private bool _isReturning = false;
     private bool _isDragging = false;
     private Vector3 _startPosition;
-    private PlayersHand playersHand;
+    private PlayersHand _playersHand;
 
     private void Awake()
     {
         _camera = Camera.main;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        playersHand = FindAnyObjectByType<PlayersHand>();
+        _playersHand = FindAnyObjectByType<PlayersHand>();
     }
 
     private void Start()
@@ -53,7 +52,7 @@ public class Card : MonoBehaviour
         _isDragging = true;
         _isReturning = false;
         
-        playersHand.SetGrabbedCard(this);
+        _playersHand.SetGrabbedCard(this);
     }
 
     private void OnMouseUp()
@@ -61,7 +60,7 @@ public class Card : MonoBehaviour
         _isReturning = true;
         _isDragging = false;
         
-        playersHand.ClearGrabbedCard();
+        _playersHand.ClearGrabbedCard();
     }
 
     private void FollowMousePosition()
@@ -101,8 +100,8 @@ public class Card : MonoBehaviour
         transform.position = slot.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 1f);
         transform.SetParent(slot);
-        if (playersHand)
-            playersHand.Recalculate();
+        if (_playersHand)
+            _playersHand.Recalculate();
     }
     
     private void DisableInteraction()

@@ -1,13 +1,10 @@
-using System;
 using System.Collections;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PhaseManager : MonoBehaviour
 {
-    public enum GamePhase {Draw, Discard, Colocation, Questions, Resolution}
     public GameManager gameManager;
+    public enum GamePhase {Draw, Discard, Colocation, Questions, Resolution}
     
     private GamePhase _currentPhase;
 
@@ -23,6 +20,7 @@ public class PhaseManager : MonoBehaviour
         StartCoroutine(ExecutePhase());
     }
     
+    //Se ejecuta la fase actual y luego de terminar se avanza a la siguiente.
     private IEnumerator ExecutePhase()
     {
         switch (_currentPhase)
@@ -54,13 +52,27 @@ public class PhaseManager : MonoBehaviour
         }
         AdvancePhase();
     }
-    
+
+    #region Phases
+
     private IEnumerator DrawPhase()
     {
         gameManager.ResetVariables();
         gameManager.DrawCards();
         gameManager.GetPlayersHand().Recalculate();
         yield return new WaitForSeconds(0.5f);
+    }
+    
+    private IEnumerator DiscardPhase()
+    {
+        gameManager.UpdateZones(_currentPhase.ToString());
+        yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 3);
+    }
+    
+    private IEnumerator ColocationPhase()
+    {
+        gameManager.UpdateZones(_currentPhase.ToString());
+        yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 0);
     }
 
     private IEnumerator QuestionsPhase()
@@ -74,17 +86,7 @@ public class PhaseManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
     }
 
-    private IEnumerator DiscardPhase()
-    {
-        gameManager.UpdateZones(_currentPhase.ToString());
-        yield return new WaitUntil(() => gameManager.CardsCountInHand() <= 3);
-    }
-
-    private IEnumerator ColocationPhase()
-    {
-        gameManager.UpdateZones(_currentPhase.ToString());
-        yield return new WaitUntil(() => gameManager.CardsCountInHand() <= 0);
-    }
+    #endregion
     
     public GamePhase CurrentPhase
     {

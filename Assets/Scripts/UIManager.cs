@@ -1,17 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
     public Canvas winCanvas;
     public Canvas loseCanvas;
     
     [Header("Player Stats")]
-    public TextMeshProUGUI attackText;
-    public TextMeshProUGUI defenseText;
+    public TextMeshProUGUI playerAttackText;
+    public TextMeshProUGUI playerDefenseText;
+    
+    [Header("Enemy Stats")]
+    public TextMeshProUGUI enemyAttackText;
+    public TextMeshProUGUI enemyDefenseText;
     
     [Header("Questions")]
     public TextMeshProUGUI questionText;
@@ -36,7 +40,7 @@ public class UIManager : MonoBehaviour
         phaseText.text = phase;
     }
 
-    public void GameOverCanvas(bool win)
+    public void UpdateGameOverCanvas(bool win)
     {
         if (win)
             winCanvas.gameObject.SetActive(true);
@@ -49,10 +53,19 @@ public class UIManager : MonoBehaviour
         timerText.text = timeText;
     }
 
-    public void UpdatePlayerStats(int currentAttack, int currentDefense)
+    public void UpdateStats(int currentAttack, int currentDefense, string character)
     {
-        attackText.text = currentAttack.ToString();
-        defenseText.text = currentDefense.ToString();
+        switch (character)
+        {
+            case "Player":
+                playerAttackText.text = currentAttack.ToString();
+                playerDefenseText.text = currentDefense.ToString();
+                break;
+            case "Enemy":
+                enemyAttackText.text = currentAttack.ToString();
+                enemyDefenseText.text = currentDefense.ToString();
+                break;
+        }
     }
 
     public void ShowQuestion(QuestionData selectedQuestion)

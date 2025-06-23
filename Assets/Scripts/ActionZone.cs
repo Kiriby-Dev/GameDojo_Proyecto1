@@ -7,14 +7,12 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
-    
     public enum ZoneType { Attack, Defense , Discard}
     public ZoneType zoneType;
     
     private GameObject[] _cardsInZone;
     private int _cantCardsInZone = 0;
     private Card _selectedCard;
-    
     private bool _isDropping;
     private bool _activeZone;
     
@@ -23,6 +21,7 @@ public class ActionZone : MonoBehaviour
         GetZoneChildren();
     }
     
+    //Si la zona esta activa verifico si solté una carta ahí.
     private void Update()
     {
         if(!_activeZone) return;
@@ -32,17 +31,8 @@ public class ActionZone : MonoBehaviour
         
     }
 
-    private void GetZoneChildren()
-    {
-        int childCount = transform.childCount;
-        _cardsInZone = new GameObject[childCount];
-
-        for (int i = 0; i < childCount; i++)
-        {
-            _cardsInZone[i] = transform.GetChild(i).gameObject;
-        }
-    }
-
+    /*Si suelto una carta mientras está en fase de descarte la elimino.
+    Si suelto una carta mientras está en fase de colocación agrego la carta a la zona correspondiente.*/
     private void DropCard()
     {
         if(_cantCardsInZone >= _cardsInZone.Length || !_isDropping || !_selectedCard || !_selectedCard.gameObject) return;
@@ -66,21 +56,6 @@ public class ActionZone : MonoBehaviour
         }
     }
     
-    private IEnumerator RecalculateNextFrame()
-    {
-        yield return new WaitForEndOfFrame();
-        gameManager.GetPlayersHand().Recalculate();
-    }
-
-    public void ResetZone()
-    {
-        for (int i = 0; i < _cantCardsInZone; i++)
-        {
-            Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
-        }
-        _cantCardsInZone = 0;
-    }
-
     private void AddCardInZone()
     {
         switch (zoneType)
@@ -95,7 +70,7 @@ public class ActionZone : MonoBehaviour
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
         _cantCardsInZone++;
     }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         _activeZone = true;
@@ -106,8 +81,39 @@ public class ActionZone : MonoBehaviour
     {
         _activeZone = false;
     }
+
+    #region Utilities
+    //Reordeno las cartas en la mano luego de descartar (debo esperar al terminar el frame porque unity hace el Destroy por último).
+    private IEnumerator RecalculateNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        gameManager.GetPlayersHand().Recalculate();
+    }
     
+    private void GetZoneChildren()
+    {
+        int childCount = transform.childCount;
+        _cardsInZone = new GameObject[childCount];
+
+        for (int i = 0; i < childCount; i++)
+        {
+            _cardsInZone[i] = transform.GetChild(i).gameObject;
+        }
+    }
+
+    public void ResetZone()
+    {
+        for (int i = 0; i < _cantCardsInZone; i++)
+        {
+            Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
+        }
+        _cantCardsInZone = 0;
+    }
+    #endregion
+
+    #region Getters
     public int GetCantCardsInZone() => _cantCardsInZone;
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
     public ZoneType GetZoneType() => zoneType;
+    #endregion
 }

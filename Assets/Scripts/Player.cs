@@ -1,32 +1,13 @@
-using System;
-using TMPro;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
-    public GameManager gameManager;
-    
-    private int _currentAttack;
-    private int _currentDefense;
-    private HPBar _hpBar;
-
-    private void Awake()
-    {
-        _hpBar = GetComponentInChildren<HPBar>();
-    }
-
     private void Start()
     {
         ResetStats();
     }
 
-    public void ResetStats()
-    {
-        _currentAttack = 0;
-        _currentDefense = 0;
-        gameManager.GetUIManager().UpdatePlayerStats(_currentAttack, _currentDefense);
-    }
-
+    //Le añade ataque o defensa al jugador con el valor correspondiente.
     public void AddStats(GameObject card, int value)
     {
         ActionZone.ZoneType zoneType = card.transform.parent.GetComponent<ActionZone>().GetZoneType();
@@ -39,29 +20,25 @@ public class Player : MonoBehaviour
                 AddDefense(value);
                 break;
         }
-        gameManager.GetUIManager().UpdatePlayerStats(_currentAttack, _currentDefense);
+        gameManager.GetUIManager().UpdateStats(CurrentAttack, CurrentDefense, "Player");
+    }
+
+    #region Utilities
+    public void ResetStats()
+    {
+        CurrentAttack = 0;
+        CurrentDefense = 0;
+        gameManager.GetUIManager().UpdateStats(CurrentAttack, CurrentDefense, "Player");
     }
     
     private void AddAttack(int value)
     {
-        _currentAttack += value;
+        CurrentAttack += value;
     }
 
     private void AddDefense(int value)
     {
-        _currentDefense += value;
+        CurrentDefense += value;
     }
-
-    public void TakeDamage(int value)
-    {
-        _hpBar.Damage(-value);
-    }
-
-    public bool IsDead()
-    {
-        return _hpBar.IsDead();
-    }
-
-    public int GetAttack() => _currentAttack;
-    public int GetDefense() => _currentDefense;
+    #endregion
 }
