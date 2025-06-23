@@ -7,9 +7,23 @@ public class PlayersHand : MonoBehaviour
     private int _cardsCount;
     private float _cardSize = 2.5f;
     private float _startPosition;
-    
+
+    private Card grabbedCard = null; // Carta que está agarrada
+
     void Start()
     {
+        Recalculate();
+    }
+
+    public void SetGrabbedCard(Card card)
+    {
+        grabbedCard = card;
+        Recalculate();
+    }
+
+    public void ClearGrabbedCard()
+    {
+        grabbedCard = null;
         Recalculate();
     }
 
@@ -24,12 +38,13 @@ public class PlayersHand : MonoBehaviour
     private void SetCardsOrder()
     {
         int i = 0;
-        foreach (var card in transform)
+        foreach (Transform cardTransform in transform)
         {
-            Transform currentCard = (Transform) card;
-            currentCard.GetComponent<Card>().SetCardOrder(i * 2); 
-            /*Ordenamos las cartas solo en los pares pues los layers impares estan reservados para los textos
-            (la carta en el lugar 0, tiene su texto en el lugar 1, la carta en el lugar 2 tiene su texto en el lugar 3 y asi)*/
+            Card card = cardTransform.GetComponent<Card>();
+            if (card == grabbedCard)
+                continue; // Saltar carta agarrada
+
+            card.SetCardOrder(i * 2);
             i++;
         }
     }
@@ -37,27 +52,29 @@ public class PlayersHand : MonoBehaviour
     private void SetPositions()
     {
         int i = 0;
-        bool isEven = _cardsCount % 2 == 0;
+        int visibleCardsCount = grabbedCard ? _cardsCount - 1 : _cardsCount;
 
-        float halfCount = Mathf.Floor(_cardsCount * 0.5f);
+        if (visibleCardsCount == 0)
+            return;
+
+        bool isEven = visibleCardsCount % 2 == 0;
+        float halfCount = Mathf.Floor(visibleCardsCount * 0.5f);
 
         if (!isEven)
-        {
             _startPosition = -1 * (_cardSize * halfCount);
-        }
         else
-        {
             _startPosition = -1 * (_cardSize * halfCount - _cardSize / 2f);
-        }
 
-        foreach (var card in transform)
+        foreach (Transform cardTransform in transform)
         {
-            Transform currentCard = (Transform) card;
-            
-            Vector3 cardPos = currentCard.position;
-            currentCard.position = new Vector3(_startPosition + (i * _cardSize), cardPos.y, cardPos.z);
-            
-            currentCard.GetComponent<Card>().SetCardStartPosition();
+            Card card = cardTransform.GetComponent<Card>();
+            if (card == grabbedCard)
+                continue; // No mover carta agarrada
+
+            Vector3 cardPos = cardTransform.position;
+            cardTransform.position = new Vector3(_startPosition + (i * _cardSize), cardPos.y, cardPos.z);
+
+            card.SetCardStartPosition();
             i++;
         }
     }

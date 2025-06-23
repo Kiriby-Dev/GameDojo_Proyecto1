@@ -9,11 +9,11 @@ public class Enemy : MonoBehaviour
 
     private int _attack;
     private int _defense;
-    private HPBar hpBar;
+    private HPBar _hpBar;
 
     private void Awake()
     {
-        hpBar = GetComponentInChildren<HPBar>();
+        _hpBar = GetComponentInChildren<HPBar>();
     }
     
     public void GenerateStats()
@@ -26,12 +26,12 @@ public class Enemy : MonoBehaviour
     
     public void TakeDamage(int value)
     {
-        hpBar.Damage(-1 * value);
+        _hpBar.Damage(-1 * value);
     }
     
     public bool IsDead()
     {
-        return hpBar.IsDead();
+        return _hpBar.IsDead();
     }
     
     public int GetAttack() => _attack;

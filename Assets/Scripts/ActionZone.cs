@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,9 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
+    
+    public enum ZoneType { Attack, Defense , Discard}
+    public ZoneType zoneType;
     
     private GameObject[] _cardsInZone;
     private int _cantCardsInZone = 0;
@@ -41,22 +45,31 @@ public class ActionZone : MonoBehaviour
 
     private void DropCard()
     {
-        if(_cantCardsInZone >= _cardsInZone.Length) return;
-        if (!_isDropping) return;
+        if(_cantCardsInZone >= _cardsInZone.Length || !_isDropping || !_selectedCard || !_selectedCard.gameObject) return;
         _activeZone = false;
         
-        if(_selectedCard && _selectedCard.gameObject)
-        {
-            string _phase = gameManager.CheckPhase();
-            if (_phase == "Discard")
-            {
-                Destroy(_selectedCard.gameObject);
-                gameManager.GetPlayersHand().Recalculate();
-            }
+        var currentPhase = gameManager.GetPhaseManager().CurrentPhase;
 
-            if (_phase == "Colocation")
+        switch (currentPhase)
+        {
+            case PhaseManager.GamePhase.Discard:
+                if (zoneType == ZoneType.Discard)
+                {
+                    Destroy(_selectedCard.gameObject);
+                    StartCoroutine(RecalculateNextFrame());
+                }
+                break;
+
+            case PhaseManager.GamePhase.Colocation:
                 AddCardInZone();
+                break;
         }
+    }
+    
+    private IEnumerator RecalculateNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        gameManager.GetPlayersHand().Recalculate();
     }
 
     public void ResetZone()
@@ -68,18 +81,18 @@ public class ActionZone : MonoBehaviour
         _cantCardsInZone = 0;
     }
 
-    private string CheckZone()
-    {
-        return gameObject.name;
-    }
-
     private void AddCardInZone()
     {
-        if (CheckZone() == "AttackZone")
-            _selectedCard.ChangeSprite(1);
-        if (CheckZone() == "DefenseZone")
-            _selectedCard.ChangeSprite(2);
-        _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cantCardsInZone);
+        switch (zoneType)
+        {
+            case ZoneType.Attack: 
+                _selectedCard.ChangeSprite(1);
+                break;
+            case ZoneType.Defense:
+                _selectedCard.ChangeSprite(2);
+                break;
+        }
+        _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
         _cantCardsInZone++;
     }
 
@@ -96,4 +109,5 @@ public class ActionZone : MonoBehaviour
     
     public int GetCantCardsInZone() => _cantCardsInZone;
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
+    public ZoneType GetZoneType() => zoneType;
 }

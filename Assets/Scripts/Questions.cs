@@ -6,9 +6,9 @@ public class Questions : MonoBehaviour
     private string[] _options;
     private string _correctAnswer;
 
-    public void SetData(string q, string[] opts, string correct)
+    public void SetData(string question, string[] opts, string correct)
     {
-        _question = q;
+        _question = question;
         _options = opts;
         _correctAnswer = correct;
     }

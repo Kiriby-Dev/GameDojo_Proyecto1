@@ -5,101 +5,52 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("GameObjects")]
+    [Header("Managers")]
+    public QuestionManager questionManager;
+    public PhaseManager phaseManager;
+    public UIManager uiManager;
+    
+    [Header("Game Objects")]
     public GameObject playersHand;
     public GameObject card;
-    public QuestionManager questionManager;
     public Player player;
     public Enemy enemy;
-
-    [Header("UI")] 
-    public TextMeshProUGUI phaseText;
-    public Canvas winCanvas;
-    public Canvas loseCanvas;
     
     [Header("ActionZones")]
-    public GameObject discardZone;
-    public GameObject attackZone;
-    public GameObject defenseZone;
-
-    private ActionZone _discardActionZone;
-    private ActionZone _attackActionZone;
-    private ActionZone _defenseActionZone;
-    private PlayersHand _playersHandScript;
-    private bool _waitingForQuestions = false;
-    private bool _waitingForResults = false;
+    public ActionZone discardZone;
+    public ActionZone attackZone;
+    public ActionZone defenseZone;
     
-    private bool _isTurnOver = true;
-    private string _phase;
     private bool _gameOver = false;
+    private PlayersHand _playersHandScript;
+    private Card _cardScript;
 
     private void Awake()
     {
-        _discardActionZone = discardZone.GetComponent<ActionZone>();
-        _attackActionZone = attackZone.GetComponent<ActionZone>();
-        _defenseActionZone = defenseZone.GetComponent<ActionZone>();
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
+        _cardScript = card.GetComponent<Card>();
     }
 
     private void Update()
     {
         CheckEndGame();
-        if (_gameOver) return;
-        ChangePhase();
     }
 
-    public string CheckPhase()
+    public void UpdateZones(string gamePhase)
     {
-        return _phase;
+        bool active = (gamePhase == "Discard");
+        
+        discardZone.enabled = active;
+        attackZone.enabled = !active;
+        defenseZone.enabled = !active;
     }
 
-    public void SetPhase(string phase)
+    public void DrawCards()
     {
-        _phase = phase;
-        phaseText.text = _phase;
-    }
-
-    private void ChangePhase()
-    {
-        if (_waitingForQuestions) return;
-        if (_waitingForResults) return;
-        
-        int cantCards = CardsCountInHand();
-        
-        if (cantCards <= 0 && !_isTurnOver)
+        for (int i = 1; i <= 5; i++)
         {
-            SetPhase("Questions");
-            _waitingForQuestions = true;
-            StartCoroutine(WaitQuestionsPhase());
-        }
-        
-        if (cantCards <= 0 && _isTurnOver)
-        {
-            ResetVariables();
-            SetPhase("Draw");
-            for (int i = 1; i <= 5; i++)
-            {
-                GameObject go = Instantiate(card, playersHand.transform);
-                go.GetComponent<Card>().GenerateCardValue();
-            }
-            _playersHandScript.Recalculate();
-            _isTurnOver = false;
-        }
-
-        if (cantCards <= 5 && cantCards > 3)
-        {
-            SetPhase("Discard");
-            _discardActionZone.enabled = true;
-            _attackActionZone.enabled = false;
-            _defenseActionZone.enabled = false;
-        }
-
-        if (cantCards <= 3 && cantCards > 0)
-        {
-            SetPhase("Colocation");
-            _discardActionZone.enabled = false;
-            _attackActionZone.enabled = true;
-            _defenseActionZone.enabled = true;
+            GameObject go = Instantiate(card, playersHand.transform);
+            go.GetComponent<Card>().GenerateCardValue();
         }
     }
 
@@ -114,41 +65,19 @@ public class GameManager : MonoBehaviour
     private void GameOver(bool win)
     {
         _gameOver = true;
-        if (win)
-            winCanvas.enabled = true;
-        else
-            loseCanvas.enabled = true;
+        uiManager.GameOverCanvas(win);
     }
 
-    private void ResetVariables()
+    public void ResetVariables()
     {
         player.ResetStats();
         enemy.GenerateStats();
-        questionManager.ResetBoard();
-        _attackActionZone.ResetZone();
-        _defenseActionZone.ResetZone();
-        winCanvas.enabled = false;
-        loseCanvas.enabled = false;
-    }
-
-    private IEnumerator WaitQuestionsPhase()
-    {
-        yield return StartCoroutine(questionManager.StartQuestions());
-        _waitingForQuestions = false;
-        
-        SetPhase("Resolution");
-        _waitingForResults = true;
-        StartCoroutine(WaitResolutionPhase());
+        attackZone.ResetZone();
+        defenseZone.ResetZone();
+        uiManager.ResetVisuals();
     }
     
-    private IEnumerator WaitResolutionPhase()
-    {
-        yield return StartCoroutine(ResolveStats());
-        _waitingForResults = false;
-        _isTurnOver = true;
-    }
-
-    private IEnumerator ResolveStats()
+    public void ResolveCombat()
     {
         int damageDealed = enemy.GetDefense() - player.GetAttack();
         int damageTaken = player.GetDefense() - enemy.GetAttack();
@@ -157,17 +86,20 @@ public class GameManager : MonoBehaviour
             player.TakeDamage(damageTaken);
         if (damageDealed < 0)
             enemy.TakeDamage(damageDealed);
-        
-        yield return new WaitForSeconds(2.0f);
     }
 
     public int CardsCountInHand()
     {
         return playersHand.transform.childCount;
     }
-    
+
+    public PhaseManager GetPhaseManager() => phaseManager;
+    public QuestionManager GetQuestionManager() => questionManager;
+    public UIManager GetUIManager() => uiManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
-    public ActionZone GetAttackZone() => _attackActionZone;
-    public ActionZone GetDefenseZone() => _defenseActionZone;
+    public ActionZone GetAttackZone() => attackZone;
+    public ActionZone GetDefenseZone() => defenseZone;
     public Player GetPlayer() => player;
+    public bool IsGameOver() => _gameOver;
+    public Card GetCard() => _cardScript;
 }

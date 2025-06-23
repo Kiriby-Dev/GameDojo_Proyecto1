@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 
 public class Card : MonoBehaviour
 {
+    public enum CardColor { Red, Yellow, Green, White }
+    
     public float returnSpeed;
     public Canvas textCanvas;
     
@@ -16,11 +18,13 @@ public class Card : MonoBehaviour
     private bool _isReturning = false;
     private bool _isDragging = false;
     private Vector3 _startPosition;
+    private PlayersHand playersHand;
 
     private void Awake()
     {
         _camera = Camera.main;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        playersHand = FindAnyObjectByType<PlayersHand>();
     }
 
     private void Start()
@@ -44,14 +48,20 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        SetCardStartPosition();
+        
         _isDragging = true;
         _isReturning = false;
+        
+        playersHand.SetGrabbedCard(this);
     }
 
     private void OnMouseUp()
     {
         _isReturning = true;
         _isDragging = false;
+        
+        playersHand.ClearGrabbedCard();
     }
 
     private void FollowMousePosition()
@@ -63,7 +73,10 @@ public class Card : MonoBehaviour
 
     public void SetCardStartPosition()
     {
-        _startPosition = transform.position;
+        if (!_isDragging && !_isReturning)
+        {
+            _startPosition = transform.position;
+        }
     }
 
     public void SetCardOrder(int cardOrder)
@@ -75,39 +88,46 @@ public class Card : MonoBehaviour
     private void ReturnStartPosition()
     {
         transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
-        if (transform.position == _startPosition)
+        if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
         {
+            transform.position = _startPosition;
             _isReturning = false;
         }
     }
     
-    public GameObject[] PutCardInZone(GameObject[] cardsInZone, int cardsInZoneIndex)
+    public void PutCardInSlot(Transform slot)
     {
+        DisableInteraction();
+        transform.position = slot.position;
+        transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        transform.SetParent(slot);
+        if (playersHand)
+            playersHand.Recalculate();
+    }
+    
+    private void DisableInteraction()
+    {
+        _isDragging = false;
         _isReturning = false;
         GetComponent<Collider2D>().enabled = false;
-        
         transform.Find("DropZone").gameObject.SetActive(false);
-        transform.position = cardsInZone[cardsInZoneIndex].transform.position;
-        transform.localScale = new Vector3(0.6f, 0.6f, 0);
-        transform.SetParent(cardsInZone[cardsInZoneIndex].transform);
-        return cardsInZone;
     }
 
-    public void ChangeColor(string color = "white")
+    public void ChangeColor(CardColor color = CardColor.White)
     {
         switch (color)
         {
-            case "red":
-                _spriteRenderer.color = Color.red;
+            case CardColor.Red: 
+                _spriteRenderer.color = Color.red; 
                 break;
-            case "yellow":
-                _spriteRenderer.color = Color.yellow;
+            case CardColor.Yellow: 
+                _spriteRenderer.color = Color.yellow; 
                 break;
-            case "green":
-                _spriteRenderer.color = Color.green;
+            case CardColor.Green: 
+                _spriteRenderer.color = Color.green; 
                 break;
-            case "white":
-                _spriteRenderer.color = Color.white;
+            case CardColor.White: 
+                _spriteRenderer.color = Color.white; 
                 break;
         }
     }

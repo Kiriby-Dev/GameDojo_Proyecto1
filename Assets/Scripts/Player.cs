@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [Header("Player Stats")]
-    public TextMeshProUGUI attackText;
-    public TextMeshProUGUI defenseText;
-
+    public GameManager gameManager;
+    
     private int _currentAttack;
     private int _currentDefense;
-    private HPBar hpBar;
+    private HPBar _hpBar;
 
     private void Awake()
     {
-        hpBar = GetComponentInChildren<HPBar>();
+        _hpBar = GetComponentInChildren<HPBar>();
     }
 
     private void Start()
@@ -22,39 +20,46 @@ public class Player : MonoBehaviour
         ResetStats();
     }
 
-    private void UpdateStats()
-    {
-        attackText.text = _currentAttack.ToString();
-        defenseText.text = _currentDefense.ToString();
-    }
-
     public void ResetStats()
     {
         _currentAttack = 0;
         _currentDefense = 0;
-        UpdateStats();
+        gameManager.GetUIManager().UpdatePlayerStats(_currentAttack, _currentDefense);
     }
 
-    public void AddAttack(int value)
+    public void AddStats(GameObject card, int value)
+    {
+        ActionZone.ZoneType zoneType = card.transform.parent.GetComponent<ActionZone>().GetZoneType();
+        switch (zoneType)
+        {
+            case ActionZone.ZoneType.Attack:
+                AddAttack(value);
+                break;
+            case ActionZone.ZoneType.Defense:
+                AddDefense(value);
+                break;
+        }
+        gameManager.GetUIManager().UpdatePlayerStats(_currentAttack, _currentDefense);
+    }
+    
+    private void AddAttack(int value)
     {
         _currentAttack += value;
-        UpdateStats();
     }
 
-    public void AddDefense(int value)
+    private void AddDefense(int value)
     {
         _currentDefense += value;
-        UpdateStats();
     }
 
     public void TakeDamage(int value)
     {
-        hpBar.Damage(-value);
+        _hpBar.Damage(-value);
     }
 
     public bool IsDead()
     {
-        return hpBar.IsDead();
+        return _hpBar.IsDead();
     }
 
     public int GetAttack() => _currentAttack;
