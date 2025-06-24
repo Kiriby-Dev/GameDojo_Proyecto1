@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,11 +7,12 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
+    public enum ZoneType { Attack, Defense , Discard}
+    public ZoneType zoneType;
     
     private GameObject[] _cardsInZone;
     private int _cantCardsInZone = 0;
     private Card _selectedCard;
-    
     private bool _isDropping;
     private bool _activeZone;
     
@@ -19,6 +21,7 @@ public class ActionZone : MonoBehaviour
         GetZoneChildren();
     }
     
+    //Si la zona esta activa verifico si solté una carta ahí.
     private void Update()
     {
         if(!_activeZone) return;
@@ -28,6 +31,65 @@ public class ActionZone : MonoBehaviour
         
     }
 
+    /*Si suelto una carta mientras está en fase de descarte la elimino.
+    Si suelto una carta mientras está en fase de colocación agrego la carta a la zona correspondiente.*/
+    private void DropCard()
+    {
+        if(_cantCardsInZone >= _cardsInZone.Length || !_isDropping || !_selectedCard || !_selectedCard.gameObject) return;
+        _activeZone = false;
+        
+        var currentPhase = gameManager.GetPhaseManager().CurrentPhase;
+
+        switch (currentPhase)
+        {
+            case PhaseManager.GamePhase.Discard:
+                if (zoneType == ZoneType.Discard)
+                {
+                    Destroy(_selectedCard.gameObject);
+                    StartCoroutine(RecalculateNextFrame());
+                }
+                break;
+
+            case PhaseManager.GamePhase.Colocation:
+                AddCardInZone();
+                break;
+        }
+    }
+    
+    private void AddCardInZone()
+    {
+        switch (zoneType)
+        {
+            case ZoneType.Attack: 
+                _selectedCard.ChangeSprite(1);
+                break;
+            case ZoneType.Defense:
+                _selectedCard.ChangeSprite(2);
+                break;
+        }
+        _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
+        _cantCardsInZone++;
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        _activeZone = true;
+        _selectedCard = other.gameObject.GetComponentInParent<Card>();
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        _activeZone = false;
+    }
+
+    #region Utilities
+    //Reordeno las cartas en la mano luego de descartar (debo esperar al terminar el frame porque unity hace el Destroy por último).
+    private IEnumerator RecalculateNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        gameManager.GetPlayersHand().Recalculate();
+    }
+    
     private void GetZoneChildren()
     {
         int childCount = transform.childCount;
@@ -39,26 +101,6 @@ public class ActionZone : MonoBehaviour
         }
     }
 
-    private void DropCard()
-    {
-        if(_cantCardsInZone >= _cardsInZone.Length) return;
-        if (!_isDropping) return;
-        _activeZone = false;
-        
-        if(_selectedCard && _selectedCard.gameObject)
-        {
-            string _phase = gameManager.CheckPhase();
-            if (_phase == "Discard")
-            {
-                Destroy(_selectedCard.gameObject);
-                gameManager.GetPlayersHand().Recalculate();
-            }
-
-            if (_phase == "Colocation")
-                AddCardInZone();
-        }
-    }
-
     public void ResetZone()
     {
         for (int i = 0; i < _cantCardsInZone; i++)
@@ -67,33 +109,11 @@ public class ActionZone : MonoBehaviour
         }
         _cantCardsInZone = 0;
     }
+    #endregion
 
-    private string CheckZone()
-    {
-        return gameObject.name;
-    }
-
-    private void AddCardInZone()
-    {
-        if (CheckZone() == "AttackZone")
-            _selectedCard.ChangeSprite(1);
-        if (CheckZone() == "DefenseZone")
-            _selectedCard.ChangeSprite(2);
-        _cardsInZone = _selectedCard.PutCardInZone(_cardsInZone, _cantCardsInZone);
-        _cantCardsInZone++;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        _activeZone = true;
-        _selectedCard = other.gameObject.GetComponentInParent<Card>();
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        _activeZone = false;
-    }
-    
+    #region Getters
     public int GetCantCardsInZone() => _cantCardsInZone;
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
+    public ZoneType GetZoneType() => zoneType;
+    #endregion
 }

@@ -1,62 +1,44 @@
-using System;
-using TMPro;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
-    [Header("Player Stats")]
-    public TextMeshProUGUI attackText;
-    public TextMeshProUGUI defenseText;
-
-    private int _currentAttack;
-    private int _currentDefense;
-    private HPBar hpBar;
-
-    private void Awake()
-    {
-        hpBar = GetComponentInChildren<HPBar>();
-    }
-
     private void Start()
     {
         ResetStats();
     }
 
-    private void UpdateStats()
+    //Le añade ataque o defensa al jugador con el valor correspondiente.
+    public void AddStats(GameObject card, int value)
     {
-        attackText.text = _currentAttack.ToString();
-        defenseText.text = _currentDefense.ToString();
+        ActionZone.ZoneType zoneType = card.transform.parent.GetComponent<ActionZone>().GetZoneType();
+        switch (zoneType)
+        {
+            case ActionZone.ZoneType.Attack:
+                AddAttack(value);
+                break;
+            case ActionZone.ZoneType.Defense:
+                AddDefense(value);
+                break;
+        }
+        gameManager.GetUIManager().UpdateStats(CurrentAttack, CurrentDefense, "Player");
     }
 
+    #region Utilities
     public void ResetStats()
     {
-        _currentAttack = 0;
-        _currentDefense = 0;
-        UpdateStats();
+        CurrentAttack = 0;
+        CurrentDefense = 0;
+        gameManager.GetUIManager().UpdateStats(CurrentAttack, CurrentDefense, "Player");
     }
-
-    public void AddAttack(int value)
+    
+    private void AddAttack(int value)
     {
-        _currentAttack += value;
-        UpdateStats();
+        CurrentAttack += value;
     }
 
-    public void AddDefense(int value)
+    private void AddDefense(int value)
     {
-        _currentDefense += value;
-        UpdateStats();
+        CurrentDefense += value;
     }
-
-    public void TakeDamage(int value)
-    {
-        hpBar.Damage(-value);
-    }
-
-    public bool IsDead()
-    {
-        return hpBar.IsDead();
-    }
-
-    public int GetAttack() => _currentAttack;
-    public int GetDefense() => _currentDefense;
+    #endregion
 }

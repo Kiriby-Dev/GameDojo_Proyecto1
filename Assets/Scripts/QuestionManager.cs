@@ -1,107 +1,117 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class QuestionManager : MonoBehaviour
 {
-    [Header("UI")]
-    public TextMeshProUGUI questionText;
-    public TextMeshProUGUI answerText1;
-    public TextMeshProUGUI answerText2;
-    public TextMeshProUGUI answerText3;
-    public TextMeshProUGUI answerText4;
-    public TextMeshProUGUI timerText;
-    
-    [Header("GameObjects")]
     public GameManager gameManager;
+    public int timePerQuestion;
     
-    private Questions[] _hard;
-    private Questions[] _medium;
-    private Questions[] _easy;
+    private QuestionData[] allQuestions;
+    private List<QuestionData> _easy;
+    private List<QuestionData> _medium;
+    private List<QuestionData> _hard;
     
+    private QuestionData _selectedQuestion = null;
     private bool _playerHasAnswered = false;
-    private Questions _selectedQuestion = null;
     private bool _playerAnswersCorrectly;
     private bool _timeRanOut = false;
-    private Questions _emptyQuestion;
-    private Coroutine _countdownCoroutine;
 
     private void Start()
     {
-        CreateEmptyQuestion();
-        SetQuestionsArrays();
+        _easy = new List<QuestionData>();
+        _medium = new List<QuestionData>();
+        _hard = new List<QuestionData>();
         LoadQuestions();
     }
 
-    private void CreateEmptyQuestion()
-    {
-        _emptyQuestion = gameObject.AddComponent<Questions>();
-        _emptyQuestion.SetData("Pregunta", new []{"Respuesta 2", "Respuesta 3", "Respuesta 4"}, "Respuesta 1");
-    }
-
-    public void ResetBoard()
-    {
-        ShowQuestion(_emptyQuestion);
-    }
-
+    //Recorro todas las cartas de la zona de ataque y cuando termino recien ahi recorro las de la zona de defensa.
     public IEnumerator StartQuestions()
     {
         ActionZone attackZone = gameManager.GetAttackZone();
         ActionZone defenseZone = gameManager.GetDefenseZone();
-        yield return StartCoroutine(GoThroughCards(attackZone));
+        yield return StartCoroutine(GoThroughCards(attackZone)); //Espera a que termine la corrutina antes de seguir.
         yield return StartCoroutine(GoThroughCards(defenseZone));
     }
 
-    private IEnumerator GoThroughCards(ActionZone actionZone)
+    //Recorre todas las cartas de una zona.
+    private IEnumerator GoThroughCards(ActionZone zone)
     {
-        for (int i = 0; i < actionZone.GetCantCardsInZone(); i++)
+        int count = zone.GetCantCardsInZone();
+        for (int i = 0; i < count; i++)
         {
-            GameObject card = actionZone.GetActualCardZone(i);
-            if (card)
-            {
-                int difficulty = int.Parse(card.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1));
-                Card cardScript = card.GetComponentInChildren<Card>();
-
-                SelectQuestion(difficulty);
-                cardScript.ChangeColor("yellow");
-
-                _playerHasAnswered = false;
-                _countdownCoroutine = StartCoroutine(CountdownTimer(60f)); // ← Inicia el timer de 60s
-                yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
-
-                if (_countdownCoroutine != null)
-                    StopCoroutine(_countdownCoroutine);
-
-                if (cardScript)
-                {
-                    if (_playerAnswersCorrectly)
-                    {
-                        cardScript.ChangeColor("green");
-                        AddStats(card, difficulty);
-                    }
-                    else
-                    {
-                        cardScript.ChangeColor("red");
-                    }
-                }
-
-                _playerHasAnswered = false;
-                _timeRanOut = false;
-                yield return new WaitForSeconds(1f);
-            }
+            GameObject cardGO = zone.GetActualCardZone(i);
+            yield return ProcessCard(cardGO);
         }
     }
 
-    private IEnumerator CountdownTimer(float duration)
+    #region ProcessCard
+
+    /*Se procesa la carta, esto conlleva muchas cosas:
+    - Selecciona una pregunta aleatoria de la dificultad asociada.
+    - Indica que la carta esta seleccionada (la pinta de amarillo).
+    - Inicia el timer.
+    - Espera a que el jugador responda o el tiempo se acabe.
+    - Verifica la respuesta seleccionada.*/
+    private IEnumerator ProcessCard(GameObject cardGO)
+    {
+        if (!cardGO) yield break;
+
+        int difficulty = GetCardDifficulty(cardGO);
+        Card cardScript = cardGO.GetComponentInChildren<Card>();
+
+        SelectQuestion(difficulty);
+        cardScript.ChangeColor(Card.CardColor.Yellow);
+
+        _playerHasAnswered = false;
+        _timeRanOut = false;
+
+        StartCoroutine(Timer(timePerQuestion));
+        yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
+
+        HandleAnswerResult(cardScript, cardGO, difficulty);
+
+        yield return new WaitForSeconds(1f);
+    }
+    
+    //Selecciona una pregunta dada una dificultad y la elimina de la lista correspondiente para no repetirla.
+    private void SelectQuestion(int difficulty)
+    {
+        List<QuestionData> listToUse = null;
+
+        switch (difficulty)
+        {
+            case 1:
+                listToUse = _easy;
+                break;
+            case 2:
+                listToUse = _medium;
+                break;
+            case 3:
+                listToUse = _hard;
+                break;
+        }
+
+        if (listToUse != null && listToUse.Count > 0)
+        {
+            int i = Random.Range(0, listToUse.Count);
+            _selectedQuestion = listToUse[i];
+            listToUse.RemoveAt(i);
+        }
+
+        gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
+    }
+    
+    private IEnumerator Timer(float duration)
     {
         float timeLeft = duration;
+
         while (timeLeft > 0f && !_playerHasAnswered)
         {
-            timerText.text = Mathf.CeilToInt(timeLeft).ToString();
+            gameManager.GetUIManager().UpdateTimer(Mathf.CeilToInt(timeLeft).ToString());
             timeLeft -= Time.deltaTime;
             yield return null;
         }
@@ -112,19 +122,10 @@ public class QuestionManager : MonoBehaviour
             _playerAnswersCorrectly = false;
         }
 
-        timerText.text = "";
+        gameManager.GetUIManager().UpdateTimer("");
     }
     
-    private void AddStats(GameObject card, int value)
-    {
-        Player player = gameManager.GetPlayer();
-        Transform zone = card.transform.parent;
-        if (zone.name == "AttackZone")
-            player.AddAttack(value);
-        if (zone.name == "DefenseZone")
-            player.AddDefense(value);
-    }
-
+    //Indica que el jugador selecciono una respuesta.
     public void OnAnswerSelected(Button clickedButton)
     {
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
@@ -132,66 +133,59 @@ public class QuestionManager : MonoBehaviour
         _playerHasAnswered = true;
     }
 
+    //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).
+    private void HandleAnswerResult(Card card, GameObject cardGO, int difficulty)
+    {
+        if (!card) return;
+
+        if (_playerAnswersCorrectly)
+        {
+            card.ChangeColor(Card.CardColor.Green);
+            gameManager.GetPlayer().AddStats(cardGO, difficulty);
+        }
+        else
+        {
+            card.ChangeColor(Card.CardColor.Red);
+        }
+    }
+
+    #endregion
+    
+    /*Toma todos los scriptable objects (preguntas) y los carga en la lista general.
+    Luego recorre esta lista y la separa en 3 distintas: facil, medio y dificil*/
+    private void LoadQuestions()
+    {
+        allQuestions = Resources.LoadAll<QuestionData>("Questions");
+
+        foreach (var q in allQuestions)
+        {
+            switch (q.difficulty)
+            {
+                case QuestionData.Difficulty.Easy:
+                    _easy.Add(q);
+                    break;
+                case QuestionData.Difficulty.Medium:
+                    _medium.Add(q);
+                    break;
+                case QuestionData.Difficulty.Hard:
+                    _hard.Add(q);
+                    break;
+            }
+        }
+    }
+
+    #region Utilities
+
     private bool CheckAnswer(string selectedText)
     {
         return selectedText == _selectedQuestion.GetCorrectAnswer();
     }
-
-    private void SetQuestionsArrays()
+    
+    private int GetCardDifficulty(GameObject cardGO)
     {
-        _easy = new Questions[4];
-        _medium = new Questions[4];
-        _hard = new Questions[4];
-
-        for (int i = 0; i < 4; i++)
-        {
-            _easy[i] = gameObject.AddComponent<Questions>();
-            _medium[i] = gameObject.AddComponent<Questions>();
-            _hard[i] = gameObject.AddComponent<Questions>();
-        }
+        string numberText = cardGO.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1);
+        return int.Parse(numberText);
     }
 
-    public void SelectQuestion(int difficulty)
-    {
-        int i = Random.Range(0, 4);
-        switch (difficulty)
-        {
-            case 1: _selectedQuestion = _easy[i];
-                break;
-            case 2: _selectedQuestion = _medium[i];
-                break;
-            case 3: _selectedQuestion = _hard[i];
-                break;
-            default: 
-                break;
-        }
-        ShowQuestion(_selectedQuestion);
-    }
-
-    private void ShowQuestion(Questions selectedQuestion)
-    {
-        questionText.text = selectedQuestion.GetQuestion();
-        answerText1.text = selectedQuestion.GetCorrectAnswer();
-        answerText2.text = selectedQuestion.GetOptions()[0];
-        answerText3.text = selectedQuestion.GetOptions()[1];
-        answerText4.text = selectedQuestion.GetOptions()[2];
-    }
-
-    private void LoadQuestions()
-    {
-        _easy[0].SetData("¿De qué color es el cielo en un día despejado?", new string[]{"Rojo", "Verde", "Negro"}, "Azul");
-        _easy[1].SetData("¿Cuánto es 5 + 3?", new string[]{"6", "7", "9"}, "8");
-        _easy[2].SetData("¿Qué animal dice 'miau'?", new string[]{"Perro", "Vaca", "Gallina"}, "Gato");
-        _easy[3].SetData("¿Qué día viene después del lunes?", new string[]{"Miércoles", "Jueves", "Viernes"}, "Martes");
-        
-        _medium[0].SetData("¿Quién pintó la Mona Lisa?", new string[]{"Picasso", "Van Gogh", "Rembrandt"}, "Leonardo da Vinci");
-        _medium[1].SetData("¿Cuál es el país con mayor población del mundo?", new string[]{"Estados Unidos", "Brasil", "Indonesia"}, "China");
-        _medium[2].SetData("¿Cuántos lados tiene un hexágono?", new string[]{"5", "7", "8"}, "6");
-        _medium[3].SetData("¿En qué continente está Egipto?", new string[]{"Asia", "Europa", "Oceanía"}, "África");
-        
-        _hard[0].SetData("¿En qué año comenzó la Segunda Guerra Mundial?", new string[]{"1937", "1940", "1942"}, "1939");
-        _hard[1].SetData("¿Qué elemento químico tiene el símbolo 'Fe'?", new string[]{"Flúor", "Francio", "Fermio"}, "Hierro");
-        _hard[2].SetData("¿Cuál es la capital de Finlandia?", new string[]{"Oslo", "Copenhague", "Estocolmo"}, "Helsinki");
-        _hard[3].SetData("¿Quién escribió 'La Odisea'?", new string[]{"Sófocles", "Virgilio", "Platón"}, "Homero");
-    }
+    #endregion
 }
