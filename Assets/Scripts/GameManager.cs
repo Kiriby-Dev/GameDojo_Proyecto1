@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject go = Instantiate(card, playersHand.transform);
             go.GetComponent<Card>().GenerateCardValue();
+            go.name = "Card" + i;
         }
     }
 

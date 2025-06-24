@@ -17,6 +17,8 @@ public class Card : MonoBehaviour
     private bool _isReturning = false;
     private bool _isDragging = false;
     private Vector3 _startPosition;
+    private int _cardIndex;
+    private bool _isCardActive;
 
     private void Awake()
     {
@@ -43,18 +45,26 @@ public class Card : MonoBehaviour
     #region Card Movement
     private void OnMouseDown()
     {
+        if (!_isCardActive) return;
         SetCardStartPosition();
         
         _isDragging = true;
         _isReturning = false;
-        
-        _playersHand.SetGrabbedCard(this);
+
+        _cardIndex = _playersHand.GetCardIndex(transform);
+        transform.parent = null;
+        _playersHand.ToggleCardsEnable(false);
+        _playersHand.Recalculate();
     }
 
     private void OnMouseUp()
     {
         _isReturning = true;
         _isDragging = false;
+        
+        transform.parent = _playersHand.transform;
+        transform.SetSiblingIndex(_cardIndex);
+        _playersHand.Recalculate();
     }
 
     private void FollowMousePosition()
@@ -71,8 +81,8 @@ public class Card : MonoBehaviour
         if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
         {
             transform.position = _startPosition;
+            _playersHand.ToggleCardsEnable(true);
             _isReturning = false;
-            _playersHand.ClearGrabbedCard();
         }
     }
     
@@ -90,14 +100,12 @@ public class Card : MonoBehaviour
     }
     #endregion
     
-    
     public void PutCardInSlot(Transform slot)
     {
         DisableInteraction();
         transform.position = slot.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 1f);
         transform.SetParent(slot);
-        _playersHand.Recalculate();
     }
     
     private void DisableInteraction()
@@ -139,5 +147,7 @@ public class Card : MonoBehaviour
     {
         _spriteRenderer.sprite = cardSprites[i];
     }
+    
+    public void SetCardActive(bool active) => _isCardActive = active;
     #endregion
 }

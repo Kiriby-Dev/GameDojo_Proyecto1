@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayersHand : MonoBehaviour
@@ -15,8 +16,9 @@ public class PlayersHand : MonoBehaviour
     }
 
     //Se utiliza para recalcular las posiciones de las cartas en la mano.
-    public void Recalculate()
+    public IEnumerator RecalculateCoroutine()
     {
+        yield return new WaitForEndOfFrame();
         _cardsCount = gameManager.CantCardsInHand();
 
         SetCardsOrder();
@@ -39,24 +41,17 @@ public class PlayersHand : MonoBehaviour
 
     private void SetPositions()
     {
-        int visibleCardsCount = _grabbedCard ? _cardsCount - 1 : _cardsCount; //Si hay una carta agarrada resto 1 a la cantidad de cartas en mano.
-
-        if (visibleCardsCount == 0) return;
-
-        float initialX = CalculateStartX(visibleCardsCount);
+        float initialX = CalculateStartX(_cardsCount);
         int i = 0;
         foreach (Transform cardTransform in transform)
         {
             Card card = cardTransform.GetComponent<Card>();
-            if (card != _grabbedCard)
-            {
-                Vector3 currentPos = cardTransform.position;
-                float newX = initialX + (i * _cardSpacing);
-                cardTransform.position = new Vector3(newX, currentPos.y, currentPos.z);
+            Vector3 currentPos = cardTransform.position;
+            float newX = initialX + (i * _cardSpacing);
+            cardTransform.position = new Vector3(newX, currentPos.y, currentPos.z);
 
-                card.SetCardStartPosition();
-                i++;
-            }
+            card.SetCardStartPosition();
+            i++;
         }
     }
 
@@ -72,17 +67,30 @@ public class PlayersHand : MonoBehaviour
         else
             return -1 * (_cardSpacing * half);
     }
-    
-    public void SetGrabbedCard(Card card)
+
+    public int GetCardIndex(Transform cardTransform)
     {
-        _grabbedCard = card;
-        Recalculate();
+        int index = 0;
+        foreach (Transform card in gameObject.transform)
+        {
+            if (card.name == cardTransform.name)
+                return index;
+            index++;
+        }
+        return -1;
+    }
+    
+    public void ToggleCardsEnable(bool enable)
+    {
+        foreach (Transform card in gameObject.transform)
+        {
+            card.GetComponent<Card>().SetCardActive(enable);
+        }
     }
 
-    public void ClearGrabbedCard()
+    public void Recalculate()
     {
-        _grabbedCard = null;
-        Recalculate();
+        StartCoroutine("RecalculateCoroutine");
     }
     #endregion
 }

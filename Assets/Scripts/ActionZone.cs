@@ -46,7 +46,6 @@ public class ActionZone : MonoBehaviour
                 if (zoneType == ZoneType.Discard)
                 {
                     Destroy(_selectedCard.gameObject);
-                    StartCoroutine(RecalculateNextFrame());
                 }
                 break;
 
@@ -83,13 +82,6 @@ public class ActionZone : MonoBehaviour
     }
 
     #region Utilities
-    //Reordeno las cartas en la mano luego de descartar (debo esperar al terminar el frame porque unity hace el Destroy por último).
-    private IEnumerator RecalculateNextFrame()
-    {
-        yield return new WaitForEndOfFrame();
-        gameManager.GetPlayersHand().Recalculate();
-    }
-    
     private void GetZoneChildren()
     {
         int childCount = transform.childCount;
