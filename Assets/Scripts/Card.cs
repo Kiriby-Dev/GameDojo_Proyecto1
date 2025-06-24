@@ -68,16 +68,11 @@ public class Card : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
         
-        if (Vector3.Distance(transform.position, _startPosition) < 2f)
-        {
-            _playersHand.ClearGrabbedCard();
-            _playersHand.Recalculate();
-        }
-        
         if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
         {
             transform.position = _startPosition;
             _isReturning = false;
+            _playersHand.ClearGrabbedCard();
         }
     }
     

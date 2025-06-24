@@ -77,11 +77,13 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator QuestionsPhase()
     {
+        gameManager.GetUIManager().QuestionMode();
         yield return gameManager.GetQuestionManager().StartQuestions();
     }
 
     private IEnumerator ResolutionPhase()
     {
+        gameManager.GetUIManager().NormalMode();
         gameManager.ResolveCombat();
         yield return new WaitForSeconds(2f);
     }

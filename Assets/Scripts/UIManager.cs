@@ -1,13 +1,22 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Config")]
+    public Vector3 enlargedBoardScale;
+    public Vector3 newActionZonePosition;
+    public Vector3 newActionZoneScale;
+    
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
     public Canvas winCanvas;
     public Canvas loseCanvas;
+    public GameObject board;
+    public GameObject actionZones;
     
     [Header("Player Stats")]
     public TextMeshProUGUI playerAttackText;
@@ -24,11 +33,24 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
     public TextMeshProUGUI timerText;
+    
+    private Vector3 _boardOriginalScale;
+    private Vector3 _actionZonesOriginalPosition;
+    private Vector3 _actionZonesOriginalScale;
+
+    private void Start()
+    {
+        _boardOriginalScale = board.transform.localScale;
+        _actionZonesOriginalPosition = actionZones.transform.position;
+        _actionZonesOriginalScale = actionZones.transform.localScale;
+    }
 
     public void ResetVisuals()
     {
+        NormalMode();
         winCanvas.gameObject.SetActive(false);
         loseCanvas.gameObject.SetActive(false);
+        questionText.text = "";
         answerText1.text = "";
         answerText2.text = "";
         answerText3.text = "";
@@ -88,4 +110,24 @@ public class UIManager : MonoBehaviour
         answerText3.text = allOptions[2];
         answerText4.text = allOptions[3];
     }
+
+    #region Utilities
+    // Agranda el tablero y posiciona las zonas de acción
+    public void QuestionMode()
+    {
+        board.transform.localScale = enlargedBoardScale;
+        actionZones.transform.position = newActionZonePosition;
+        actionZones.transform.localScale = newActionZoneScale;
+        actionZones.transform.GetChild(2).gameObject.SetActive(false); //Desactivo la discard zone
+    }
+
+    // Vuelve al tamaño original y posiciona las zonas de acción
+    public void NormalMode()
+    {
+        board.transform.localScale = _boardOriginalScale;
+        actionZones.transform.position = _actionZonesOriginalPosition;
+        actionZones.transform.localScale = _actionZonesOriginalScale;
+        actionZones.transform.GetChild(2).gameObject.SetActive(true); //Activo la discard zone
+    }
+    #endregion
 }
