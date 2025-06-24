@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01be03c17a9a184bbd019768494d7b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  returnSpeed: 2
+  returnSpeed: 3
   textCanvas: {fileID: 2628653270333303562}
   cardSprites:
   - {fileID: 2527533061934187546, guid: cec6ab38c41a2684696404d027f2266a, type: 3}

@@ -8,16 +8,15 @@ public class Card : MonoBehaviour
     
     public float returnSpeed;
     public Canvas textCanvas;
-    
     public Sprite[] cardSprites;
     
     private Camera _camera;
     private SpriteRenderer _spriteRenderer;
+    private PlayersHand _playersHand;
     
     private bool _isReturning = false;
     private bool _isDragging = false;
     private Vector3 _startPosition;
-    private PlayersHand _playersHand;
 
     private void Awake()
     {
@@ -28,23 +27,20 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        ChangeColor();
-        ChangeSprite();
+        ChangeColor(); //Setea la carta en su color original
+        ChangeSprite(); //Setea el sprite original de la carta
     }
 
     private void Update()
     {
         if (_isReturning)
-        {
             ReturnStartPosition();
-        }
 
         if (_isDragging)
-        {
             FollowMousePosition();
-        }
     }
 
+    #region Card Movement
     private void OnMouseDown()
     {
         SetCardStartPosition();
@@ -59,8 +55,6 @@ public class Card : MonoBehaviour
     {
         _isReturning = true;
         _isDragging = false;
-        
-        _playersHand.ClearGrabbedCard();
     }
 
     private void FollowMousePosition()
@@ -69,24 +63,17 @@ public class Card : MonoBehaviour
         mousePoint.z = 0;
         transform.position = mousePoint;
     }
-
-    public void SetCardStartPosition()
-    {
-        if (!_isDragging && !_isReturning)
-        {
-            _startPosition = transform.position;
-        }
-    }
-
-    public void SetCardOrder(int cardOrder)
-    {
-        _spriteRenderer.sortingOrder = cardOrder;
-        textCanvas.sortingOrder = cardOrder + 1;
-    }
-
+    
     private void ReturnStartPosition()
     {
         transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
+        
+        if (Vector3.Distance(transform.position, _startPosition) < 2f)
+        {
+            _playersHand.ClearGrabbedCard();
+            _playersHand.Recalculate();
+        }
+        
         if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
         {
             transform.position = _startPosition;
@@ -94,14 +81,28 @@ public class Card : MonoBehaviour
         }
     }
     
+    //Setea la sorting layer de la carta y pone el texto en 1 sorting layer mas arriba
+    public void SetCardOrder(int cardOrder)
+    {
+        _spriteRenderer.sortingOrder = cardOrder;
+        textCanvas.sortingOrder = cardOrder + 1;
+    }
+
+    public void SetCardStartPosition()
+    {
+        if (!_isDragging && !_isReturning)
+            _startPosition = transform.position;
+    }
+    #endregion
+    
+    
     public void PutCardInSlot(Transform slot)
     {
         DisableInteraction();
         transform.position = slot.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 1f);
         transform.SetParent(slot);
-        if (_playersHand)
-            _playersHand.Recalculate();
+        _playersHand.Recalculate();
     }
     
     private void DisableInteraction()
@@ -112,6 +113,14 @@ public class Card : MonoBehaviour
         transform.Find("DropZone").gameObject.SetActive(false);
     }
 
+    public void GenerateCardValue()
+    {
+        TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
+        int number = Random.Range(1,4);
+        cardText.text = "+" + number;
+    }
+
+    #region Utilities
     public void ChangeColor(CardColor color = CardColor.White)
     {
         switch (color)
@@ -135,11 +144,5 @@ public class Card : MonoBehaviour
     {
         _spriteRenderer.sprite = cardSprites[i];
     }
-
-    public void GenerateCardValue()
-    {
-        TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        int number = Random.Range(1,4);
-        cardText.text = "+" + number;
-    }
+    #endregion
 }
