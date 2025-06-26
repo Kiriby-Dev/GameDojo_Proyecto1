@@ -47,5 +47,8 @@ TagManager:
   - name: Cards
     uniqueID: 3005955695
     locked: 0
+  - name: Trasitions
+    uniqueID: 2579320235
+    locked: 0
   m_RenderingLayers:
   - Default
