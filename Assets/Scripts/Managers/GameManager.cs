@@ -18,11 +18,13 @@ public class GameManager : MonoBehaviour
     public ActionZone discardZone;
     public ActionZone attackZone;
     public ActionZone defenseZone;
+    public ActionZone cardsZone;
     
     private bool _gameOver = false;
     private PlayersHand _playersHandScript;
     private Card _cardScript;
     private int _cantCardsInHand;
+    private int _cardsPlayed;
 
     private void Awake()
     {
@@ -102,6 +104,13 @@ public class GameManager : MonoBehaviour
     public void RemoveCardFromHand() => _cantCardsInHand--;
     public void AddCardToHand() => _cantCardsInHand++;
 
+    public Transform GetActualZoneFromBoard()
+    {
+        Transform zone = cardsZone.transform.GetChild(_cardsPlayed);
+        _cardsPlayed++;
+        return zone;
+    }
+
     #region Getters
     public PhaseManager GetPhaseManager() => phaseManager;
     public QuestionManager GetQuestionManager() => questionManager;
@@ -110,6 +119,7 @@ public class GameManager : MonoBehaviour
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;
+    public ActionZone GetCardsZone() => cardsZone;
     public Player GetPlayer() => player;
     public bool IsGameOver() => _gameOver;
     public Card GetCard() => _cardScript;

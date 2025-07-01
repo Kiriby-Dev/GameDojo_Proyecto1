@@ -45,7 +45,8 @@ public class Card : MonoBehaviour
     #region Card Movement
     private void OnMouseDown()
     {
-        //if (!_isCardActive) return;
+        if (!_isCardActive) return;
+        SetCardOrder(99);
         SetCardStartPosition();
         
         _isDragging = true;
@@ -53,7 +54,7 @@ public class Card : MonoBehaviour
 
         _cardIndex = _playersHand.GetCardIndex(transform);
         transform.parent = null;
-        //_playersHand.ToggleCardsEnable(false);
+        _playersHand.ToggleCardsEnable(false);
         _playersHand.Recalculate();
     }
 
@@ -61,10 +62,6 @@ public class Card : MonoBehaviour
     {
         _isReturning = true;
         _isDragging = false;
-        
-        transform.parent = _playersHand.transform;
-        transform.SetSiblingIndex(_cardIndex);
-        _playersHand.Recalculate();
     }
 
     private void FollowMousePosition()
@@ -78,11 +75,14 @@ public class Card : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
         
-        if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
+        if (Vector3.Distance(transform.position, _startPosition) < 0.03f)
         {
             transform.position = _startPosition;
             _playersHand.ToggleCardsEnable(true);
             _isReturning = false;
+            transform.parent = _playersHand.transform;
+            transform.SetSiblingIndex(_cardIndex);
+            _playersHand.Recalculate();
         }
     }
     

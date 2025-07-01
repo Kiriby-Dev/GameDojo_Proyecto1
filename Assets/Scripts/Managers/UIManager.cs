@@ -17,10 +17,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI phaseText;
     public Canvas winCanvas;
     public Canvas loseCanvas;
+    public Canvas boardCanvas;
+    public Canvas gameCanvas;
     public GameObject board;
     public GameObject actionZones;
-    public GameObject questionModeBackground;
-    public GameObject answersContainer;
     
     [Header("Player Stats")]
     public TextMeshProUGUI playerAttackText;
@@ -37,21 +37,17 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
     public TextMeshProUGUI timerText;
+    public GameObject cardsZoneSpace;
     
-    private Vector3 _boardOriginalScale;
-    private Vector3 _actionZonesOriginalPosition;
-    private Vector3 _actionZonesOriginalScale;
+    private Transform _cardsZone;
 
     private void Start()
     {
-        _boardOriginalScale = board.transform.localScale;
-        _actionZonesOriginalPosition = actionZones.transform.position;
-        _actionZonesOriginalScale = actionZones.transform.localScale;
+        _cardsZone = gameManager.GetCardsZone().transform;
     }
 
     public void ResetVisuals()
     {
-        NormalMode();
         winCanvas.gameObject.SetActive(false);
         loseCanvas.gameObject.SetActive(false);
         questionText.text = "";
@@ -123,10 +119,8 @@ public class UIManager : MonoBehaviour
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        board.transform.localScale = enlargedBoardScale;
-        actionZones.transform.position = newActionZonePosition;
-        actionZones.transform.localScale = newActionZoneScale;
         ToggleUIItems(true);
+        _cardsZone.position = new Vector3(0, -3, 0);
         
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(1.5f);
@@ -138,10 +132,8 @@ public class UIManager : MonoBehaviour
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        board.transform.localScale = _boardOriginalScale;
-        actionZones.transform.position = _actionZonesOriginalPosition;
-        actionZones.transform.localScale = _actionZonesOriginalScale;
         ToggleUIItems(false);
+        _cardsZone.position = new Vector3(0, -8, 0);
         
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
@@ -149,10 +141,11 @@ public class UIManager : MonoBehaviour
 
     private void ToggleUIItems(bool toggle)
     {
-        actionZones.transform.GetChild(2).gameObject.SetActive(!toggle); //Desactivo o activo la discard zone
-        questionModeBackground.SetActive(toggle);
-        timerText.gameObject.SetActive(toggle);
-        answersContainer.gameObject.SetActive(toggle);
+        actionZones.transform.GetChild(3).gameObject.SetActive(!toggle); //Desactivo o activo la discard zone
+        gameManager.GetAttackZone().gameObject.SetActive(!toggle);
+        gameManager.GetDefenseZone().gameObject.SetActive(!toggle);
+        gameCanvas.gameObject.SetActive(!toggle);
+        boardCanvas.gameObject.SetActive(toggle);
     }
     #endregion
 }

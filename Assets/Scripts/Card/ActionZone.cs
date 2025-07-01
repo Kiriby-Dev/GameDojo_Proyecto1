@@ -7,7 +7,7 @@ using UnityEngine;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
-    public enum ZoneType { Attack, Defense , Discard}
+    public enum ZoneType { Attack, Defense , Discard, Cards}
     public ZoneType zoneType;
     
     private GameObject[] _cardsInZone;
@@ -59,19 +59,30 @@ public class ActionZone : MonoBehaviour
     
     private void AddCardInZone()
     {
+        int spriteIndex = 0;
         switch (zoneType)
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(1);
+                spriteIndex = 1;
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(2);
+                spriteIndex = 2;
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
+        CopyCardToBoard(spriteIndex);
         _cantCardsInZone++;
     }
-    
+
+    private void CopyCardToBoard(int spriteIndex)
+    {
+        Transform zone = gameManager.GetActualZoneFromBoard();
+        Card cardClone = Instantiate(_selectedCard, zone);
+        cardClone.ChangeSprite(spriteIndex);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         _activeZone = true;
@@ -106,7 +117,6 @@ public class ActionZone : MonoBehaviour
     #endregion
 
     #region Getters
-    public int GetCantCardsInZone() => _cantCardsInZone;
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
     public ZoneType GetZoneType() => zoneType;
     #endregion

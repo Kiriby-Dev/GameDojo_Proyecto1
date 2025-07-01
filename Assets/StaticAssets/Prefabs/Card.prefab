@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1490115031896537867}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1289011601
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2527533061934187546, guid: cec6ab38c41a2684696404d027f2266a, type: 3}
+  m_Sprite: {fileID: -484606970923595660, guid: e2d85f7e7a5fe2448ba54b704edcbf63, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -379,12 +379,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01be03c17a9a184bbd019768494d7b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  returnSpeed: 5
+  returnSpeed: 8
   textCanvas: {fileID: 2628653270333303562}
   cardSprites:
-  - {fileID: 2527533061934187546, guid: cec6ab38c41a2684696404d027f2266a, type: 3}
-  - {fileID: -1080093609164191491, guid: c38b960a3f56f0f4f8c84fa5ce28a3d3, type: 3}
-  - {fileID: 2292470035028938368, guid: 741899065827aad4fb9755f580aa5967, type: 3}
+  - {fileID: -484606970923595660, guid: e2d85f7e7a5fe2448ba54b704edcbf63, type: 3}
+  - {fileID: 5338889019617707709, guid: 59f65178181a6ee408217d32ecb7d483, type: 3}
+  - {fileID: 7070947416160331775, guid: 1a1baf8337745344d9c1bded967aaf51, type: 3}
 --- !u!1 &4975412851613118154
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,7 +419,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -33}
+  m_AnchoredPosition: {x: 0, y: -40}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4829178995860631649
@@ -450,17 +450,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +999
+  m_text: +99
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}
+  m_sharedMaterial: {fileID: -3069001873900614250, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4292927712
+  m_fontColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -477,8 +477,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

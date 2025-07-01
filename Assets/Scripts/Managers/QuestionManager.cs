@@ -31,20 +31,18 @@ public class QuestionManager : MonoBehaviour
     //Recorro todas las cartas de la zona de ataque y cuando termino recien ahi recorro las de la zona de defensa.
     public IEnumerator StartQuestions()
     {
-        ActionZone attackZone = gameManager.GetAttackZone();
-        ActionZone defenseZone = gameManager.GetDefenseZone();
-        yield return StartCoroutine(GoThroughCards(attackZone)); //Espera a que termine la corrutina antes de seguir.
-        yield return StartCoroutine(GoThroughCards(defenseZone));
+        yield return StartCoroutine(GoThroughCards()); //Espera a que termine la corrutina antes de seguir.
     }
 
-    //Recorre todas las cartas de una zona.
-    private IEnumerator GoThroughCards(ActionZone zone)
+    //Recorre todas las cartas jugadas en la fase de colocación.
+    private IEnumerator GoThroughCards()
     {
-        int count = zone.GetCantCardsInZone();
-        for (int i = 0; i < count; i++)
+        ActionZone cardsZone = gameManager.GetCardsZone();
+        
+        for (int i = 0; i < 3; i++)
         {
-            GameObject cardGO = zone.GetActualCardZone(i);
-            yield return ProcessCard(cardGO);
+            GameObject cardGo = cardsZone.GetActualCardZone(i);
+            yield return ProcessCard(cardGo);
         }
     }
 
@@ -56,12 +54,12 @@ public class QuestionManager : MonoBehaviour
     - Inicia el timer.
     - Espera a que el jugador responda o el tiempo se acabe.
     - Verifica la respuesta seleccionada.*/
-    private IEnumerator ProcessCard(GameObject cardGO)
+    private IEnumerator ProcessCard(GameObject cardGo)
     {
-        if (!cardGO) yield break;
+        if (!cardGo) yield break;
 
-        int difficulty = GetCardDifficulty(cardGO);
-        Card cardScript = cardGO.GetComponentInChildren<Card>();
+        int difficulty = GetCardDifficulty(cardGo);
+        Card cardScript = cardGo.GetComponentInChildren<Card>();
 
         SelectQuestion(difficulty);
         cardScript.ChangeColor(Card.CardColor.Yellow);
@@ -72,7 +70,7 @@ public class QuestionManager : MonoBehaviour
         StartCoroutine(Timer(timePerQuestion));
         yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
 
-        HandleAnswerResult(cardScript, cardGO, difficulty);
+        HandleAnswerResult(cardScript, cardGo, difficulty);
 
         yield return new WaitForSeconds(1f);
     }
@@ -134,14 +132,14 @@ public class QuestionManager : MonoBehaviour
     }
 
     //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).
-    private void HandleAnswerResult(Card card, GameObject cardGO, int difficulty)
+    private void HandleAnswerResult(Card card, GameObject cardGo, int difficulty)
     {
         if (!card) return;
 
         if (_playerAnswersCorrectly)
         {
             card.ChangeColor(Card.CardColor.Green);
-            gameManager.GetPlayer().AddStats(cardGO, difficulty);
+            gameManager.GetPlayer().AddStats(cardGo, difficulty);
         }
         else
         {
@@ -181,9 +179,9 @@ public class QuestionManager : MonoBehaviour
         return selectedText == _selectedQuestion.GetCorrectAnswer();
     }
     
-    private int GetCardDifficulty(GameObject cardGO)
+    private int GetCardDifficulty(GameObject cardGo)
     {
-        string numberText = cardGO.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1);
+        string numberText = cardGo.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1);
         return int.Parse(numberText);
     }
 
