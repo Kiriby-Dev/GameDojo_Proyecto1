@@ -59,28 +59,24 @@ public class ActionZone : MonoBehaviour
     
     private void AddCardInZone()
     {
-        int spriteIndex = 0;
         switch (zoneType)
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(1);
-                spriteIndex = 1;
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(2);
-                spriteIndex = 2;
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
-        CopyCardToBoard(spriteIndex);
+        CopyCardToBoard();
         _cantCardsInZone++;
     }
 
-    private void CopyCardToBoard(int spriteIndex)
+    private void CopyCardToBoard()
     {
         Transform zone = gameManager.GetActualZoneFromBoard();
-        Card cardClone = Instantiate(_selectedCard, zone);
-        cardClone.ChangeSprite(spriteIndex);
+        Instantiate(_selectedCard, zone);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

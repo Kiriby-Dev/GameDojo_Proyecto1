@@ -30,7 +30,6 @@ public class Card : MonoBehaviour
     private void Start()
     {
         ChangeColor(); //Setea la carta en su color original
-        ChangeSprite(); //Setea el sprite original de la carta
     }
 
     private void Update()
@@ -146,6 +145,8 @@ public class Card : MonoBehaviour
     public void ChangeSprite(int i = 0)
     {
         _spriteRenderer.sprite = cardSprites[i];
+        Debug.Log(gameObject.name);
+        Debug.Log(i);
     }
     
     public void SetCardActive(bool active) => _isCardActive = active;

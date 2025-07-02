@@ -36,7 +36,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText2;
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
-    public TextMeshProUGUI timerText;
     public GameObject cardsZoneSpace;
     
     private Transform _cardsZone;
@@ -68,11 +67,6 @@ public class UIManager : MonoBehaviour
             winCanvas.gameObject.SetActive(true);
         else
             loseCanvas.gameObject.SetActive(true);
-    }
-    
-    public void UpdateTimer(string timeText)
-    {
-        timerText.text = timeText;
     }
 
     public void UpdateStats(int currentAttack, int currentDefense, string character)

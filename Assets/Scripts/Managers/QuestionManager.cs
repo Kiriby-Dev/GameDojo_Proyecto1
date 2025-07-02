@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class QuestionManager : MonoBehaviour
 {
     public GameManager gameManager;
-    public int timePerQuestion;
+    public Timer timer;
     
     private QuestionData[] allQuestions;
     private List<QuestionData> _easy;
@@ -50,7 +50,7 @@ public class QuestionManager : MonoBehaviour
 
     /*Se procesa la carta, esto conlleva muchas cosas:
     - Selecciona una pregunta aleatoria de la dificultad asociada.
-    - Indica que la carta esta seleccionada (la pinta de amarillo).
+    - Indica que la carta está seleccionada (la pinta de amarillo).
     - Inicia el timer.
     - Espera a que el jugador responda o el tiempo se acabe.
     - Verifica la respuesta seleccionada.*/
@@ -67,7 +67,7 @@ public class QuestionManager : MonoBehaviour
         _playerHasAnswered = false;
         _timeRanOut = false;
 
-        StartCoroutine(Timer(timePerQuestion));
+        timer.StartTimer();
         yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
 
         HandleAnswerResult(cardScript, cardGo, difficulty);
@@ -101,26 +101,6 @@ public class QuestionManager : MonoBehaviour
         }
 
         gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
-    }
-    
-    private IEnumerator Timer(float duration)
-    {
-        float timeLeft = duration;
-
-        while (timeLeft > 0f && !_playerHasAnswered)
-        {
-            gameManager.GetUIManager().UpdateTimer(Mathf.CeilToInt(timeLeft).ToString());
-            timeLeft -= Time.deltaTime;
-            yield return null;
-        }
-
-        if (!_playerHasAnswered)
-        {
-            _timeRanOut = true;
-            _playerAnswersCorrectly = false;
-        }
-
-        gameManager.GetUIManager().UpdateTimer("");
     }
     
     //Indica que el jugador selecciono una respuesta.
@@ -184,6 +164,10 @@ public class QuestionManager : MonoBehaviour
         string numberText = cardGo.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1);
         return int.Parse(numberText);
     }
+
+    public bool PlayerHasAnswered() => _playerHasAnswered;
+    public void PlayerAnswersCorrectly(bool correct) => _playerAnswersCorrectly = correct;
+    public void TimeRanOut(bool ranOut) => _timeRanOut = ranOut;
 
     #endregion
 }
