@@ -8,7 +8,7 @@ public class PhaseManager : MonoBehaviour
     
     private GamePhase _currentPhase;
 
-    private void Start()
+    public void StartPhases()
     {
         CurrentPhase = GamePhase.Draw;
         AdvancePhase();

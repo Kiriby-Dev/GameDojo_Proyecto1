@@ -10,11 +10,6 @@ public class PlayersHand : MonoBehaviour
     private float _startPosition;
     private Card _grabbedCard;
 
-    void Start()
-    {
-        Recalculate();
-    }
-
     //Se utiliza para recalcular las posiciones de las cartas en la mano.
     public IEnumerator RecalculateCoroutine()
     {

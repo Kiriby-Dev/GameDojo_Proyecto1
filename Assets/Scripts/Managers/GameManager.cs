@@ -20,11 +20,12 @@ public class GameManager : MonoBehaviour
     public ActionZone defenseZone;
     public ActionZone cardsZone;
     
-    private bool _gameOver = false;
+    private bool _gameOver;
     private PlayersHand _playersHandScript;
     private Card _cardScript;
     private int _cantCardsInHand;
     private int _cardsPlayed;
+    private bool _gameStarted;
 
     private void Awake()
     {
@@ -34,7 +35,14 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (!_gameStarted) return;
         CheckEndGame();
+    }
+
+    public void StartGame()
+    {
+        _gameStarted = true;
+        phaseManager.StartPhases();
     }
 
     //Se habilitan y deshabilitan las zonas de accion dependiendo la fase en la que estamos.
@@ -110,6 +118,8 @@ public class GameManager : MonoBehaviour
         _cardsPlayed++;
         return zone;
     }
+
+    public bool GameStarted() => _gameStarted;
 
     #region Getters
     public PhaseManager GetPhaseManager() => phaseManager;
