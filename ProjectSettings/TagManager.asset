@@ -41,14 +41,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: UI
+  - name: UI_Main
     uniqueID: 3162492889
     locked: 0
   - name: Cards
     uniqueID: 3005955695
     locked: 0
+  - name: UI_Effects
+    uniqueID: 4144776289
+    locked: 0
   - name: Trasitions
     uniqueID: 2579320235
+    locked: 0
+  - name: UI_Top
+    uniqueID: 2049130273
     locked: 0
   m_RenderingLayers:
   - Default

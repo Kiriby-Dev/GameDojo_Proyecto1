@@ -18,6 +18,8 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
+        ResetMenus();
+        
         foreach (Button button in levelButtons)
         {
             button.interactable = false;
@@ -25,6 +27,12 @@ public class MenuManager : MonoBehaviour
         
         int cantButtons = levelButtons.Length;
         levelButtons[cantButtons - 1].interactable = true;
+    }
+
+    private void ResetMenus()
+    {
+        game.SetActive(false);
+        menu.SetActive(true);
     }
 
     public void StartGame()

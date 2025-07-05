@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Card : MonoBehaviour
@@ -25,11 +26,6 @@ public class Card : MonoBehaviour
         _camera = Camera.main;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _playersHand = FindAnyObjectByType<PlayersHand>();
-    }
-
-    private void Start()
-    {
-        ChangeColor(); //Setea la carta en su color original
     }
 
     private void Update()
@@ -125,19 +121,20 @@ public class Card : MonoBehaviour
     #region Utilities
     public void ChangeColor(CardColor color = CardColor.White)
     {
+        Image cardImage = gameObject.GetComponent<Image>();
         switch (color)
         {
             case CardColor.Red: 
-                _spriteRenderer.color = Color.red; 
+                cardImage.color = Color.red; 
                 break;
             case CardColor.Yellow: 
-                _spriteRenderer.color = Color.yellow; 
+                cardImage.color = Color.yellow; 
                 break;
             case CardColor.Green: 
-                _spriteRenderer.color = Color.green; 
+                cardImage.color = Color.green; 
                 break;
             case CardColor.White: 
-                _spriteRenderer.color = Color.white; 
+                cardImage.color = Color.white; 
                 break;
         }
     }
@@ -145,8 +142,6 @@ public class Card : MonoBehaviour
     public void ChangeSprite(int i = 0)
     {
         _spriteRenderer.sprite = cardSprites[i];
-        Debug.Log(gameObject.name);
-        Debug.Log(i);
     }
     
     public void SetCardActive(bool active) => _isCardActive = active;

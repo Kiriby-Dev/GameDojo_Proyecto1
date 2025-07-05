@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActionZone : MonoBehaviour
 {
@@ -75,8 +76,11 @@ public class ActionZone : MonoBehaviour
 
     private void CopyCardToBoard()
     {
-        Transform zone = gameManager.GetActualZoneFromBoard();
-        Instantiate(_selectedCard, zone);
+        GameObject card = gameManager.GetActualCardFromBoard();
+        Image cardImage = card.GetComponent<Image>();
+        TextMeshProUGUI cardText = card.GetComponentInChildren<TextMeshProUGUI>();
+        cardImage.sprite = _selectedCard.GetComponentInChildren<SpriteRenderer>().sprite;
+        cardText.text = _selectedCard.GetComponentInChildren<TextMeshProUGUI>().text;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

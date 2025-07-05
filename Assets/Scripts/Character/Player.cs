@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Character
 {
@@ -10,13 +11,13 @@ public class Player : Character
     //Le añade ataque o defensa al jugador con el valor correspondiente.
     public void AddStats(GameObject card, int value)
     {
-        ActionZone.ZoneType zoneType = card.transform.parent.GetComponent<ActionZone>().GetZoneType();
-        switch (zoneType)
+        Image cardImage = card.transform.GetComponentInChildren<Image>();
+        switch (cardImage.sprite.name)
         {
-            case ActionZone.ZoneType.Attack:
+            case "CartaV3.4_0": //Este chequeo es un DESASTRE hay que arreglarlo después :)
                 AddAttack(value);
                 break;
-            case ActionZone.ZoneType.Defense:
+            case "CartaV3.5_0":
                 AddDefense(value);
                 break;
         }

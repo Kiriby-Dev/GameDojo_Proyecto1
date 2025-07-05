@@ -8,23 +8,20 @@ public class UIManager : MonoBehaviour
 {
     public GameManager gameManager;
     
-    [Header("Config")]
-    public Vector3 enlargedBoardScale;
-    public Vector3 newActionZonePosition;
-    public Vector3 newActionZoneScale;
-    
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
     public Canvas winCanvas;
     public Canvas loseCanvas;
     public Canvas boardCanvas;
     public Canvas gameCanvas;
-    public GameObject board;
-    public GameObject actionZones;
     
-    [Header("Player Stats")]
+    [Header("Player Stats On Board")]
     public TextMeshProUGUI playerAttackText;
     public TextMeshProUGUI playerDefenseText;
+    
+    [Header("Player Stats")]
+    public TextMeshProUGUI playerAttack;
+    public TextMeshProUGUI playerDefense;
     
     [Header("Enemy Stats")]
     public TextMeshProUGUI enemyAttackText;
@@ -36,7 +33,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText2;
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
-    public GameObject cardsZoneSpace;
     
     private Transform _cardsZone;
 
@@ -49,6 +45,9 @@ public class UIManager : MonoBehaviour
     {
         winCanvas.gameObject.SetActive(false);
         loseCanvas.gameObject.SetActive(false);
+        boardCanvas.gameObject.SetActive(false);
+        playerAttack.text = "0";
+        playerDefense.text = "0";
         questionText.text = "";
         answerText1.text = "";
         answerText2.text = "";
@@ -127,6 +126,8 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         ToggleUIItems(false);
+        playerAttack.text = playerAttackText.text;
+        playerDefense.text = playerDefenseText.text;
         _cardsZone.position = new Vector3(0, -8, 0);
         
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
@@ -135,7 +136,7 @@ public class UIManager : MonoBehaviour
 
     private void ToggleUIItems(bool toggle)
     {
-        actionZones.transform.GetChild(3).gameObject.SetActive(!toggle); //Desactivo o activo la discard zone
+        gameManager.GetDiscardZone().gameObject.SetActive(!toggle); //Desactivo o activo la discard zone
         gameManager.GetAttackZone().gameObject.SetActive(!toggle);
         gameManager.GetDefenseZone().gameObject.SetActive(!toggle);
         gameCanvas.gameObject.SetActive(!toggle);

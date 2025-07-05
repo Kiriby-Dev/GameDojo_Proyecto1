@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
+        _cardsPlayed = 0;
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
@@ -112,11 +113,11 @@ public class GameManager : MonoBehaviour
     public void RemoveCardFromHand() => _cantCardsInHand--;
     public void AddCardToHand() => _cantCardsInHand++;
 
-    public Transform GetActualZoneFromBoard()
+    public GameObject GetActualCardFromBoard()
     {
-        Transform zone = cardsZone.transform.GetChild(_cardsPlayed);
+        GameObject card = cardsZone.transform.GetChild(_cardsPlayed).gameObject;
         _cardsPlayed++;
-        return zone;
+        return card;
     }
 
     public bool GameStarted() => _gameStarted;
@@ -130,6 +131,7 @@ public class GameManager : MonoBehaviour
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;
     public ActionZone GetCardsZone() => cardsZone;
+    public ActionZone GetDiscardZone() => discardZone;
     public Player GetPlayer() => player;
     public bool IsGameOver() => _gameOver;
     public Card GetCard() => _cardScript;
