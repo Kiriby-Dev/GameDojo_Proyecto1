@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 28c22957cbf8fba4594da12377571000
+guid: ba513c915f8a4264a9fc78665fb6ce7c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5937764268318024347
-    second: Espada_0
+      213: -3803196367135801590
+    second: escudo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Espada_0
+      name: escudo_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 372
-        height: 291
+        width: 193
+        height: 182
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56d95ea8bd2d89da0800000000000000
-      internalID: -5937764268318024347
+      spriteID: a0f70d5ed05583bc0800000000000000
+      internalID: -3803196367135801590
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Espada_0: -5937764268318024347
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 28c22957cbf8fba4594da12377571000
+guid: 1af30a486a34b5f40bbf90c586a9dfb3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5937764268318024347
-    second: Espada_0
+      213: 6497482477365584276
+    second: HojaExamen_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Espada_0
+      name: HojaExamen_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 372
-        height: 291
+        width: 1178
+        height: 313
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56d95ea8bd2d89da0800000000000000
-      internalID: -5937764268318024347
+      spriteID: 49163b553e1bb2a50800000000000000
+      internalID: 6497482477365584276
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Espada_0: -5937764268318024347
+      HojaExamen_0: 6497482477365584276
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

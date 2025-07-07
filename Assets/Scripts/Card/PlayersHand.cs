@@ -6,7 +6,7 @@ public class PlayersHand : MonoBehaviour
     public GameManager gameManager;
     
     private int _cardsCount;
-    private float _cardSpacing = 2.5f;
+    private float _cardSpacing = 1.5f;
     private float _startPosition;
     private Card _grabbedCard;
 

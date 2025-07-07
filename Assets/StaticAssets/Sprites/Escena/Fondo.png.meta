@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 28c22957cbf8fba4594da12377571000
+guid: 155eaf3f0cede4345978109abb15b125
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5937764268318024347
-    second: Espada_0
+      213: -5130558894233647175
+    second: Fondo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Espada_0
+      name: Fondo_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 372
-        height: 291
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56d95ea8bd2d89da0800000000000000
-      internalID: -5937764268318024347
+      spriteID: 9b78bf95ed79cc8b0800000000000000
+      internalID: -5130558894233647175
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Espada_0: -5937764268318024347
+      Fondo_0: -5130558894233647175
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

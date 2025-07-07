@@ -89,7 +89,16 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
+        ResetBoardCardsColor();
         _cardsPlayed = 0;
+    }
+
+    private void ResetBoardCardsColor()
+    {
+        foreach (Card card in cardsZone.gameObject.GetComponentsInChildren<Card>())
+        {
+            card.ChangeColor();
+        }
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.

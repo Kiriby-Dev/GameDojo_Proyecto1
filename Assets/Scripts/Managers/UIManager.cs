@@ -33,13 +33,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText2;
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
-    
-    private Transform _cardsZone;
-
-    private void Start()
-    {
-        _cardsZone = gameManager.GetCardsZone().transform;
-    }
 
     public void ResetVisuals()
     {
@@ -113,7 +106,6 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         ToggleUIItems(true);
-        _cardsZone.position = new Vector3(0, -3, 0);
         
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(1.5f);
@@ -128,7 +120,6 @@ public class UIManager : MonoBehaviour
         ToggleUIItems(false);
         playerAttack.text = playerAttackText.text;
         playerDefense.text = playerDefenseText.text;
-        _cardsZone.position = new Vector3(0, -8, 0);
         
         gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
