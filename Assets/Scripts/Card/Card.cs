@@ -7,25 +7,31 @@ public class Card : MonoBehaviour
 {
     public enum CardColor { Red, Yellow, Green, White }
     
+    [SerializeField] private float followSmoothness = 10f;
+    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float maxTiltAngle = 15f;
     public float returnSpeed;
     public Canvas textCanvas;
     public Sprite[] cardSprites;
     
-    private int _cardIndex;
     private bool _isReturning;
     private bool _isDragging;
-    private bool _isCardActive;
-    private Vector3 _startPosition;
+    private int _cardLayer;
+    
+    private Vector3 _lastMousePosition;
+    private float _currentRotationZ;
     
     private Camera _camera;
     private SpriteRenderer _spriteRenderer;
+    private GameManager _gameManager;
     private PlayersHand _playersHand;
 
     private void Awake()
     {
         _camera = Camera.main;
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _playersHand = FindAnyObjectByType<PlayersHand>();
+        _gameManager = FindAnyObjectByType<GameManager>();
+        _playersHand = _gameManager.GetPlayersHand();
     }
 
     private void Update()
@@ -34,50 +40,63 @@ public class Card : MonoBehaviour
             ReturnStartPosition();
 
         if (_isDragging)
+        {
             FollowMousePosition();
+        }
     }
 
     #region Card Movement
     private void OnMouseDown()
     {
-        if (!_isCardActive) return;
         SetCardOrder(99);
-        SetCardStartPosition();
         
         _isDragging = true;
         _isReturning = false;
 
-        _cardIndex = _playersHand.GetCardIndex(transform);
-        transform.parent = null;
-        _playersHand.ToggleCardsEnable(false);
-        _playersHand.Recalculate();
+        _playersHand.SelectedCard(this);
     }
 
     private void OnMouseUp()
     {
+        int slotLayer = transform.GetComponentInParent<SpriteRenderer>().sortingOrder;
+        SetCardOrder(slotLayer);
         _isReturning = true;
         _isDragging = false;
+        
+        _playersHand.SelectedCard(null);
     }
 
     private void FollowMousePosition()
     {
+        // Obtener posición del mouse
         Vector3 mousePoint = _camera.ScreenToWorldPoint(Input.mousePosition);
         mousePoint.z = 0;
-        transform.position = mousePoint;
+
+        // Calcular delta de movimiento
+        Vector3 mouseDelta = mousePoint - _lastMousePosition;
+        _lastMousePosition = mousePoint;
+
+        // Seguir al mouse con delay
+        transform.position = Vector3.Lerp(transform.position, mousePoint, Time.deltaTime * followSmoothness);
+
+        // Calcular rotación deseada en Z
+        float targetRotationZ = Mathf.Clamp(-mouseDelta.x * 100f, -maxTiltAngle, maxTiltAngle);
+
+        // Suavizar rotación actual hacia la deseada
+        _currentRotationZ = Mathf.Lerp(_currentRotationZ, targetRotationZ, Time.deltaTime * rotationSpeed);
+
+        // Aplicar rotación en eulerAngles
+        transform.eulerAngles = new Vector3(0, 0, _currentRotationZ);
     }
     
     private void ReturnStartPosition()
     {
-        transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, returnSpeed * Time.deltaTime);
         
-        if (Vector3.Distance(transform.position, _startPosition) < 0.03f)
+        if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.01f)
         {
-            transform.position = _startPosition;
-            _playersHand.ToggleCardsEnable(true);
+            transform.localPosition = Vector3.zero;
             _isReturning = false;
-            transform.parent = _playersHand.transform;
-            transform.SetSiblingIndex(_cardIndex);
-            _playersHand.Recalculate();
         }
     }
     
@@ -86,12 +105,6 @@ public class Card : MonoBehaviour
     {
         _spriteRenderer.sortingOrder = cardOrder;
         textCanvas.sortingOrder = cardOrder + 1;
-    }
-
-    public void SetCardStartPosition()
-    {
-        if (!_isDragging && !_isReturning)
-            _startPosition = transform.position;
     }
     #endregion
     
@@ -144,6 +157,9 @@ public class Card : MonoBehaviour
         _spriteRenderer.sprite = cardSprites[i];
     }
     
-    public void SetCardActive(bool active) => _isCardActive = active;
+    public int GetParentIndex()
+    {
+        return transform.parent.GetSiblingIndex();
+    }
     #endregion
 }

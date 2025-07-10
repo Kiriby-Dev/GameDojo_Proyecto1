@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Objects")]
     public GameObject playersHand;
     public GameObject card;
+    public GameObject cardSlot;
     public Player player;
     public Enemy enemy;
     
@@ -76,9 +77,9 @@ public class GameManager : MonoBehaviour
     //Se instancian las 5 cartas con valores random en la mano del jugador.
     public void DrawCards()
     {
-        for (int i = 1; i <= 5; i++)
+        for (int i = 0; i <= 4; i++)
         {
-            GameObject go = Instantiate(card, playersHand.transform);
+            GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
             go.GetComponent<Card>().GenerateCardValue();
             go.name = "Card" + i;
             AddCardToHand();
@@ -93,8 +94,12 @@ public class GameManager : MonoBehaviour
     }
     
     public int CantCardsInHand() => _cantCardsInHand;
-    public int CantGameObjectsInHand() => playersHand.transform.childCount;
-    public void RemoveCardFromHand() => _cantCardsInHand--;
+
+    public void RemoveCardFromHand()
+    {
+        _cantCardsInHand--;
+        _playersHandScript.Recalculate();
+    }
     private void AddCardToHand() => _cantCardsInHand++;
     #endregion
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,30 +8,91 @@ public class PlayersHand : MonoBehaviour
     public float cardSpacing = 1.5f;
     
     private int _cardsCount;
-    private float _startPosition;
-    private Card _grabbedCard;
+    private Card[] _cards;
+    private Card _selectedCard;
+    private bool _isCrossing;
+
+    private void Start()
+    {
+        _cards = new Card[gameManager.CantCardsInHand()];
+    }
+
+    private void Update()
+    {
+        CheckForSwap();
+    }
+
+    private void CheckForSwap()
+    {
+        if (!_selectedCard) return;
+        if (_isCrossing) return;
+        
+        for (int i = 0; i < _cardsCount; i++)
+        {
+            if (_selectedCard.transform.position.x > _cards[i].transform.position.x)
+            {
+                if (_selectedCard.GetParentIndex() < _cards[i].GetParentIndex())
+                {
+                    Swap(i);
+                    return;
+                }
+            }
+            if (_selectedCard.transform.position.x < _cards[i].transform.position.x)
+            {
+                if (_selectedCard.GetParentIndex() > _cards[i].GetParentIndex())
+                {
+                    Swap(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void Swap(int i)
+    {
+        _isCrossing = true;
+
+        Transform focusedParent = _selectedCard.transform.parent;
+        Transform crossedParent = _cards[i].transform.parent;
+
+        _cards[i].transform.SetParent(focusedParent);
+        _cards[i].transform.localPosition = Vector3.zero;
+        int selectedCardLayer = focusedParent.GetComponent<SpriteRenderer>().sortingOrder;
+        _cards[i].GetComponentInChildren<SpriteRenderer>().sortingOrder = selectedCardLayer;
+        _selectedCard.transform.SetParent(crossedParent);
+
+        _isCrossing = false;
+    }
 
     //Se utiliza para recalcular las posiciones de las cartas en la mano.
     public IEnumerator RecalculateCoroutine()
     {
         yield return new WaitForEndOfFrame();
-        _cardsCount = gameManager.CantGameObjectsInHand();
-
+        _cardsCount = gameManager.CantCardsInHand();
+        
+        GetCardsInHand();
         SetCardsOrder();
         SetPositions();
     }
-    
+
+    private void GetCardsInHand()
+    {
+        int i = 0;
+        foreach (Transform cardSlot in gameObject.transform)
+        {
+            _cards[i] = cardSlot.GetComponentInChildren<Card>();
+            i++;
+        }
+    }
+
     private void SetCardsOrder()
     {
         int i = 0;
-        foreach (Transform cardTransform in transform)
+        foreach (Transform cardSlot in transform)
         {
-            Card card = cardTransform.GetComponent<Card>();
-            if (card != _grabbedCard)
-            {
-                card.SetCardOrder(i * 2); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
-                i++;
-            }
+            Card card = cardSlot.GetComponentInChildren<Card>();
+            card.SetCardOrder(i * 2); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
+            i++;
         }
     }
 
@@ -38,14 +100,14 @@ public class PlayersHand : MonoBehaviour
     {
         float initialX = CalculateStartX(_cardsCount);
         int i = 0;
-        foreach (Transform cardTransform in transform)
+        foreach (Transform cardSlot in transform)
         {
-            Card card = cardTransform.GetComponent<Card>();
-            Vector3 currentPos = cardTransform.position;
+            Card card = cardSlot.GetComponentInChildren<Card>();
+            Vector3 currentPos = cardSlot.position;
             float newX = initialX + (i * cardSpacing);
-            cardTransform.position = new Vector3(newX, currentPos.y, currentPos.z);
+            cardSlot.position = new Vector3(newX, currentPos.y, currentPos.z);
 
-            card.SetCardStartPosition();
+            card.transform.localPosition = Vector3.zero;
             i++;
         }
     }
@@ -63,29 +125,14 @@ public class PlayersHand : MonoBehaviour
             return -1 * (cardSpacing * half);
     }
 
-    public int GetCardIndex(Transform cardTransform)
-    {
-        int index = 0;
-        foreach (Transform card in gameObject.transform)
-        {
-            if (card.name == cardTransform.name)
-                return index;
-            index++;
-        }
-        return -1;
-    }
-    
-    public void ToggleCardsEnable(bool enable)
-    {
-        foreach (Transform card in gameObject.transform)
-        {
-            card.GetComponent<Card>().SetCardActive(enable);
-        }
-    }
-
     public void Recalculate()
     {
         StartCoroutine("RecalculateCoroutine");
+    }
+    
+    public void SelectedCard(Card card)
+    {
+        _selectedCard = card;
     }
     #endregion
 }

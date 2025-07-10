@@ -379,6 +379,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01be03c17a9a184bbd019768494d7b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  followSmoothness: 30
+  rotationSpeed: 20
+  maxTiltAngle: 90
   returnSpeed: 8
   textCanvas: {fileID: 2628653270333303562}
   cardSprites:
