@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,10 +13,13 @@ public class ActionZone : MonoBehaviour
     private Card _selectedCard;
     private bool _isDropping;
     private bool _activeZone;
+    private ZoneType[] _cardsInBoard;
+    private int _cardsPlayed;
     
     private void Start()
     {
         GetZoneChildren();
+        _cardsInBoard = new ZoneType[3];
     }
     
     //Si la zona esta activa verifico si solté una carta ahí.
@@ -64,19 +64,29 @@ public class ActionZone : MonoBehaviour
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(1);
+                _cardsInBoard[_cardsPlayed] = ZoneType.Attack;
+                Debug.Log(_cardsInBoard[_cardsPlayed]);
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(2);
+                _cardsInBoard[_cardsPlayed] = ZoneType.Defense;
+                Debug.Log(_cardsInBoard[_cardsPlayed]);
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
         CopyCardToBoard();
         _cantCardsInZone++;
+        _cardsPlayed++;
+    }
+
+    public ZoneType GetCardType(int position)
+    {
+        return _cardsInBoard[position];
     }
 
     private void CopyCardToBoard()
     {
-        GameObject card = gameManager.GetActualCardFromBoard();
+        GameObject card = gameManager.GetActualCardForQuestion();
         Image cardImage = card.GetComponent<Image>();
         TextMeshProUGUI cardText = card.GetComponentInChildren<TextMeshProUGUI>();
         cardImage.sprite = _selectedCard.GetComponentInChildren<SpriteRenderer>().sprite;
@@ -113,11 +123,11 @@ public class ActionZone : MonoBehaviour
             Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
         }
         _cantCardsInZone = 0;
+        _cardsPlayed = 0;
     }
     #endregion
 
     #region Getters
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
-    public ZoneType GetZoneType() => zoneType;
     #endregion
 }

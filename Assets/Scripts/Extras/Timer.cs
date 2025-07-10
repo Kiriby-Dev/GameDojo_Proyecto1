@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +12,16 @@ public class Timer : MonoBehaviour
     private float _remainingTime;
     private float _targetFill;
     private bool _isRunning;
+    private QuestionManager _questionManager;
+
+    private void Start()
+    {
+        _questionManager = gameManager.GetQuestionManager() ;
+    }
 
     private void Update()
     {
-        if (gameManager.GetQuestionManager().PlayerHasAnswered() || !_isRunning) return;
+        if (_questionManager.PlayerHasAnswered() || !_isRunning) return;
         TimerUpdate();
     }
 
@@ -51,8 +58,8 @@ public class Timer : MonoBehaviour
     private void TimerFinished()
     {
         _isRunning = false;
-        gameManager.GetQuestionManager().TimeRanOut(true);
-        gameManager.GetQuestionManager().PlayerAnswersCorrectly(false);
+        _questionManager.TimeRanOut(true);
+        _questionManager.PlayerAnswersCorrectly(false);
     }
 
     private void ChangeTimerColor()

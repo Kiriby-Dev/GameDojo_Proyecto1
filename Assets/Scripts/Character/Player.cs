@@ -9,15 +9,14 @@ public class Player : Character
     }
 
     //Le añade ataque o defensa al jugador con el valor correspondiente.
-    public void AddStats(GameObject card, int value)
+    public void AddStats(ActionZone.ZoneType cardType, int value)
     {
-        Image cardImage = card.transform.GetComponentInChildren<Image>();
-        switch (cardImage.sprite.name)
+        switch (cardType)
         {
-            case "CartaV3.4_0": //Este chequeo es un DESASTRE hay que arreglarlo después :)
+            case ActionZone.ZoneType.Attack:
                 AddAttack(value);
                 break;
-            case "CartaV3.5_0":
+            case ActionZone.ZoneType.Defense:
                 AddDefense(value);
                 break;
         }

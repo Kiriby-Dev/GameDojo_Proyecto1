@@ -4,9 +4,9 @@ using UnityEngine;
 public class PlayersHand : MonoBehaviour
 {
     public GameManager gameManager;
+    public float cardSpacing = 1.5f;
     
     private int _cardsCount;
-    private float _cardSpacing = 1.5f;
     private float _startPosition;
     private Card _grabbedCard;
 
@@ -14,7 +14,7 @@ public class PlayersHand : MonoBehaviour
     public IEnumerator RecalculateCoroutine()
     {
         yield return new WaitForEndOfFrame();
-        _cardsCount = gameManager.CantCardsInHandObject();
+        _cardsCount = gameManager.CantGameObjectsInHand();
 
         SetCardsOrder();
         SetPositions();
@@ -42,7 +42,7 @@ public class PlayersHand : MonoBehaviour
         {
             Card card = cardTransform.GetComponent<Card>();
             Vector3 currentPos = cardTransform.position;
-            float newX = initialX + (i * _cardSpacing);
+            float newX = initialX + (i * cardSpacing);
             cardTransform.position = new Vector3(newX, currentPos.y, currentPos.z);
 
             card.SetCardStartPosition();
@@ -58,9 +58,9 @@ public class PlayersHand : MonoBehaviour
         float half = Mathf.Floor(count * 0.5f);
 
         if (isEven)
-            return -1 * (_cardSpacing * half - _cardSpacing / 2f);
+            return -1 * (cardSpacing * half - cardSpacing / 2f);
         else
-            return -1 * (_cardSpacing * half);
+            return -1 * (cardSpacing * half);
     }
 
     public int GetCardIndex(Transform cardTransform)

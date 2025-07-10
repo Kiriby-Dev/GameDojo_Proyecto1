@@ -15,10 +15,11 @@ public class QuestionManager : MonoBehaviour
     private List<QuestionData> _medium;
     private List<QuestionData> _hard;
     
-    private QuestionData _selectedQuestion = null;
-    private bool _playerHasAnswered = false;
+    private QuestionData _selectedQuestion;
+    private bool _playerHasAnswered;
     private bool _playerAnswersCorrectly;
-    private bool _timeRanOut = false;
+    private bool _timeRanOut;
+    private int _actualCardIndex;
 
     private void Start()
     {
@@ -27,10 +28,10 @@ public class QuestionManager : MonoBehaviour
         _hard = new List<QuestionData>();
         LoadQuestions();
     }
-
-    //Recorro todas las cartas de la zona de ataque y cuando termino recien ahi recorro las de la zona de defensa.
+    
     public IEnumerator StartQuestions()
     {
+        _actualCardIndex = 0;
         yield return StartCoroutine(GoThroughCards()); //Espera a que termine la corrutina antes de seguir.
     }
 
@@ -70,7 +71,7 @@ public class QuestionManager : MonoBehaviour
         timer.StartTimer();
         yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
 
-        HandleAnswerResult(cardScript, cardGo, difficulty);
+        HandleAnswerResult(cardScript, difficulty);
 
         yield return new WaitForSeconds(1f);
     }
@@ -112,25 +113,30 @@ public class QuestionManager : MonoBehaviour
     }
 
     //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).
-    private void HandleAnswerResult(Card card, GameObject cardGo, int difficulty)
+    private void HandleAnswerResult(Card card, int difficulty)
     {
         if (!card) return;
 
         if (_playerAnswersCorrectly)
         {
             card.ChangeColor(Card.CardColor.Green);
-            gameManager.GetPlayer().AddStats(cardGo, difficulty);
+            ActionZone.ZoneType cardType = gameManager.GetCardsZone().GetCardType(_actualCardIndex);
+            Debug.Log(cardType);
+            Debug.Log(_actualCardIndex);
+            gameManager.GetPlayer().AddStats(cardType, difficulty);
         }
         else
         {
             card.ChangeColor(Card.CardColor.Red);
         }
+
+        _actualCardIndex++;
     }
 
     #endregion
     
     /*Toma todos los scriptable objects (preguntas) y los carga en la lista general.
-    Luego recorre esta lista y la separa en 3 distintas: facil, medio y dificil*/
+    Luego recorre esta lista y la separa en 3 distintas: fácil, medio y difícil*/
     private void LoadQuestions()
     {
         allQuestions = Resources.LoadAll<QuestionData>("Questions");

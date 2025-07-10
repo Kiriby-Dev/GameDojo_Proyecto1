@@ -33,9 +33,17 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI answerText2;
     public TextMeshProUGUI answerText3;
     public TextMeshProUGUI answerText4;
+    
+    private TransitionManager _transitionManager;
+
+    private void Start()
+    {
+        _transitionManager = gameManager.GetTransitionManager();
+    }
 
     public void ResetVisuals()
     {
+        ResetBoardCardsColor();
         winCanvas.gameObject.SetActive(false);
         loseCanvas.gameObject.SetActive(false);
         boardCanvas.gameObject.SetActive(false);
@@ -98,30 +106,30 @@ public class UIManager : MonoBehaviour
     }
 
     #region Utilities
-    // Agranda el tablero y posiciona las zonas de acción
+    // Entra en el modo preguntas, se hace la transición y se muestra el pizarrón agrandado.
     public IEnumerator QuestionMode()
     {
         yield return new WaitForSeconds(1f);
-        gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionIn");
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
         ToggleUIItems(true);
         
-        gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(1.5f);
     }
 
-    // Vuelve al tamaño original y posiciona las zonas de acción
+    // Vuelve al modo normal, se hace la transición y se muestra el pizarrón en su estado original.
     public IEnumerator NormalMode()
     {
-        gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionIn");
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
         ToggleUIItems(false);
         playerAttack.text = playerAttackText.text;
         playerDefense.text = playerDefenseText.text;
         
-        gameManager.GetTransitionManager().PlayTransition("Paper", "TransitionOut");
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
     }
 
@@ -132,6 +140,14 @@ public class UIManager : MonoBehaviour
         gameManager.GetDefenseZone().gameObject.SetActive(!toggle);
         gameCanvas.gameObject.SetActive(!toggle);
         boardCanvas.gameObject.SetActive(toggle);
+    }
+    
+    private void ResetBoardCardsColor()
+    {
+        foreach (Card card in gameManager.GetCardsZone().gameObject.GetComponentsInChildren<Card>())
+        {
+            card.ChangeColor();
+        }
     }
     #endregion
 }

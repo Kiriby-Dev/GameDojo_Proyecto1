@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public PhaseManager phaseManager;
     public UIManager uiManager;
     public TransitionManager transitionManager;
+    public MenuManager menuManager;
     
     [Header("Game Objects")]
     public GameObject playersHand;
@@ -20,17 +21,15 @@ public class GameManager : MonoBehaviour
     public ActionZone defenseZone;
     public ActionZone cardsZone;
     
-    private bool _gameOver;
-    private PlayersHand _playersHandScript;
-    private Card _cardScript;
     private int _cantCardsInHand;
     private int _cardsPlayed;
     private bool _gameStarted;
+    private bool _gameOver;
+    private PlayersHand _playersHandScript;
 
     private void Awake()
     {
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
-        _cardScript = card.GetComponent<Card>();
     }
 
     private void Update()
@@ -39,34 +38,14 @@ public class GameManager : MonoBehaviour
         CheckEndGame();
     }
 
+    #region GameLoop
     public void StartGame()
     {
         _gameStarted = true;
+        ResetVariables();
         phaseManager.StartPhases();
     }
-
-    //Se habilitan y deshabilitan las zonas de accion dependiendo la fase en la que estamos.
-    public void UpdateZones(string gamePhase)
-    {
-        bool active = (gamePhase == "Discard");
-        
-        discardZone.enabled = active;
-        attackZone.enabled = !active;
-        defenseZone.enabled = !active;
-    }
-
-    //Se instancian las 5 cartas con valores random en la mano del jugador.
-    public void DrawCards()
-    {
-        for (int i = 1; i <= 5; i++)
-        {
-            GameObject go = Instantiate(card, playersHand.transform);
-            go.GetComponent<Card>().GenerateCardValue();
-            go.name = "Card" + i;
-            AddCardToHand();
-        }
-    }
-
+    
     //Verificamos si alguno de los personajes murio y en ese caso terminamos el juego.
     private void CheckEndGame()
     {
@@ -89,16 +68,45 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
-        ResetBoardCardsColor();
         _cardsPlayed = 0;
     }
+    #endregion
 
-    private void ResetBoardCardsColor()
+    #region Cards
+    //Se instancian las 5 cartas con valores random en la mano del jugador.
+    public void DrawCards()
     {
-        foreach (Card card in cardsZone.gameObject.GetComponentsInChildren<Card>())
+        for (int i = 1; i <= 5; i++)
         {
-            card.ChangeColor();
+            GameObject go = Instantiate(card, playersHand.transform);
+            go.GetComponent<Card>().GenerateCardValue();
+            go.name = "Card" + i;
+            AddCardToHand();
         }
+    }
+    
+    public GameObject GetActualCardForQuestion()
+    {
+        GameObject card = cardsZone.transform.GetChild(_cardsPlayed).gameObject;
+        _cardsPlayed++;
+        return card;
+    }
+    
+    public int CantCardsInHand() => _cantCardsInHand;
+    public int CantGameObjectsInHand() => playersHand.transform.childCount;
+    public void RemoveCardFromHand() => _cantCardsInHand--;
+    private void AddCardToHand() => _cantCardsInHand++;
+    #endregion
+
+    #region  Utilities
+    //Se habilitan y deshabilitan las zonas de accion dependiendo la fase en la que estamos.
+    public void UpdateZones(string gamePhase)
+    {
+        bool active = (gamePhase == "Discard");
+        
+        discardZone.enabled = active;
+        attackZone.enabled = !active;
+        defenseZone.enabled = !active;
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
@@ -112,25 +120,8 @@ public class GameManager : MonoBehaviour
         if (damageDealed < 0)
             enemy.TakeDamage(damageDealed);
     }
-
-    public int CantCardsInHandObject()
-    {
-        return playersHand.transform.childCount;
-    }
-
-    public int CantCardsInHand() => _cantCardsInHand;
-    public void RemoveCardFromHand() => _cantCardsInHand--;
-    public void AddCardToHand() => _cantCardsInHand++;
-
-    public GameObject GetActualCardFromBoard()
-    {
-        GameObject card = cardsZone.transform.GetChild(_cardsPlayed).gameObject;
-        _cardsPlayed++;
-        return card;
-    }
-
-    public bool GameStarted() => _gameStarted;
-
+    #endregion
+    
     #region Getters
     public PhaseManager GetPhaseManager() => phaseManager;
     public QuestionManager GetQuestionManager() => questionManager;
@@ -143,6 +134,5 @@ public class GameManager : MonoBehaviour
     public ActionZone GetDiscardZone() => discardZone;
     public Player GetPlayer() => player;
     public bool IsGameOver() => _gameOver;
-    public Card GetCard() => _cardScript;
     #endregion
 }

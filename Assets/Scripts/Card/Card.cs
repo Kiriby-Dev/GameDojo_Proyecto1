@@ -11,15 +11,15 @@ public class Card : MonoBehaviour
     public Canvas textCanvas;
     public Sprite[] cardSprites;
     
+    private int _cardIndex;
+    private bool _isReturning;
+    private bool _isDragging;
+    private bool _isCardActive;
+    private Vector3 _startPosition;
+    
     private Camera _camera;
     private SpriteRenderer _spriteRenderer;
     private PlayersHand _playersHand;
-    
-    private bool _isReturning = false;
-    private bool _isDragging = false;
-    private Vector3 _startPosition;
-    private int _cardIndex;
-    private bool _isCardActive;
 
     private void Awake()
     {

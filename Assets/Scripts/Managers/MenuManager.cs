@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,19 +13,12 @@ public class MenuManager : MonoBehaviour
     public Canvas canvasPause;
     public Canvas canvasLevelsMenu;
 
-    public Button[] levelButtons;
+    public Button[] levelsButtons;
 
     private void Start()
     {
         ResetMenus();
-        
-        foreach (Button button in levelButtons)
-        {
-            button.interactable = false;
-        }
-        
-        int cantButtons = levelButtons.Length;
-        levelButtons[cantButtons - 1].interactable = true;
+        DisableBlockedLevels();
     }
 
     private void ResetMenus()
@@ -39,12 +31,22 @@ public class MenuManager : MonoBehaviour
     {
         menu.SetActive(false);
         game.SetActive(true);
-        gameManager.ResetVariables();
         gameManager.StartGame();
     }
 
     public void TogglePauseGameCanvas(bool pause)
     {
         canvasPause.enabled = pause;
+    }
+
+    private void DisableBlockedLevels()
+    {
+        foreach (Button button in levelsButtons)
+        {
+            button.interactable = false;
+        }
+        
+        int cantButtons = levelsButtons.Length;
+        levelsButtons[cantButtons - 1].interactable = true;
     }
 }
