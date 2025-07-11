@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,9 +8,13 @@ public class Card : MonoBehaviour
 {
     public enum CardColor { Red, Yellow, Green, White }
     
-    [SerializeField] private float followSmoothness = 10f;
-    [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float maxTiltAngle = 15f;
+    [SerializeField] private float followSmoothness;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float maxTiltAngle;
+    
+    [SerializeField] private SpriteRenderer cardSprite;
+    [SerializeField] private SpriteRenderer shadowSprite;
+    
     public float returnSpeed;
     public Canvas textCanvas;
     public Sprite[] cardSprites;
@@ -22,14 +27,12 @@ public class Card : MonoBehaviour
     private float _currentRotationZ;
     
     private Camera _camera;
-    private SpriteRenderer _spriteRenderer;
     private GameManager _gameManager;
     private PlayersHand _playersHand;
 
     private void Awake()
     {
         _camera = Camera.main;
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _gameManager = FindAnyObjectByType<GameManager>();
         _playersHand = _gameManager.GetPlayersHand();
     }
@@ -54,6 +57,9 @@ public class Card : MonoBehaviour
         _isReturning = false;
 
         _playersHand.SelectedCard(this);
+        shadowSprite.transform.localPosition = new Vector3(shadowSprite.transform.localPosition.x, -0.3f, shadowSprite.transform.localPosition.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z);
+        ChangeSize(1.2f);
     }
 
     private void OnMouseUp()
@@ -64,6 +70,8 @@ public class Card : MonoBehaviour
         _isDragging = false;
         
         _playersHand.SelectedCard(null);
+        shadowSprite.transform.localPosition = new Vector3(shadowSprite.transform.localPosition.x, -0.137f, shadowSprite.transform.localPosition.z);
+        ChangeSize(1f);
     }
 
     private void FollowMousePosition()
@@ -73,7 +81,7 @@ public class Card : MonoBehaviour
         mousePoint.z = 0;
 
         // Calcular delta de movimiento
-        Vector3 mouseDelta = mousePoint - _lastMousePosition;
+        Vector3 mouseDelta = (mousePoint - _lastMousePosition).normalized;
         _lastMousePosition = mousePoint;
 
         // Seguir al mouse con delay
@@ -81,7 +89,7 @@ public class Card : MonoBehaviour
 
         // Calcular rotación deseada en Z
         float targetRotationZ = Mathf.Clamp(-mouseDelta.x * 100f, -maxTiltAngle, maxTiltAngle);
-
+        
         // Suavizar rotación actual hacia la deseada
         _currentRotationZ = Mathf.Lerp(_currentRotationZ, targetRotationZ, Time.deltaTime * rotationSpeed);
 
@@ -103,7 +111,8 @@ public class Card : MonoBehaviour
     //Setea la sorting layer de la carta y pone el texto en 1 sorting layer mas arriba
     public void SetCardOrder(int cardOrder)
     {
-        _spriteRenderer.sortingOrder = cardOrder;
+        shadowSprite.sortingOrder = cardOrder - 1;
+        cardSprite.sortingOrder = cardOrder;
         textCanvas.sortingOrder = cardOrder + 1;
     }
     #endregion
@@ -152,9 +161,14 @@ public class Card : MonoBehaviour
         }
     }
 
+    private void ChangeSize(float size)
+    {
+        transform.localScale = new Vector3(size, size, transform.localScale.z);
+    }
+
     public void ChangeSprite(int i = 0)
     {
-        _spriteRenderer.sprite = cardSprites[i];
+        cardSprite.sprite = cardSprites[i];
     }
     
     public int GetParentIndex()

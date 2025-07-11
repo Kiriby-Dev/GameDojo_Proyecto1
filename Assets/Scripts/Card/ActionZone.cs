@@ -47,36 +47,44 @@ public class ActionZone : MonoBehaviour
                 if (zoneType == ZoneType.Discard)
                 {
                     Destroy(_selectedCard.gameObject);
-                    gameManager.RemoveCardFromHand();
+                    DisableSlotAndRemoveCard();
                 }
                 break;
 
             case PhaseManager.GamePhase.Colocation:
+                DisableSlotAndRemoveCard();
                 AddCardInZone();
-                gameManager.RemoveCardFromHand();
                 break;
         }
     }
-    
+
+    private void DisableSlotAndRemoveCard()
+    {
+        gameManager.GetPlayersHand().DisableSlot(_selectedCard.transform.parent.GetSiblingIndex());
+        gameManager.RemoveCardFromHand();
+    }
+
     private void AddCardInZone()
     {
+        _cardsPlayed = gameManager.GetCantPlayedCards();
+        print(_cardsPlayed);
         switch (zoneType)
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(1);
                 _cardsInBoard[_cardsPlayed] = ZoneType.Attack;
-                Debug.Log(_cardsInBoard[_cardsPlayed]);
+                print(_cardsInBoard[_cardsPlayed].ToString());
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(2);
                 _cardsInBoard[_cardsPlayed] = ZoneType.Defense;
-                Debug.Log(_cardsInBoard[_cardsPlayed]);
+                print(_cardsInBoard[_cardsPlayed].ToString());
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
         CopyCardToBoard();
         _cantCardsInZone++;
-        _cardsPlayed++;
+        gameManager.PlayCard();
     }
 
     public ZoneType GetCardType(int position)

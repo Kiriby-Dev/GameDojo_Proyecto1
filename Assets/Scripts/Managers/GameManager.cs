@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     public TransitionManager transitionManager;
     public MenuManager menuManager;
+    public AudioManager audioManager;
     
     [Header("Game Objects")]
     public GameObject playersHand;
     public GameObject card;
-    public GameObject cardSlot;
     public Player player;
     public Enemy enemy;
     
@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public ActionZone cardsZone;
     
     private int _cantCardsInHand;
+    private int _actualBoardcard;
     private int _cardsPlayed;
     private bool _gameStarted;
     private bool _gameOver;
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
-        _cardsPlayed = 0;
+        _actualBoardcard = 0;
     }
     #endregion
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
     //Se instancian las 5 cartas con valores random en la mano del jugador.
     public void DrawCards()
     {
+        _playersHandScript.EnableAllSlots();
         for (int i = 0; i <= 4; i++)
         {
             GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
@@ -88,8 +90,8 @@ public class GameManager : MonoBehaviour
     
     public GameObject GetActualCardForQuestion()
     {
-        GameObject card = cardsZone.transform.GetChild(_cardsPlayed).gameObject;
-        _cardsPlayed++;
+        GameObject card = cardsZone.transform.GetChild(_actualBoardcard).gameObject;
+        _actualBoardcard++;
         return card;
     }
     
@@ -125,6 +127,9 @@ public class GameManager : MonoBehaviour
         if (damageDealed < 0)
             enemy.TakeDamage(damageDealed);
     }
+
+    public void PlayCard() => _cardsPlayed++;
+    public int GetCantPlayedCards() => _cardsPlayed;
     #endregion
     
     #region Getters
@@ -132,6 +137,7 @@ public class GameManager : MonoBehaviour
     public QuestionManager GetQuestionManager() => questionManager;
     public UIManager GetUIManager() => uiManager;
     public TransitionManager GetTransitionManager() => transitionManager;
+    public AudioManager GetAudioManager() => audioManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;

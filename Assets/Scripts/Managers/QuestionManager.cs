@@ -121,8 +121,8 @@ public class QuestionManager : MonoBehaviour
         {
             card.ChangeColor(Card.CardColor.Green);
             ActionZone.ZoneType cardType = gameManager.GetCardsZone().GetCardType(_actualCardIndex);
-            Debug.Log(cardType);
-            Debug.Log(_actualCardIndex);
+            print(_actualCardIndex);
+            print(cardType.ToString());
             gameManager.GetPlayer().AddStats(cardType, difficulty);
         }
         else

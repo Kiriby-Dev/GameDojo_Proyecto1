@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayersHand : MonoBehaviour
 {
     public GameManager gameManager;
-    public float cardSpacing = 1.5f;
+    public float cardSpacing;
     
     private int _cardsCount;
     private Card[] _cards;
@@ -15,6 +15,7 @@ public class PlayersHand : MonoBehaviour
     private void Start()
     {
         _cards = new Card[gameManager.CantCardsInHand()];
+        EnableAllSlots();
     }
 
     private void Update()
@@ -29,20 +30,24 @@ public class PlayersHand : MonoBehaviour
         
         for (int i = 0; i < _cardsCount; i++)
         {
-            if (_selectedCard.transform.position.x > _cards[i].transform.position.x)
+            if (transform.GetChild(i).gameObject.activeInHierarchy)
             {
-                if (_selectedCard.GetParentIndex() < _cards[i].GetParentIndex())
+                if (_selectedCard.transform.position.x > _cards[i].transform.position.x)
                 {
-                    Swap(i);
-                    return;
+                    if (_selectedCard.GetParentIndex() < _cards[i].GetParentIndex())
+                    {
+                        Swap(i);
+                        return;
+                    }
                 }
-            }
-            if (_selectedCard.transform.position.x < _cards[i].transform.position.x)
-            {
-                if (_selectedCard.GetParentIndex() > _cards[i].GetParentIndex())
+
+                if (_selectedCard.transform.position.x < _cards[i].transform.position.x)
                 {
-                    Swap(i);
-                    return;
+                    if (_selectedCard.GetParentIndex() > _cards[i].GetParentIndex())
+                    {
+                        Swap(i);
+                        return;
+                    }
                 }
             }
         }
@@ -52,16 +57,39 @@ public class PlayersHand : MonoBehaviour
     {
         _isCrossing = true;
 
-        Transform focusedParent = _selectedCard.transform.parent;
+        Transform selectedParent = _selectedCard.transform.parent;
         Transform crossedParent = _cards[i].transform.parent;
 
-        _cards[i].transform.SetParent(focusedParent);
-        _cards[i].transform.localPosition = Vector3.zero;
-        int selectedCardLayer = focusedParent.GetComponent<SpriteRenderer>().sortingOrder;
-        _cards[i].GetComponentInChildren<SpriteRenderer>().sortingOrder = selectedCardLayer;
+        // Obtener posicioó objetivo
+        Vector3 crossedTarget = selectedParent.position;
+
+        // Cambiar los padres (no cambia posición aún)
         _selectedCard.transform.SetParent(crossedParent);
+        _cards[i].transform.SetParent(selectedParent);
+
+        // Mover la carta suavemente a su nueva posición
+        StartCoroutine(MoveCardToPosition(_cards[i].transform, crossedTarget, 0.15f));
+
+        // Sorting order correcto
+        int selectedCardLayer = selectedParent.GetComponent<SpriteRenderer>().sortingOrder;
+        _cards[i].SetCardOrder(selectedCardLayer);
 
         _isCrossing = false;
+    }
+    
+    private IEnumerator MoveCardToPosition(Transform cardTransform, Vector3 targetPosition, float duration)
+    {
+        float timeElapsed = 0f;
+        Vector3 startPos = cardTransform.position;
+
+        while (timeElapsed < duration)
+        {
+            cardTransform.position = Vector3.Lerp(startPos, targetPosition, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        cardTransform.position = targetPosition;
     }
 
     //Se utiliza para recalcular las posiciones de las cartas en la mano.
@@ -80,7 +108,11 @@ public class PlayersHand : MonoBehaviour
         int i = 0;
         foreach (Transform cardSlot in gameObject.transform)
         {
-            _cards[i] = cardSlot.GetComponentInChildren<Card>();
+            _cards[i] = null;
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                _cards[i] = cardSlot.GetComponentInChildren<Card>();
+            }
             i++;
         }
     }
@@ -90,9 +122,12 @@ public class PlayersHand : MonoBehaviour
         int i = 0;
         foreach (Transform cardSlot in transform)
         {
-            Card card = cardSlot.GetComponentInChildren<Card>();
-            card.SetCardOrder(i * 2); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
-            i++;
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                Card card = cardSlot.GetComponentInChildren<Card>();
+                card.SetCardOrder(i * 3); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
+                i++;
+            }
         }
     }
 
@@ -102,13 +137,16 @@ public class PlayersHand : MonoBehaviour
         int i = 0;
         foreach (Transform cardSlot in transform)
         {
-            Card card = cardSlot.GetComponentInChildren<Card>();
-            Vector3 currentPos = cardSlot.position;
-            float newX = initialX + (i * cardSpacing);
-            cardSlot.position = new Vector3(newX, currentPos.y, currentPos.z);
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                Card card = cardSlot.GetComponentInChildren<Card>();
+                Vector3 currentPos = cardSlot.position;
+                float newX = initialX + (i * cardSpacing);
+                cardSlot.position = new Vector3(newX, currentPos.y, currentPos.z);
 
-            card.transform.localPosition = Vector3.zero;
-            i++;
+                card.transform.localPosition = Vector3.zero;
+                i++;
+            }
         }
     }
 
@@ -133,6 +171,19 @@ public class PlayersHand : MonoBehaviour
     public void SelectedCard(Card card)
     {
         _selectedCard = card;
+    }
+
+    public void EnableAllSlots()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void DisableSlot(int index)
+    {
+        transform.GetChild(index).gameObject.SetActive(false);
     }
     #endregion
 }

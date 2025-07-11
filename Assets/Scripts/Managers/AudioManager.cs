@@ -44,7 +44,7 @@ public class AudioManager : MonoBehaviour
         SetMixerState("SFXVolume", _sfxMuted);
     }
 
-    public void SerMasterVolume(float volume)
+    public void SetMasterVolume(float volume)
     {
         mainMixer.SetFloat("MasterVolume", volume);
     }
