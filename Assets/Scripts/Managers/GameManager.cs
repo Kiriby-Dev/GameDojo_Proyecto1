@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject card;
     public Player player;
     public Enemy enemy;
+    public GameObject deck;
     
     [Header("ActionZones")]
     public ActionZone discardZone;
@@ -28,10 +31,17 @@ public class GameManager : MonoBehaviour
     private bool _gameStarted;
     private bool _gameOver;
     private PlayersHand _playersHandScript;
+    private ActionZone.ZoneType[] _cardTypes;
+    private int _cardTypesIndex = 0;
 
     private void Awake()
     {
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
+    }
+
+    private void Start()
+    {
+        _cardTypes = new ActionZone.ZoneType[3];
     }
 
     private void Update()
@@ -70,7 +80,8 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
-        _actualBoardcard = 0;
+        ResetCardTypes();
+        _actualBoardcard = 1;
     }
     #endregion
 
@@ -82,16 +93,35 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i <= 4; i++)
         {
             GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
-            go.GetComponent<Card>().GenerateCardValue();
+            Card actualCard = go.GetComponent<Card>();
+            actualCard.GenerateCardValue();
+            actualCard.ToggleAnimator(true);
             go.name = "Card" + i;
             AddCardToHand();
         }
+
+        StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
     }
-    
+
+    private IEnumerator MovePlayersHand(Vector3 targetPosition, float duration = 0.5f)
+    {
+        float elapsedTime = 0f;
+        Vector3 startingPos = playersHand.transform.position;
+
+        while (elapsedTime < duration)
+        {
+            playersHand.transform.position = Vector3.Lerp(startingPos, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playersHand.transform.position = targetPosition; // Asegura que termina exactamente en destino
+    }
+
     public GameObject GetActualCardForQuestion()
     {
         GameObject card = cardsZone.transform.GetChild(_actualBoardcard).gameObject;
-        _actualBoardcard++;
+        _actualBoardcard += 2;
         return card;
     }
     
@@ -114,6 +144,22 @@ public class GameManager : MonoBehaviour
         discardZone.enabled = active;
         attackZone.enabled = !active;
         defenseZone.enabled = !active;
+    }
+    
+    public void SaveCardType(ActionZone.ZoneType type)
+    {
+        _cardTypes[_cardTypesIndex] = type;
+        _cardTypesIndex++;
+    }
+
+    public ActionZone.ZoneType GetCardType(int index)
+    {
+        return _cardTypes[index];
+    }
+
+    private void ResetCardTypes()
+    {
+        _cardTypesIndex = 0;
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.

@@ -77,6 +77,7 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator QuestionsPhase()
     {
+        gameManager.GetPlayersHand().transform.position = new Vector3(0, -8, 0);
         yield return gameManager.GetUIManager().QuestionMode();
         yield return gameManager.GetQuestionManager().StartQuestions();
     }

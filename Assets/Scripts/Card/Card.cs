@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ public class Card : MonoBehaviour
     
     [SerializeField] private SpriteRenderer cardSprite;
     [SerializeField] private SpriteRenderer shadowSprite;
+    [SerializeField] private ParticleSystem chalkEffect;
     
     public float returnSpeed;
     public Canvas textCanvas;
@@ -29,12 +31,14 @@ public class Card : MonoBehaviour
     private Camera _camera;
     private GameManager _gameManager;
     private PlayersHand _playersHand;
+    private Animator _animator;
 
     private void Awake()
     {
         _camera = Camera.main;
         _gameManager = FindAnyObjectByType<GameManager>();
         _playersHand = _gameManager.GetPlayersHand();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -52,6 +56,7 @@ public class Card : MonoBehaviour
     private void OnMouseDown()
     {
         SetCardOrder(99);
+        ToggleAnimator(false);
         
         _isDragging = true;
         _isReturning = false;
@@ -90,20 +95,18 @@ public class Card : MonoBehaviour
         // Calcular rotación deseada en Z
         float targetRotationZ = Mathf.Clamp(-mouseDelta.x * 100f, -maxTiltAngle, maxTiltAngle);
         
-        // Suavizar rotación actual hacia la deseada
-        _currentRotationZ = Mathf.Lerp(_currentRotationZ, targetRotationZ, Time.deltaTime * rotationSpeed);
-
-        // Aplicar rotación en eulerAngles
-        transform.eulerAngles = new Vector3(0, 0, _currentRotationZ);
+        LerpRotation(targetRotationZ);
     }
-    
+
     private void ReturnStartPosition()
     {
         transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, returnSpeed * Time.deltaTime);
+        LerpRotation(0);
         
         if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.01f)
         {
             transform.localPosition = Vector3.zero;
+            ToggleAnimator(true);
             _isReturning = false;
         }
     }
@@ -122,7 +125,9 @@ public class Card : MonoBehaviour
         DisableInteraction();
         transform.position = slot.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        transform.eulerAngles = Vector3.zero;
         transform.SetParent(slot);
+        chalkEffect.Play();
     }
     
     private void DisableInteraction()
@@ -174,6 +179,30 @@ public class Card : MonoBehaviour
     public int GetParentIndex()
     {
         return transform.parent.GetSiblingIndex();
+    }
+    
+    private void LerpRotation(float targetRotationZ)
+    {
+        // Suavizar rotación actual hacia 0
+        _currentRotationZ = Mathf.Lerp(_currentRotationZ, targetRotationZ, Time.deltaTime * rotationSpeed);
+
+        // Aplicar rotación en eulerAngles
+        transform.eulerAngles = new Vector3(0, 0, _currentRotationZ);
+    }
+    #endregion
+
+    #region Animation
+    public void PlayMoveAnimation(float direction)
+    {
+        if (direction <= 0)
+            _animator.SetTrigger("MoveRight");
+        else
+            _animator.SetTrigger("MoveLeft");
+    }
+    
+    public void ToggleAnimator(bool state)
+    {
+        _animator.enabled = state;
     }
     #endregion
 }

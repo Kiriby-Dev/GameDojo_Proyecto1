@@ -23,12 +23,14 @@ public class PlayersHand : MonoBehaviour
         CheckForSwap();
     }
 
+    #region SwapCards
+
     private void CheckForSwap()
     {
         if (!_selectedCard) return;
         if (_isCrossing) return;
         
-        for (int i = 0; i < _cardsCount; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (transform.GetChild(i).gameObject.activeInHierarchy)
             {
@@ -67,8 +69,11 @@ public class PlayersHand : MonoBehaviour
         _selectedCard.transform.SetParent(crossedParent);
         _cards[i].transform.SetParent(selectedParent);
 
+        float direction =  _selectedCard.transform.position.x - _cards[i].transform.position.x;
+        _cards[i].PlayMoveAnimation(direction);
+        
         // Mover la carta suavemente a su nueva posición
-        StartCoroutine(MoveCardToPosition(_cards[i].transform, crossedTarget, 0.15f));
+        MoveCardToPosition(_cards[i], crossedTarget, 0.15f);
 
         // Sorting order correcto
         int selectedCardLayer = selectedParent.GetComponent<SpriteRenderer>().sortingOrder;
@@ -77,45 +82,24 @@ public class PlayersHand : MonoBehaviour
         _isCrossing = false;
     }
     
-    private IEnumerator MoveCardToPosition(Transform cardTransform, Vector3 targetPosition, float duration)
+    private IEnumerator MoveCardToPositionCoroutine(Card card, Vector3 targetPosition, float duration)
     {
         float timeElapsed = 0f;
-        Vector3 startPos = cardTransform.position;
-
+        Vector3 startPos = card.transform.position;
+        
         while (timeElapsed < duration)
         {
-            cardTransform.position = Vector3.Lerp(startPos, targetPosition, timeElapsed / duration);
+            card.transform.position = Vector3.Lerp(startPos, targetPosition, timeElapsed / duration);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-
-        cardTransform.position = targetPosition;
-    }
-
-    //Se utiliza para recalcular las posiciones de las cartas en la mano.
-    public IEnumerator RecalculateCoroutine()
-    {
-        yield return new WaitForEndOfFrame();
-        _cardsCount = gameManager.CantCardsInHand();
         
-        GetCardsInHand();
-        SetCardsOrder();
-        SetPositions();
+        card.transform.position = targetPosition;
     }
 
-    private void GetCardsInHand()
-    {
-        int i = 0;
-        foreach (Transform cardSlot in gameObject.transform)
-        {
-            _cards[i] = null;
-            if (cardSlot.gameObject.activeInHierarchy)
-            {
-                _cards[i] = cardSlot.GetComponentInChildren<Card>();
-            }
-            i++;
-        }
-    }
+    #endregion
+
+    #region CardsPositions
 
     private void SetCardsOrder()
     {
@@ -150,6 +134,32 @@ public class PlayersHand : MonoBehaviour
         }
     }
 
+    //Se utiliza para recalcular las posiciones de las cartas en la mano.
+    public IEnumerator RecalculateCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        _cardsCount = gameManager.CantCardsInHand();
+        
+        GetCardsInHand();
+        SetCardsOrder();
+        SetPositions();
+    }
+
+    private void GetCardsInHand()
+    {
+        int i = 0;
+        foreach (Transform cardSlot in gameObject.transform)
+        {
+            _cards[i] = null;
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                _cards[i] = cardSlot.GetComponentInChildren<Card>();
+            }
+            i++;
+        }
+    }
+    #endregion
+    
     #region Utilities
     //Calcula la posición X inicial de la primera carta en la mano, para que todas queden centradas en pantalla.
     private float CalculateStartX(int count)
@@ -185,5 +195,11 @@ public class PlayersHand : MonoBehaviour
     {
         transform.GetChild(index).gameObject.SetActive(false);
     }
+
+    public void MoveCardToPosition(Card card, Vector3 targetPosition, float duration)
+    {
+        StartCoroutine(MoveCardToPositionCoroutine(card, targetPosition, duration));
+    }
+
     #endregion
 }

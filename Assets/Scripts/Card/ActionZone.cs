@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,13 +14,10 @@ public class ActionZone : MonoBehaviour
     private Card _selectedCard;
     private bool _isDropping;
     private bool _activeZone;
-    private ZoneType[] _cardsInBoard;
-    private int _cardsPlayed;
     
     private void Start()
     {
         GetZoneChildren();
-        _cardsInBoard = new ZoneType[3];
     }
     
     //Si la zona esta activa verifico si solté una carta ahí.
@@ -66,30 +64,20 @@ public class ActionZone : MonoBehaviour
 
     private void AddCardInZone()
     {
-        _cardsPlayed = gameManager.GetCantPlayedCards();
-        print(_cardsPlayed);
         switch (zoneType)
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(1);
-                _cardsInBoard[_cardsPlayed] = ZoneType.Attack;
-                print(_cardsInBoard[_cardsPlayed].ToString());
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(2);
-                _cardsInBoard[_cardsPlayed] = ZoneType.Defense;
-                print(_cardsInBoard[_cardsPlayed].ToString());
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
         CopyCardToBoard();
         _cantCardsInZone++;
+        gameManager.SaveCardType(zoneType);
         gameManager.PlayCard();
-    }
-
-    public ZoneType GetCardType(int position)
-    {
-        return _cardsInBoard[position];
     }
 
     private void CopyCardToBoard()
@@ -128,11 +116,20 @@ public class ActionZone : MonoBehaviour
     {
         for (int i = 0; i < _cantCardsInZone; i++)
         {
-            Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
+            StartCoroutine(DiscardCardInZone(i));
         }
         _cantCardsInZone = 0;
-        _cardsPlayed = 0;
     }
+
+    private IEnumerator DiscardCardInZone(int i)
+    {
+        Card card = _cardsInZone[i].transform.GetChild(0).GetComponent<Card>();
+        Vector3 discardZonePosition = gameManager.GetDiscardZone().transform.position;
+        gameManager.GetPlayersHand().MoveCardToPosition(card, discardZonePosition, 0.5f);
+        yield return new WaitForSeconds(0.51f);
+        Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
+    }
+
     #endregion
 
     #region Getters
