@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_5_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 famoso l\xEDder fue asesinado en 1963 en Dallas?"
-  correctAnswer: John F. Kennedy
+  question: "\xBFCu\xE1l fue el primer hombre en pisar la Luna?"
+  correctAnswer: Neil Armstrong
   wrongAnswers:
-  - Martin Luther King Jr.
-  - Ronald Reagan
-  - Richard Nixon
+  - Buzz Aldrin
+  - Yuri Gagarin
+  - Michael Collins
   difficulty: 0

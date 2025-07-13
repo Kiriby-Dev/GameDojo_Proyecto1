@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_30_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 instrumento hist\xF3rico se usaba para navegar?"
-  correctAnswer: Astrolabio
+  question: "\xBFQui\xE9n era Julio C\xE9sar?"
+  correctAnswer: "Un l\xEDder pol\xEDtico y militar romano"
   wrongAnswers:
-  - "Br\xFAjula moderna"
-  - Microscopio
-  - "Term\xF3metro"
+  - Un rey egipcio
+  - Un dios griego
+  - Un explorador vikingo
   difficulty: 0

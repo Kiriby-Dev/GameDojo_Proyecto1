@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_6_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l fue el primer hombre en pisar la Luna?"
-  correctAnswer: Neil Armstrong
+  question: "\xBFCu\xE1l es el evento que marca el inicio de la Revoluci\xF3n Francesa?"
+  correctAnswer: La Toma de la Bastilla
   wrongAnswers:
-  - Buzz Aldrin
-  - Yuri Gagarin
-  - Michael Collins
+  - "La ejecuci\xF3n de Luis XVI"
+  - "La creaci\xF3n de la guillotina"
+  - La marcha sobre Versalles
   difficulty: 0

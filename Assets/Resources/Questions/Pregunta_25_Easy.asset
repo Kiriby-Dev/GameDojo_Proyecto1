@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_25_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l fue la principal causa de la Primera Guerra Mundial?"
-  correctAnswer: Asesinato del archiduque Francisco Fernando
+  question: "\xBFQu\xE9 civilizaci\xF3n precolombina habit\xF3 en Per\xFA?"
+  correctAnswer: Inca
   wrongAnswers:
-  - Ataque a Pearl Harbor
-  - "Ca\xEDda de la Bolsa"
-  - "Revoluci\xF3n Rusa"
+  - Azteca
+  - Maya
+  - Chibcha
   difficulty: 0

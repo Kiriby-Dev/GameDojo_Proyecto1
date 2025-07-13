@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_23_Easy
   m_EditorClassIdentifier: 
-  question: "Cu\xE1l fue el primer imperio de la historia?"
-  correctAnswer: Sumerio
+  question: "\xBFCu\xE1l fue la forma de gobierno de la antigua Roma antes del Imperio?"
+  correctAnswer: "Rep\xFAblica"
   wrongAnswers:
-  - Egipcio
-  - Griego
-  - Asirio
+  - "Monarqu\xEDa"
+  - Dictadura
+  - Democracia directa
   difficulty: 0

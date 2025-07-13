@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_3_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 civilizaci\xF3n construy\xF3 las pir\xE1mides de Egipto?"
+  question: "\xBFQu\xE9 civilizaci\xF3n construy\xF3 las pir\xE1mides de Giza?"
   correctAnswer: Egipcia
   wrongAnswers:
   - Griega
