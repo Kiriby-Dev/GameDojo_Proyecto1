@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_26_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l fue la forma de gobierno de la antigua Roma antes del Imperio?"
-  correctAnswer: "Rep\xFAblica"
+  question: "\xBFQui\xE9n fue Sim\xF3n Bol\xEDvar?"
+  correctAnswer: "Libertador de Am\xE9rica"
   wrongAnswers:
-  - "Monarqu\xEDa"
-  - Dictadura
-  - Democracia directa
+  - "Emperador franc\xE9s"
+  - Presidente de EE.UU.
+  - "Conquistador espa\xF1ol"
   difficulty: 0

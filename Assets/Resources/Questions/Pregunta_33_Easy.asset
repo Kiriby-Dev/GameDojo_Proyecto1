@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_33_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 a\xF1o se firm\xF3 la Declaraci\xF3n de Independencia
-    de EE.UU.?"
-  correctAnswer: 1776
+  question: "\xBFQui\xE9n lider\xF3 el fascismo en Italia?"
+  correctAnswer: Benito Mussolini
   wrongAnswers:
-  - 1789
-  - 1492
-  - 1810
+  - Adolf Hitler
+  - Franco
+  - Stalin
   difficulty: 0

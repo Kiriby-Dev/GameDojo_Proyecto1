@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_31_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 revoluci\xF3n comenz\xF3 en 1917 en Rusia?"
-  correctAnswer: "Revoluci\xF3n Rusa"
+  question: "\xBFQu\xE9 pa\xEDs coloniz\xF3 el territorio de Brasil?"
+  correctAnswer: Portugal
   wrongAnswers:
-  - "Revoluci\xF3n Francesa"
-  - "Revoluci\xF3n Industrial"
-  - "Revoluci\xF3n Americana"
+  - "Espa\xF1a"
+  - Francia
+  - "Pa\xEDses Bajos"
   difficulty: 0

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_28_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 civilizaci\xF3n precolombina habit\xF3 en Per\xFA?"
-  correctAnswer: Inca
+  question: "\xBFQu\xE9 revoluci\xF3n comenz\xF3 en 1917 en Rusia?"
+  correctAnswer: "Revoluci\xF3n Rusa"
   wrongAnswers:
-  - Azteca
-  - Maya
-  - Chibcha
+  - "Revoluci\xF3n Francesa"
+  - "Revoluci\xF3n Industrial"
+  - "Revoluci\xF3n Americana"
   difficulty: 0

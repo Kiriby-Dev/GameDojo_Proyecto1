@@ -1,34 +1,115 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class PlayersHand : MonoBehaviour
 {
     public GameManager gameManager;
-    public float cardSpacing = 1.5f;
+    public float cardSpacing;
     
     private int _cardsCount;
-    private float _startPosition;
-    private Card _grabbedCard;
+    private Card[] _cards;
+    private Card _selectedCard;
+    private bool _isCrossing;
 
-    //Se utiliza para recalcular las posiciones de las cartas en la mano.
-    public IEnumerator RecalculateCoroutine()
+    private void Start()
     {
-        yield return new WaitForEndOfFrame();
-        _cardsCount = gameManager.CantGameObjectsInHand();
+        _cards = new Card[gameManager.CantCardsInHand()];
+        EnableAllSlots();
+    }
 
-        SetCardsOrder();
-        SetPositions();
+    private void Update()
+    {
+        CheckForSwap();
+    }
+
+    #region SwapCards
+
+    private void CheckForSwap()
+    {
+        if (!_selectedCard) return;
+        if (_isCrossing) return;
+        
+        for (int i = 0; i < 5; i++)
+        {
+            if (transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                if (_selectedCard.transform.position.x > _cards[i].transform.position.x)
+                {
+                    if (_selectedCard.GetParentIndex() < _cards[i].GetParentIndex())
+                    {
+                        Swap(i);
+                        return;
+                    }
+                }
+
+                if (_selectedCard.transform.position.x < _cards[i].transform.position.x)
+                {
+                    if (_selectedCard.GetParentIndex() > _cards[i].GetParentIndex())
+                    {
+                        Swap(i);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private void Swap(int i)
+    {
+        _isCrossing = true;
+
+        Transform selectedParent = _selectedCard.transform.parent;
+        Transform crossedParent = _cards[i].transform.parent;
+
+        // Obtener posicioó objetivo
+        Vector3 crossedTarget = selectedParent.position;
+
+        // Cambiar los padres (no cambia posición aún)
+        _selectedCard.transform.SetParent(crossedParent);
+        _cards[i].transform.SetParent(selectedParent);
+
+        float direction =  _selectedCard.transform.position.x - _cards[i].transform.position.x;
+        _cards[i].PlayMoveAnimation(direction);
+        
+        // Mover la carta suavemente a su nueva posición
+        MoveCardToPosition(_cards[i], crossedTarget, 0.15f);
+
+        // Sorting order correcto
+        int selectedCardLayer = selectedParent.GetComponent<SpriteRenderer>().sortingOrder;
+        _cards[i].SetCardOrder(selectedCardLayer);
+
+        _isCrossing = false;
     }
     
+    private IEnumerator MoveCardToPositionCoroutine(Card card, Vector3 targetPosition, float duration)
+    {
+        float timeElapsed = 0f;
+        Vector3 startPos = card.transform.position;
+        
+        while (timeElapsed < duration)
+        {
+            card.transform.position = Vector3.Lerp(startPos, targetPosition, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        card.transform.position = targetPosition;
+    }
+
+    #endregion
+
+    #region CardsPositions
+
     private void SetCardsOrder()
     {
         int i = 0;
-        foreach (Transform cardTransform in transform)
+        foreach (Transform cardSlot in transform)
         {
-            Card card = cardTransform.GetComponent<Card>();
-            if (card != _grabbedCard)
+            if (cardSlot.gameObject.activeInHierarchy)
             {
-                card.SetCardOrder(i * 2); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
+                Card card = cardSlot.GetComponentInChildren<Card>();
+                card.SetCardOrder(i * 3); //Colocamos las cartas solo en los índices pares pues en los impares van los números.
                 i++;
             }
         }
@@ -38,18 +119,47 @@ public class PlayersHand : MonoBehaviour
     {
         float initialX = CalculateStartX(_cardsCount);
         int i = 0;
-        foreach (Transform cardTransform in transform)
+        foreach (Transform cardSlot in transform)
         {
-            Card card = cardTransform.GetComponent<Card>();
-            Vector3 currentPos = cardTransform.position;
-            float newX = initialX + (i * cardSpacing);
-            cardTransform.position = new Vector3(newX, currentPos.y, currentPos.z);
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                Card card = cardSlot.GetComponentInChildren<Card>();
+                Vector3 currentPos = cardSlot.position;
+                float newX = initialX + (i * cardSpacing);
+                cardSlot.position = new Vector3(newX, currentPos.y, currentPos.z);
 
-            card.SetCardStartPosition();
-            i++;
+                card.transform.localPosition = Vector3.zero;
+                i++;
+            }
         }
     }
 
+    //Se utiliza para recalcular las posiciones de las cartas en la mano.
+    public IEnumerator RecalculateCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        _cardsCount = gameManager.CantCardsInHand();
+        
+        GetCardsInHand();
+        SetCardsOrder();
+        SetPositions();
+    }
+
+    private void GetCardsInHand()
+    {
+        int i = 0;
+        foreach (Transform cardSlot in gameObject.transform)
+        {
+            _cards[i] = null;
+            if (cardSlot.gameObject.activeInHierarchy)
+            {
+                _cards[i] = cardSlot.GetComponentInChildren<Card>();
+            }
+            i++;
+        }
+    }
+    #endregion
+    
     #region Utilities
     //Calcula la posición X inicial de la primera carta en la mano, para que todas queden centradas en pantalla.
     private float CalculateStartX(int count)
@@ -63,29 +173,33 @@ public class PlayersHand : MonoBehaviour
             return -1 * (cardSpacing * half);
     }
 
-    public int GetCardIndex(Transform cardTransform)
-    {
-        int index = 0;
-        foreach (Transform card in gameObject.transform)
-        {
-            if (card.name == cardTransform.name)
-                return index;
-            index++;
-        }
-        return -1;
-    }
-    
-    public void ToggleCardsEnable(bool enable)
-    {
-        foreach (Transform card in gameObject.transform)
-        {
-            card.GetComponent<Card>().SetCardActive(enable);
-        }
-    }
-
     public void Recalculate()
     {
         StartCoroutine("RecalculateCoroutine");
     }
+    
+    public void SelectedCard(Card card)
+    {
+        _selectedCard = card;
+    }
+
+    public void EnableAllSlots()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void DisableSlot(int index)
+    {
+        transform.GetChild(index).gameObject.SetActive(false);
+    }
+
+    public void MoveCardToPosition(Card card, Vector3 targetPosition, float duration)
+    {
+        StartCoroutine(MoveCardToPositionCoroutine(card, targetPosition, duration));
+    }
+
     #endregion
 }

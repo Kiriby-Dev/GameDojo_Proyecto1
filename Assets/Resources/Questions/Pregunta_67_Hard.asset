@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_67_Hard
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 a\xF1o cay\xF3 Constantinopla en manos del Imperio Otomano?"
-  correctAnswer: 1453
+  question: "\xBFQui\xE9n era el padre de Zeus en la mitolog\xEDa griega?"
+  correctAnswer: Cronos
   wrongAnswers:
-  - 1492
-  - 1517
-  - 1402
+  - Poseidon
+  - Urano
+  - Atlas
   difficulty: 2

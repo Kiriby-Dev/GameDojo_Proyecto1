@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_14_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es el idioma principal de Francia?"
-  correctAnswer: "Franc\xE9s"
+  question: "\xBFQu\xE9 caracteriza al per\xEDodo Neol\xEDtico?"
+  correctAnswer: El inicio de la agricultura
   wrongAnswers:
-  - "Ingl\xE9s"
-  - Italiano
-  - "Alem\xE1n"
+  - El uso del hierro
+  - El desarrollo del comercio
+  - Las primeras invasiones vikingas
   difficulty: 0

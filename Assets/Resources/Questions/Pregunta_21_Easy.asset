@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_21_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 presidente uruguayo instaur\xF3 la reforma batllista?"
-  correctAnswer: "Jos\xE9 Batlle y Ord\xF3\xF1ez"
+  question: "\xBFQui\xE9n era el dios del trueno en la mitolog\xEDa n\xF3rdica?"
+  correctAnswer: Thor
   wrongAnswers:
-  - Luis Lacalle
-  - Julio Sanguinetti
-  - Jorge Batlle
+  - "Od\xEDn"
+  - Loki
+  - Balder
   difficulty: 0

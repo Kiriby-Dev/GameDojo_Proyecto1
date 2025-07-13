@@ -20,12 +20,14 @@ public class QuestionManager : MonoBehaviour
     private bool _playerAnswersCorrectly;
     private bool _timeRanOut;
     private int _actualCardIndex;
+    private ActionZone _cardsZone;
 
     private void Start()
     {
         _easy = new List<QuestionData>();
         _medium = new List<QuestionData>();
         _hard = new List<QuestionData>();
+        _cardsZone = gameManager.GetCardsZone();
         LoadQuestions();
     }
     
@@ -40,7 +42,7 @@ public class QuestionManager : MonoBehaviour
     {
         ActionZone cardsZone = gameManager.GetCardsZone();
         
-        for (int i = 0; i < 3; i++)
+        for (int i = 1; i < 6; i += 2)
         {
             GameObject cardGo = cardsZone.GetActualCardZone(i);
             yield return ProcessCard(cardGo);
@@ -120,9 +122,7 @@ public class QuestionManager : MonoBehaviour
         if (_playerAnswersCorrectly)
         {
             card.ChangeColor(Card.CardColor.Green);
-            ActionZone.ZoneType cardType = gameManager.GetCardsZone().GetCardType(_actualCardIndex);
-            Debug.Log(cardType);
-            Debug.Log(_actualCardIndex);
+            ActionZone.ZoneType cardType = gameManager.GetCardType(_actualCardIndex);
             gameManager.GetPlayer().AddStats(cardType, difficulty);
         }
         else

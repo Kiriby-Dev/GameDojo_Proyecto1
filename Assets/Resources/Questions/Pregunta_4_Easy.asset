@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_4_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 continente se encuentra Uruguay?"
-  correctAnswer: "Am\xE9rica"
+  question: "\xBFQui\xE9n era el dios principal del Olimpo en la mitolog\xEDa griega?"
+  correctAnswer: Zeus
   wrongAnswers:
-  - Europa
-  - Asia
-  - "\xC1frica"
+  - Hades
+  - "Poseid\xF3n"
+  - Hermes
   difficulty: 0

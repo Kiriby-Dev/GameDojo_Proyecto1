@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,12 +10,14 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     public TransitionManager transitionManager;
     public MenuManager menuManager;
+    public AudioManager audioManager;
     
     [Header("Game Objects")]
     public GameObject playersHand;
     public GameObject card;
     public Player player;
     public Enemy enemy;
+    public GameObject deck;
     
     [Header("ActionZones")]
     public ActionZone discardZone;
@@ -22,14 +26,22 @@ public class GameManager : MonoBehaviour
     public ActionZone cardsZone;
     
     private int _cantCardsInHand;
+    private int _actualBoardcard;
     private int _cardsPlayed;
     private bool _gameStarted;
     private bool _gameOver;
     private PlayersHand _playersHandScript;
+    private ActionZone.ZoneType[] _cardTypes;
+    private int _cardTypesIndex = 0;
 
     private void Awake()
     {
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
+    }
+
+    private void Start()
+    {
+        _cardTypes = new ActionZone.ZoneType[3];
     }
 
     private void Update()
@@ -68,7 +80,8 @@ public class GameManager : MonoBehaviour
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
-        _cardsPlayed = 0;
+        ResetCardTypes();
+        _actualBoardcard = 1;
     }
     #endregion
 
@@ -76,25 +89,49 @@ public class GameManager : MonoBehaviour
     //Se instancian las 5 cartas con valores random en la mano del jugador.
     public void DrawCards()
     {
-        for (int i = 1; i <= 5; i++)
+        _playersHandScript.EnableAllSlots();
+        for (int i = 0; i <= 4; i++)
         {
-            GameObject go = Instantiate(card, playersHand.transform);
-            go.GetComponent<Card>().GenerateCardValue();
+            GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
+            Card actualCard = go.GetComponent<Card>();
+            actualCard.GenerateCardValue();
+            actualCard.ToggleAnimator(true);
             go.name = "Card" + i;
             AddCardToHand();
         }
+
+        StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
     }
-    
+
+    private IEnumerator MovePlayersHand(Vector3 targetPosition, float duration = 0.5f)
+    {
+        float elapsedTime = 0f;
+        Vector3 startingPos = playersHand.transform.position;
+
+        while (elapsedTime < duration)
+        {
+            playersHand.transform.position = Vector3.Lerp(startingPos, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playersHand.transform.position = targetPosition; // Asegura que termina exactamente en destino
+    }
+
     public GameObject GetActualCardForQuestion()
     {
-        GameObject card = cardsZone.transform.GetChild(_cardsPlayed).gameObject;
-        _cardsPlayed++;
+        GameObject card = cardsZone.transform.GetChild(_actualBoardcard).gameObject;
+        _actualBoardcard += 2;
         return card;
     }
     
     public int CantCardsInHand() => _cantCardsInHand;
-    public int CantGameObjectsInHand() => playersHand.transform.childCount;
-    public void RemoveCardFromHand() => _cantCardsInHand--;
+
+    public void RemoveCardFromHand()
+    {
+        _cantCardsInHand--;
+        _playersHandScript.Recalculate();
+    }
     private void AddCardToHand() => _cantCardsInHand++;
     #endregion
 
@@ -109,6 +146,22 @@ public class GameManager : MonoBehaviour
         defenseZone.enabled = !active;
     }
     
+    public void SaveCardType(ActionZone.ZoneType type)
+    {
+        _cardTypes[_cardTypesIndex] = type;
+        _cardTypesIndex++;
+    }
+
+    public ActionZone.ZoneType GetCardType(int index)
+    {
+        return _cardTypes[index];
+    }
+
+    private void ResetCardTypes()
+    {
+        _cardTypesIndex = 0;
+    }
+    
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
     public void ResolveCombat()
     {
@@ -120,6 +173,9 @@ public class GameManager : MonoBehaviour
         if (damageDealed < 0)
             enemy.TakeDamage(damageDealed);
     }
+
+    public void PlayCard() => _cardsPlayed++;
+    public int GetCantPlayedCards() => _cardsPlayed;
     #endregion
     
     #region Getters
@@ -127,6 +183,7 @@ public class GameManager : MonoBehaviour
     public QuestionManager GetQuestionManager() => questionManager;
     public UIManager GetUIManager() => uiManager;
     public TransitionManager GetTransitionManager() => transitionManager;
+    public AudioManager GetAudioManager() => audioManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;

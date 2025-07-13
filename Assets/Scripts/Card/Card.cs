@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,25 +9,36 @@ public class Card : MonoBehaviour
 {
     public enum CardColor { Red, Yellow, Green, White }
     
+    [SerializeField] private float followSmoothness;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float maxTiltAngle;
+    
+    [SerializeField] private SpriteRenderer cardSprite;
+    [SerializeField] private SpriteRenderer shadowSprite;
+    [SerializeField] private ParticleSystem chalkEffect;
+    
     public float returnSpeed;
     public Canvas textCanvas;
     public Sprite[] cardSprites;
     
-    private int _cardIndex;
     private bool _isReturning;
     private bool _isDragging;
-    private bool _isCardActive;
-    private Vector3 _startPosition;
+    private int _cardLayer;
+    
+    private Vector3 _lastMousePosition;
+    private float _currentRotationZ;
     
     private Camera _camera;
-    private SpriteRenderer _spriteRenderer;
+    private GameManager _gameManager;
     private PlayersHand _playersHand;
+    private Animator _animator;
 
     private void Awake()
     {
         _camera = Camera.main;
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _playersHand = FindAnyObjectByType<PlayersHand>();
+        _gameManager = FindAnyObjectByType<GameManager>();
+        _playersHand = _gameManager.GetPlayersHand();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -34,64 +47,76 @@ public class Card : MonoBehaviour
             ReturnStartPosition();
 
         if (_isDragging)
+        {
             FollowMousePosition();
+        }
     }
 
     #region Card Movement
     private void OnMouseDown()
     {
-        if (!_isCardActive) return;
         SetCardOrder(99);
-        SetCardStartPosition();
+        ToggleAnimator(false);
         
         _isDragging = true;
         _isReturning = false;
 
-        _cardIndex = _playersHand.GetCardIndex(transform);
-        transform.parent = null;
-        _playersHand.ToggleCardsEnable(false);
-        _playersHand.Recalculate();
+        _playersHand.SelectedCard(this);
+        shadowSprite.transform.localPosition = new Vector3(shadowSprite.transform.localPosition.x, -0.3f, shadowSprite.transform.localPosition.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, 0.3f, transform.localPosition.z);
+        ChangeSize(1.2f);
     }
 
     private void OnMouseUp()
     {
+        int slotLayer = transform.GetComponentInParent<SpriteRenderer>().sortingOrder;
+        SetCardOrder(slotLayer);
         _isReturning = true;
         _isDragging = false;
+        
+        _playersHand.SelectedCard(null);
+        shadowSprite.transform.localPosition = new Vector3(shadowSprite.transform.localPosition.x, -0.137f, shadowSprite.transform.localPosition.z);
+        ChangeSize(1f);
     }
 
     private void FollowMousePosition()
     {
+        // Obtener posición del mouse
         Vector3 mousePoint = _camera.ScreenToWorldPoint(Input.mousePosition);
         mousePoint.z = 0;
-        transform.position = mousePoint;
+
+        // Calcular delta de movimiento
+        Vector3 mouseDelta = (mousePoint - _lastMousePosition).normalized;
+        _lastMousePosition = mousePoint;
+
+        // Seguir al mouse con delay
+        transform.position = Vector3.Lerp(transform.position, mousePoint, Time.deltaTime * followSmoothness);
+
+        // Calcular rotación deseada en Z
+        float targetRotationZ = Mathf.Clamp(-mouseDelta.x * 100f, -maxTiltAngle, maxTiltAngle);
+        
+        LerpRotation(targetRotationZ);
     }
-    
+
     private void ReturnStartPosition()
     {
-        transform.position = Vector3.Lerp(transform.position, _startPosition, returnSpeed * Time.deltaTime);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, returnSpeed * Time.deltaTime);
+        LerpRotation(0);
         
-        if (Vector3.Distance(transform.position, _startPosition) < 0.03f)
+        if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.01f)
         {
-            transform.position = _startPosition;
-            _playersHand.ToggleCardsEnable(true);
+            transform.localPosition = Vector3.zero;
+            ToggleAnimator(true);
             _isReturning = false;
-            transform.parent = _playersHand.transform;
-            transform.SetSiblingIndex(_cardIndex);
-            _playersHand.Recalculate();
         }
     }
     
     //Setea la sorting layer de la carta y pone el texto en 1 sorting layer mas arriba
     public void SetCardOrder(int cardOrder)
     {
-        _spriteRenderer.sortingOrder = cardOrder;
+        shadowSprite.sortingOrder = cardOrder - 1;
+        cardSprite.sortingOrder = cardOrder;
         textCanvas.sortingOrder = cardOrder + 1;
-    }
-
-    public void SetCardStartPosition()
-    {
-        if (!_isDragging && !_isReturning)
-            _startPosition = transform.position;
     }
     #endregion
     
@@ -100,7 +125,9 @@ public class Card : MonoBehaviour
         DisableInteraction();
         transform.position = slot.position;
         transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        transform.eulerAngles = Vector3.zero;
         transform.SetParent(slot);
+        chalkEffect.Play();
     }
     
     private void DisableInteraction()
@@ -139,11 +166,43 @@ public class Card : MonoBehaviour
         }
     }
 
+    private void ChangeSize(float size)
+    {
+        transform.localScale = new Vector3(size, size, transform.localScale.z);
+    }
+
     public void ChangeSprite(int i = 0)
     {
-        _spriteRenderer.sprite = cardSprites[i];
+        cardSprite.sprite = cardSprites[i];
     }
     
-    public void SetCardActive(bool active) => _isCardActive = active;
+    public int GetParentIndex()
+    {
+        return transform.parent.GetSiblingIndex();
+    }
+    
+    private void LerpRotation(float targetRotationZ)
+    {
+        // Suavizar rotación actual hacia 0
+        _currentRotationZ = Mathf.Lerp(_currentRotationZ, targetRotationZ, Time.deltaTime * rotationSpeed);
+
+        // Aplicar rotación en eulerAngles
+        transform.eulerAngles = new Vector3(0, 0, _currentRotationZ);
+    }
+    #endregion
+
+    #region Animation
+    public void PlayMoveAnimation(float direction)
+    {
+        if (direction <= 0)
+            _animator.SetTrigger("MoveRight");
+        else
+            _animator.SetTrigger("MoveLeft");
+    }
+    
+    public void ToggleAnimator(bool state)
+    {
+        _animator.enabled = state;
+    }
     #endregion
 }

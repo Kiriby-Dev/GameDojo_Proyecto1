@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_32_Easy
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pa\xEDs sudamericano limita con Uruguay al norte?"
-  correctAnswer: Brasil
+  question: "\xBFQu\xE9 pa\xEDs coloniz\xF3 Canad\xE1?"
+  correctAnswer: Francia
   wrongAnswers:
-  - Argentina
-  - Paraguay
-  - Bolivia
+  - "Espa\xF1a"
+  - Portugal
+  - "Pa\xEDses Bajos"
   difficulty: 0

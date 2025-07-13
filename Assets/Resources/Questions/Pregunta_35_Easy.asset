@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_35_Easy
   m_EditorClassIdentifier: 
-  question: "\"\xBFQui\xE9n escribi\xF3 El Pr\xEDncipe"
-  correctAnswer: " influyente obra de la teor\xEDa pol\xEDtica?\""
+  question: "\xBFQu\xE9 cient\xEDfico propuso las leyes del movimiento y la gravitaci\xF3n
+    universal?"
+  correctAnswer: Isaac Newton
   wrongAnswers:
-  - "Nicol\xE1s Maquiavelo"
-  - "Plat\xF3n"
-  - "Arist\xF3teles"
+  - Galileo Galilei
+  - James Watt
+  - Michael Faraday
   difficulty: 0
