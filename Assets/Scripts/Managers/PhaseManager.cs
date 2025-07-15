@@ -66,12 +66,14 @@ public class PhaseManager : MonoBehaviour
     private IEnumerator DiscardPhase()
     {
         gameManager.UpdateZones(_currentPhase.ToString());
+        gameManager.GetDiscardZone().ToggleLightAnimation();
         yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 3);
     }
     
     private IEnumerator ColocationPhase()
     {
         gameManager.UpdateZones(_currentPhase.ToString());
+        gameManager.GetDiscardZone().ToggleLightAnimation();
         yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 0);
     }
 

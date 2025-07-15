@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -14,7 +15,14 @@ public class ActionZone : MonoBehaviour
     private Card _selectedCard;
     private bool _isDropping;
     private bool _activeZone;
-    
+    private int _cardsDiscarded;
+    private Animator _animator;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     private void Start()
     {
         GetZoneChildren();
@@ -45,6 +53,8 @@ public class ActionZone : MonoBehaviour
                 if (zoneType == ZoneType.Discard)
                 {
                     Destroy(_selectedCard.gameObject);
+                    _cardsDiscarded++;
+                    gameManager.GetUIManager().UpdateDiscardText(_cardsDiscarded);
                     DisableSlotAndRemoveCard();
                 }
                 break;
@@ -134,5 +144,25 @@ public class ActionZone : MonoBehaviour
 
     #region Getters
     public GameObject GetActualCardZone(int i) => _cardsInZone[i];
+
+    public void ResetDiscardedCards()
+    { 
+        _cardsDiscarded = 0;
+        gameManager.GetUIManager().UpdateDiscardText(_cardsDiscarded);
+    }
+    #endregion
+
+    #region Animations
+
+    public void PlayDiscardAnimation()
+    {
+        
+    }
+
+    public void ToggleLightAnimation()
+    {
+        _animator.SetTrigger("LightWaving");
+    }
+
     #endregion
 }

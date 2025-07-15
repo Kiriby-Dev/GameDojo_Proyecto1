@@ -75,7 +75,9 @@ public class QuestionManager : MonoBehaviour
 
         HandleAnswerResult(cardScript, difficulty);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        
+        gameManager.GetUIManager().ResetAnswerColor();
     }
     
     //Selecciona una pregunta dada una dificultad y la elimina de la lista correspondiente para no repetirla.
@@ -112,6 +114,15 @@ public class QuestionManager : MonoBehaviour
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
         _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;
+        MarkSelectedAnswer(selectedText);
+    }
+
+    private void MarkSelectedAnswer(string selectedText)
+    {
+        if (!_playerAnswersCorrectly)
+            gameManager.GetUIManager().ShowSelectedAnswer(selectedText);
+        
+        gameManager.GetUIManager().ShowCorrectAnswer(_selectedQuestion.GetCorrectAnswer());
     }
 
     //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).

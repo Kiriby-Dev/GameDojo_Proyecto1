@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
         enemy.GenerateStats();
         attackZone.ResetZone();
         defenseZone.ResetZone();
+        discardZone.ResetDiscardedCards();
         uiManager.ResetVisuals();
         ResetCardTypes();
         _actualBoardcard = 1;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class UIManager : MonoBehaviour
     
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
+    public TextMeshProUGUI discardText;
     public Canvas winCanvas;
     public Canvas loseCanvas;
     public Canvas boardCanvas;
@@ -27,11 +29,15 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI enemyAttackText;
     public TextMeshProUGUI enemyDefenseText;
     
-    [Header("Questions")]
+    [Header("Question")]
     public TextMeshProUGUI questionText;
+    public Button answerButton1;
     public TextMeshProUGUI answerText1;
+    public Button answerButton2;
     public TextMeshProUGUI answerText2;
+    public Button answerButton3;
     public TextMeshProUGUI answerText3;
+    public Button answerButton4;
     public TextMeshProUGUI answerText4;
     
     private TransitionManager _transitionManager;
@@ -72,6 +78,11 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateDiscardText(int value)
+    {
+        discardText.text = value + "/" + "2";
     }
 
     public void UpdateGameOverCanvas(bool win)
@@ -116,6 +127,39 @@ public class UIManager : MonoBehaviour
         answerText2.text = allOptions[1];
         answerText3.text = allOptions[2];
         answerText4.text = allOptions[3];
+    }
+    
+    //estas 3 funciones hay que cambiarlas para poner los valores en un arreglo y recorrerlo
+    public void ShowCorrectAnswer(string correctAnswer)
+    {
+        if (correctAnswer == answerText1.text)
+            ChangeAnswerColor(answerText1, answerButton1, "Green");
+        if (correctAnswer == answerText2.text)
+            ChangeAnswerColor(answerText2, answerButton2, "Green");
+        if (correctAnswer == answerText3.text)
+            ChangeAnswerColor(answerText3, answerButton3, "Green");
+        if (correctAnswer == answerText4.text)
+            ChangeAnswerColor(answerText4, answerButton4, "Green");
+    }
+
+    public void ShowSelectedAnswer(string selectedText)
+    {
+        if (selectedText == answerText1.text)
+            ChangeAnswerColor(answerText1, answerButton1, "Red");
+        if (selectedText == answerText2.text)
+            ChangeAnswerColor(answerText2, answerButton2, "Red");
+        if (selectedText == answerText3.text)
+            ChangeAnswerColor(answerText3, answerButton3, "Red");
+        if (selectedText == answerText4.text)
+            ChangeAnswerColor(answerText4, answerButton4, "Red");
+    }
+
+    public void ResetAnswerColor()
+    {
+        ChangeAnswerColor(answerText1, answerButton1, "");
+        ChangeAnswerColor(answerText2, answerButton2, "");
+        ChangeAnswerColor(answerText3, answerButton3, "");
+        ChangeAnswerColor(answerText4, answerButton4, "");
     }
 
     #region Utilities
@@ -162,5 +206,25 @@ public class UIManager : MonoBehaviour
             card.ChangeColor();
         }
     }
+
+    private void ChangeAnswerColor(TextMeshProUGUI answerText, Button answerButton, string color)
+    {
+        switch (color)
+        {
+            case "Green":
+                answerText.color = Color.green;
+                answerButton.image.color = Color.green;
+                break;
+            case "Red":
+                answerText.color = Color.red;
+                answerButton.image.color = Color.red;
+                break;
+            default:
+                answerText.color = Color.white;
+                answerButton.image.color = Color.white;
+                break;
+        }
+    }
+
     #endregion
 }
