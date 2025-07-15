@@ -56,9 +56,22 @@ public class UIManager : MonoBehaviour
         answerText4.text = "";
     }
 
-    public void UpdatePhaseText(string phase)
+    public void UpdatePhaseText(PhaseManager.GamePhase phase)
     {
-        phaseText.text = phase;
+        switch (phase)
+        {
+            case PhaseManager.GamePhase.Discard:
+                phaseText.text = "DESCARTE";
+                break;
+            case PhaseManager.GamePhase.Colocation:
+                phaseText.text = "COLOCACIÓN";
+                break;
+            case PhaseManager.GamePhase.Draw:
+                phaseText.text = "ROBANDO";
+                break;
+            default:
+                break;
+        }
     }
 
     public void UpdateGameOverCanvas(bool win)
