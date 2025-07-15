@@ -123,10 +123,10 @@ public class Card : MonoBehaviour
     public void PutCardInSlot(Transform slot)
     {
         DisableInteraction();
-        transform.position = slot.position;
-        transform.localScale = new Vector3(0.6f, 0.6f, 1f);
-        transform.eulerAngles = Vector3.zero;
         transform.SetParent(slot);
+        transform.localPosition = Vector3.zero;
+        transform.eulerAngles = Vector3.zero;
+        transform.localScale = new Vector3(0.4f, 0.3f, 1f);
         chalkEffect.Play();
     }
     

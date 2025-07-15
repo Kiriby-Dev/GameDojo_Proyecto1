@@ -100,7 +100,7 @@ public class PhaseManager : MonoBehaviour
         set
         {
             _currentPhase = value;
-            gameManager.GetUIManager().UpdatePhaseText(_currentPhase.ToString());
+            gameManager.GetUIManager().UpdatePhaseText(_currentPhase);
         }
     }
 }
