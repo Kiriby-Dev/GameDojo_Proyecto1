@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,19 +14,25 @@ public class MenuManager : MonoBehaviour
     public Canvas canvasMenu;
     public Canvas canvasPause;
     public Canvas canvasLevelsMenu;
+    public Canvas canvasOptions;
 
     public Button[] levelsButtons;
+    
+    private TransitionManager _transitionManager;
 
     private void Start()
     {
         ResetMenus();
         DisableBlockedLevels();
+        _transitionManager = gameManager.GetTransitionManager();
     }
 
     private void ResetMenus()
     {
         game.SetActive(false);
         menu.SetActive(true);
+        canvasMenu.enabled = true;
+        canvasLevelsMenu.enabled = false;
     }
 
     public void StartGame()
@@ -35,7 +42,44 @@ public class MenuManager : MonoBehaviour
         gameManager.StartGame();
     }
 
-    public void TogglePauseGameCanvas(bool pause)
+    private IEnumerator PlayCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        print("transition");
+        canvasMenu.enabled = false;
+        canvasLevelsMenu.enabled = true;
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+    }
+    
+    private IEnumerator MenuCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        print("transition");
+        canvasOptions.enabled = false;
+        canvasLevelsMenu.enabled = false;
+        canvasMenu.enabled = true;
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+    }
+
+    public void QuitButton()
+    {
+        Application.Quit();
+    }
+
+    public void OptionsButton()
+    {
+        canvasOptions.enabled = true;
+    }
+
+    public void TogglePause(bool pause)
     {
         canvasPause.enabled = pause;
     }
@@ -50,4 +94,18 @@ public class MenuManager : MonoBehaviour
         int cantButtons = levelsButtons.Length;
         levelsButtons[cantButtons - 1].interactable = true;
     }
+
+    #region Utilities
+    
+    public void PlayButton()
+    {
+        StartCoroutine(PlayCoroutine());
+    }
+    
+    public void MenuButton()
+    {
+        StartCoroutine(MenuCoroutine());
+    }
+
+    #endregion
 }

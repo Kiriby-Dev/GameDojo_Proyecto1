@@ -154,11 +154,6 @@ public class ActionZone : MonoBehaviour
 
     #region Animations
 
-    public void PlayDiscardAnimation()
-    {
-        
-    }
-
     public void ToggleLightAnimation()
     {
         _animator.SetTrigger("LightWaving");
