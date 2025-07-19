@@ -86,9 +86,9 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator ResolutionPhase()
     {
+        yield return gameManager.GetUIManager().BattleMode();
+        yield return gameManager.ResolveCombat();
         yield return gameManager.GetUIManager().NormalMode();
-        gameManager.ResolveCombat();
-        yield return new WaitForSeconds(2f);
     }
 
     #endregion

@@ -15,9 +15,10 @@ public class GameManager : MonoBehaviour
     [Header("Game Objects")]
     public GameObject playersHand;
     public GameObject card;
-    public Player player;
-    public Enemy enemy;
-    public GameObject deck;
+    public GameObject player;
+    public GameObject enemy;
+    public GameObject playerFight;
+    public GameObject enemyFight;
     
     [Header("ActionZones")]
     public ActionZone discardZone;
@@ -32,11 +33,19 @@ public class GameManager : MonoBehaviour
     private bool _gameOver;
     private PlayersHand _playersHandScript;
     private ActionZone.ZoneType[] _cardTypes;
+    private Player _playerScript;
+    private Enemy _enemyScript;
     private int _cardTypesIndex = 0;
+    private Animator _playerFightAnimator;
+    private Animator _enemyFightAnimator;
 
     private void Awake()
     {
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
+        _playerScript = player.GetComponent<Player>();
+        _enemyScript = enemy.GetComponent<Enemy>();
+        _playerFightAnimator = playerFight.GetComponent<Animator>();
+        _enemyFightAnimator = enemyFight.GetComponent<Animator>();
     }
 
     private void Start()
@@ -61,9 +70,9 @@ public class GameManager : MonoBehaviour
     //Verificamos si alguno de los personajes murio y en ese caso terminamos el juego.
     private void CheckEndGame()
     {
-        if (player.IsDead())
+        if (_playerScript.IsDead())
             GameOver(false);//Como murio el jugador termina el juego y perdemos
-        if (enemy.IsDead())
+        if (_enemyScript.IsDead())
             GameOver(true);//Como murio el enemigo termina el juego y ganamos
     }
 
@@ -75,8 +84,8 @@ public class GameManager : MonoBehaviour
 
     public void ResetVariables()
     {
-        player.ResetStats();
-        enemy.GenerateStats();
+        _playerScript.ResetStats();
+        _enemyScript.GenerateStats();
         attackZone.ResetZone();
         defenseZone.ResetZone();
         discardZone.ResetDiscardedCards();
@@ -164,15 +173,38 @@ public class GameManager : MonoBehaviour
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
-    public void ResolveCombat()
+    public IEnumerator ResolveCombat()
     {
-        int damageDealed = enemy.GetDefense() - player.GetAttack();
-        int damageTaken = player.GetDefense() - enemy.GetAttack();
+        int damageDealed = _enemyScript.GetDefense() - _playerScript.GetAttack();
+        int damageTaken = _playerScript.GetDefense() - _enemyScript.GetAttack();
         
-        if (damageTaken < 0)
-            player.TakeDamage(damageTaken);
+        _playerFightAnimator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.35f);
         if (damageDealed < 0)
-            enemy.TakeDamage(damageDealed);
+        {
+            _enemyScript.TakeDamage(damageDealed);
+            enemyFight.GetComponent<Enemy>().TakeDamage(damageDealed);
+            _enemyFightAnimator.SetTrigger("Hurt");
+        }
+        else
+        {
+            _enemyFightAnimator.SetTrigger("BlockAttack");
+        }
+        yield return new WaitForSeconds(2f);
+        
+        _enemyFightAnimator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.35f);
+        if (damageTaken < 0)
+        {
+            _playerScript.TakeDamage(damageTaken);
+            playerFight.GetComponent<Player>().TakeDamage(damageTaken);
+            _playerFightAnimator.SetTrigger("Hurt");
+        }
+        else
+        {
+            _playerFightAnimator.SetTrigger("BlockAttack");
+        }
+        yield return new WaitForSeconds(1f);
     }
 
     public void PlayCard() => _cardsPlayed++;
@@ -190,7 +222,7 @@ public class GameManager : MonoBehaviour
     public ActionZone GetDefenseZone() => defenseZone;
     public ActionZone GetCardsZone() => cardsZone;
     public ActionZone GetDiscardZone() => discardZone;
-    public Player GetPlayer() => player;
+    public Player GetPlayer() => _playerScript;
     public bool IsGameOver() => _gameOver;
     #endregion
 }

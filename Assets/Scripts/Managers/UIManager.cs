@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public Canvas winCanvas;
     public Canvas loseCanvas;
     public Canvas boardCanvas;
+    public Canvas battleCanvas;
     public Canvas gameCanvas;
     
     [Header("Player Stats On Board")]
@@ -24,10 +25,14 @@ public class UIManager : MonoBehaviour
     [Header("Player Stats")]
     public TextMeshProUGUI playerAttack;
     public TextMeshProUGUI playerDefense;
+    public TextMeshProUGUI playerFightAttackText;
+    public TextMeshProUGUI playerFightDefenseText;
     
     [Header("Enemy Stats")]
     public TextMeshProUGUI enemyAttackText;
     public TextMeshProUGUI enemyDefenseText;
+    public TextMeshProUGUI enemyFightAttackText;
+    public TextMeshProUGUI enemyFightDefenseText;
     
     [Header("Question")]
     public TextMeshProUGUI questionText;
@@ -53,6 +58,7 @@ public class UIManager : MonoBehaviour
         winCanvas.gameObject.SetActive(false);
         loseCanvas.gameObject.SetActive(false);
         boardCanvas.gameObject.SetActive(false);
+        battleCanvas.gameObject.SetActive(false);
         playerAttack.text = "0";
         playerDefense.text = "0";
         questionText.text = "";
@@ -173,7 +179,22 @@ public class UIManager : MonoBehaviour
         ToggleUIItems(true);
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
-        yield return new WaitForSeconds(1.5f);
+    }
+
+    public IEnumerator BattleMode()
+    {
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        boardCanvas.gameObject.SetActive(false);
+        battleCanvas.gameObject.SetActive(true);
+        playerFightAttackText.text = playerAttackText.text;
+        playerFightDefenseText.text = playerDefenseText.text;
+        enemyFightAttackText.text = enemyAttackText.text;
+        enemyFightDefenseText.text = enemyDefenseText.text;
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+        yield return new WaitForSeconds(2f);
     }
 
     // Vuelve al modo normal, se hace la transición y se muestra el pizarrón en su estado original.
@@ -183,6 +204,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         ToggleUIItems(false);
+        battleCanvas.gameObject.SetActive(false);
         playerAttack.text = playerAttackText.text;
         playerDefense.text = playerDefenseText.text;
         
