@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     public ActionZone defenseZone;
     public ActionZone cardsZone;
     
+    [Header("Config")]
+    public int[] neededPoints;
+    
     private int _cantCardsInHand;
     private int _actualBoardcard;
     private int _cardsPlayed;
@@ -38,6 +41,9 @@ public class GameManager : MonoBehaviour
     private int _cardTypesIndex = 0;
     private Animator _playerFightAnimator;
     private Animator _enemyFightAnimator;
+    private int _index;
+    private int _actualPoints;
+    private bool _isFull;
 
     private void Awake()
     {
@@ -51,19 +57,49 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _cardTypes = new ActionZone.ZoneType[3];
+        _isFull = false;
+        _actualPoints = 0;
+        _index = 0;
     }
 
     private void Update()
     {
         if (!_gameStarted) return;
         CheckEndGame();
+        
+        if (!_isFull) return;
+        ResetPoints();
     }
 
+    public void UpdatePoints(int value)
+    {
+        if (!_isFull)
+        {
+            _actualPoints += value;
+            if (_actualPoints >= neededPoints[_index])
+            {
+                _actualPoints = neededPoints[_index];
+                _isFull = true;
+            }
+            uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
+        }
+    }
+    
+    private void ResetPoints()
+    {
+        _actualPoints = 0;
+        _isFull = false;
+        _index++;
+        uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
+        _playerScript.HealCharacter(3);
+    }
+    
     #region GameLoop
     public void StartGame()
     {
         _gameStarted = true;
         ResetVariables();
+        uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         phaseManager.StartPhases();
     }
     
@@ -88,7 +124,6 @@ public class GameManager : MonoBehaviour
         _enemyScript.GenerateStats();
         attackZone.ResetZone();
         defenseZone.ResetZone();
-        discardZone.ResetDiscardedCards();
         uiManager.ResetVisuals();
         ResetCardTypes();
         _actualBoardcard = 1;

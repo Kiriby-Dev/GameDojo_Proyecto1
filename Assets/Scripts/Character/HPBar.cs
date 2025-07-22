@@ -49,6 +49,13 @@ public class HPBar : MonoBehaviour
         _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);
     }
 
+    public void Heal(int heal)
+    {
+        if (_isDead) return;
+        _currentHp += heal;
+        _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);
+    }
+
     public bool IsDead()
     {
         return _isDead;

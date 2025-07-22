@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class AudioManager : MonoBehaviour
     }
 
     [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField] private Sprite imageEnabled;
+    [SerializeField] private Sprite imageDisabled;
 
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource musicSource;
@@ -19,6 +23,7 @@ public class AudioManager : MonoBehaviour
     private bool _masterMuted;
     private bool _sfxMuted;
     private bool _musicMuted;
+    private bool _isEnabled;
 
     public void PlayAudio(AudioList clipName, float pitch = 1.0f, bool oneShoot = true)
     {
@@ -58,5 +63,21 @@ public class AudioManager : MonoBehaviour
     private void SetMixerState(string parameter, bool muted)
     {
         mainMixer.SetFloat(parameter, (muted) ? -80.0f : 0.0f);
+    }
+
+    public void ChangeSprite(Button button)
+    {
+        Image img = button.gameObject.GetComponent<Image>();
+
+        if (img.sprite.name == imageEnabled.name)
+        {
+            img.sprite = imageDisabled;
+            img.color = Color.red;
+        }
+        else
+        {
+            img.sprite = imageEnabled;
+            img.color = Color.green;
+        }
     }
 }

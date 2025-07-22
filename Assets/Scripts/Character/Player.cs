@@ -3,10 +3,6 @@ using UnityEngine.UI;
 
 public class Player : Character
 {
-    private void Start()
-    {
-        ResetStats();
-    }
 
     //Le añade ataque o defensa al jugador con el valor correspondiente.
     public void AddStats(ActionZone.ZoneType cardType, int value)

@@ -18,6 +18,11 @@ public class Character : MonoBehaviour
         _hpBar.Damage(-1 * value);
     }
     
+    public void HealCharacter(int value)
+    {
+        _hpBar.Heal(value);
+    }
+    
     public bool IsDead()
     {
         return _hpBar.IsDead();

@@ -15,6 +15,7 @@ public class MenuManager : MonoBehaviour
     public Canvas canvasPause;
     public Canvas canvasLevelsMenu;
     public Canvas canvasOptions;
+    public Canvas canvasTutorial;
 
     public Button[] levelsButtons;
     
@@ -33,6 +34,8 @@ public class MenuManager : MonoBehaviour
         menu.SetActive(true);
         canvasMenu.enabled = true;
         canvasLevelsMenu.enabled = false;
+        canvasOptions.enabled = false;
+        canvasTutorial.enabled = false;
     }
 
     public void StartGame()
@@ -48,7 +51,6 @@ public class MenuManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        print("transition");
         canvasMenu.enabled = false;
         canvasLevelsMenu.enabled = true;
         
@@ -61,10 +63,22 @@ public class MenuManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        print("transition");
         canvasOptions.enabled = false;
         canvasLevelsMenu.enabled = false;
         canvasMenu.enabled = true;
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+    }
+    
+    private IEnumerator TutorialCoroutine()
+    {
+        canvasOptions.enabled = false;
+        yield return new WaitForSeconds(0.5f);
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        canvasLevelsMenu.enabled = false;
+        canvasTutorial.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
     }
@@ -74,9 +88,9 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void OptionsButton()
+    public void ToggleOptions(bool optionsToggle)
     {
-        canvasOptions.enabled = true;
+        canvasOptions.enabled = optionsToggle;
     }
 
     public void TogglePause(bool pause)
@@ -107,5 +121,10 @@ public class MenuManager : MonoBehaviour
         StartCoroutine(MenuCoroutine());
     }
 
+    public void TutorialButton()
+    {
+        StartCoroutine(TutorialCoroutine());
+    }
+    
     #endregion
 }

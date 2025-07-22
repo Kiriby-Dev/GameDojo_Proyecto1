@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Config")]
     public GameManager gameManager;
     
     [Header("UI Elements")]
@@ -73,22 +74,22 @@ public class UIManager : MonoBehaviour
         switch (phase)
         {
             case PhaseManager.GamePhase.Discard:
-                phaseText.text = "DESCARTE";
+                phaseText.text = "DESCARTE 2 CARTAS";
                 break;
             case PhaseManager.GamePhase.Colocation:
                 phaseText.text = "COLOCACIÓN";
                 break;
             case PhaseManager.GamePhase.Draw:
-                phaseText.text = "ROBANDO";
+                phaseText.text = "ROBANDO CARTAS";
                 break;
             default:
                 break;
         }
     }
 
-    public void UpdateDiscardText(int value)
+    public void UpdateDiscardText(int actualPoints, int neededPoints)
     {
-        discardText.text = value + "/" + "2";
+        discardText.text = actualPoints+ "/" + neededPoints;
     }
 
     public void UpdateGameOverCanvas(bool win)
