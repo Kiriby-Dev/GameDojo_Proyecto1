@@ -103,10 +103,12 @@ public class MenuManager : MonoBehaviour
         foreach (Button button in levelsButtons)
         {
             button.interactable = false;
+            button.gameObject.GetComponentInParent<LevelButtonImage>().UpdateSprite(LevelButtonImage.State.Blocked);
         }
         
         int cantButtons = levelsButtons.Length;
         levelsButtons[cantButtons - 1].interactable = true;
+        levelsButtons[cantButtons - 1].gameObject.GetComponentInParent<LevelButtonImage>().UpdateSprite(LevelButtonImage.State.Able);
     }
 
     #region Utilities

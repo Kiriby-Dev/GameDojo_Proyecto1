@@ -8,7 +8,11 @@ public class AudioManager : MonoBehaviour
 {
     public enum AudioList
     {
-
+        Discard,
+        Blocked,
+        WrongAnswer,
+        Attack,
+        RightAnswer
     }
 
     [SerializeField] private List<AudioClip> audioClips;

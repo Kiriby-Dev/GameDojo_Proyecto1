@@ -220,10 +220,12 @@ public class GameManager : MonoBehaviour
             _enemyScript.TakeDamage(damageDealed);
             enemyFight.GetComponent<Enemy>().TakeDamage(damageDealed);
             _enemyFightAnimator.SetTrigger("Hurt");
+            audioManager.PlayAudio(AudioManager.AudioList.Attack);
         }
         else
         {
             _enemyFightAnimator.SetTrigger("BlockAttack");
+            audioManager.PlayAudio(AudioManager.AudioList.Blocked);
         }
         yield return new WaitForSeconds(2f);
         
@@ -234,10 +236,12 @@ public class GameManager : MonoBehaviour
             _playerScript.TakeDamage(damageTaken);
             playerFight.GetComponent<Player>().TakeDamage(damageTaken);
             _playerFightAnimator.SetTrigger("Hurt");
+            audioManager.PlayAudio(AudioManager.AudioList.Attack);
         }
         else
         {
             _playerFightAnimator.SetTrigger("BlockAttack");
+            audioManager.PlayAudio(AudioManager.AudioList.Blocked);
         }
         yield return new WaitForSeconds(1f);
     }

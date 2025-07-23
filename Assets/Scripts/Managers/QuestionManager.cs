@@ -20,14 +20,12 @@ public class QuestionManager : MonoBehaviour
     private bool _playerAnswersCorrectly;
     private bool _timeRanOut;
     private int _actualCardIndex;
-    private ActionZone _cardsZone;
 
     private void Start()
     {
         _easy = new List<QuestionData>();
         _medium = new List<QuestionData>();
         _hard = new List<QuestionData>();
-        _cardsZone = gameManager.GetCardsZone();
         LoadQuestions();
     }
     
@@ -135,10 +133,12 @@ public class QuestionManager : MonoBehaviour
             card.ChangeColor(Card.CardColor.Green);
             ActionZone.ZoneType cardType = gameManager.GetCardType(_actualCardIndex);
             gameManager.GetPlayer().AddStats(cardType, difficulty);
+            gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.RightAnswer);
         }
         else
         {
             card.ChangeColor(Card.CardColor.Red);
+            gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.WrongAnswer);
         }
 
         _actualCardIndex++;

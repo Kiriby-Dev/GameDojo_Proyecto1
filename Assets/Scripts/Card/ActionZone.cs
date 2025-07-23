@@ -52,6 +52,7 @@ public class ActionZone : MonoBehaviour
                 if (zoneType == ZoneType.Discard)
                 {
                     Destroy(_selectedCard.gameObject);
+                    gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
                     gameManager.UpdatePoints(int.Parse(_selectedCard.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1)));
                     DisableSlotAndRemoveCard();
                 }
