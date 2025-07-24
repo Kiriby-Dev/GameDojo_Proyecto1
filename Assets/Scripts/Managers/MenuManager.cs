@@ -113,10 +113,10 @@ public class MenuManager : MonoBehaviour
 
     public void ToggleOptions(bool optionsToggle)
     {
-        if (game.gameObject.activeInHierarchy && Input.GetKeyDown(KeyCode.Escape) || canvasMenu.isActiveAndEnabled)
-            canvasOptions.enabled = optionsToggle;
-        else
+        if (canvasLevelsMenu.isActiveAndEnabled)
             MenuButton();
+        else
+            canvasOptions.enabled = optionsToggle;
     }
 
     #region Utilities

@@ -61,6 +61,7 @@ public class QuestionManager : MonoBehaviour
         {
             GameObject cardGo = cardsZone.GetActualCardZone(i);
             yield return ProcessCard(cardGo);
+            gameManager.GetUIManager().ToggleButtonsInteraction(true);
         }
     }
 
@@ -138,6 +139,7 @@ public class QuestionManager : MonoBehaviour
     //Indica que el jugador selecciono una respuesta.
     public void OnAnswerSelected(Button clickedButton)
     {
+        gameManager.GetUIManager().ToggleButtonsInteraction(false);
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
         _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;

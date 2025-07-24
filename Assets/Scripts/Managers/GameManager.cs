@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         ResetPoints();
     }
 
-    private void Pause()
+    public void Pause()
     {
         menuManager.ToggleOptions(!_isPaused);
         if (_isPaused)

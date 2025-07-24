@@ -177,6 +177,14 @@ public class UIManager : MonoBehaviour
             ChangeAnswerColor(answerText4, answerButton4, "Green");
     }
 
+    public void ToggleButtonsInteraction(bool interactable)
+    {
+        answerButton1.interactable = interactable;
+        answerButton2.interactable = interactable;
+        answerButton3.interactable = interactable;
+        answerButton4.interactable = interactable;
+    }
+
     public void ShowSelectedAnswer(string selectedText)
     {
         if (selectedText == answerText1.text)
