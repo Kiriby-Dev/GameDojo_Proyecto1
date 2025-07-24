@@ -22,7 +22,12 @@ public class Character : MonoBehaviour
     {
         _hpBar.Heal(value);
     }
-    
+
+    public void ResetLife()
+    {
+        _hpBar.RestoreAllLife();
+    }
+
     public bool IsDead()
     {
         return _hpBar.IsDead();

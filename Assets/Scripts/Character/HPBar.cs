@@ -60,4 +60,12 @@ public class HPBar : MonoBehaviour
     {
         return _isDead;
     }
+
+    public void RestoreAllLife()
+    {
+        _isDead = false;
+        _currentHp = maxHp;
+        imageBar.fillAmount = 1f;
+        _targetFill = 1F;
+    }
 }

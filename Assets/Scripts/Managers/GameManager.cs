@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public TransitionManager transitionManager;
     public MenuManager menuManager;
     public AudioManager audioManager;
+    public LevelsManager levelsManager;
     
     [Header("Game Objects")]
     public GameObject playersHand;
@@ -31,7 +32,6 @@ public class GameManager : MonoBehaviour
     
     private int _cantCardsInHand;
     private int _actualBoardcard;
-    private int _cardsPlayed;
     private bool _gameStarted;
     private bool _gameOver;
     private PlayersHand _playersHandScript;
@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     private int _index;
     private int _actualPoints;
     private bool _isFull;
+    private bool _isPaused = false;
 
     private void Awake()
     {
@@ -64,11 +65,30 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_gameStarted) return;
+        if (!_gameStarted || _gameOver) return;
         CheckEndGame();
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Pause();
         
         if (!_isFull) return;
         ResetPoints();
+    }
+
+    private void Pause()
+    {
+        menuManager.ToggleOptions(!_isPaused);
+        if (_isPaused)
+            ToggleFreeze(1);
+        else
+            ToggleFreeze(0);
+        _isPaused = !_isPaused;
+    }
+
+    public void ToggleFreeze(int value)
+    {
+        Time.timeScale = value;
+        print(Time.timeScale);
     }
 
     public void UpdatePoints(int value)
@@ -98,6 +118,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _gameStarted = true;
+        _gameOver = false;
         ResetVariables();
         uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         phaseManager.StartPhases();
@@ -109,13 +130,18 @@ public class GameManager : MonoBehaviour
         if (_playerScript.IsDead())
             GameOver(false);//Como murio el jugador termina el juego y perdemos
         if (_enemyScript.IsDead())
+        {
+            print("CheckEndGame");
             GameOver(true);//Como murio el enemigo termina el juego y ganamos
+            levelsManager.AdvanceLevel();
+            menuManager.MenuLevelsButton();
+        }
     }
 
     private void GameOver(bool win)
     {
         _gameOver = true;
-        uiManager.UpdateGameOverCanvas(win);
+        _gameStarted = false;
     }
 
     public void ResetVariables()
@@ -128,6 +154,29 @@ public class GameManager : MonoBehaviour
         ResetCardTypes();
         _actualBoardcard = 1;
     }
+
+    public void EndGame()
+    {
+        phaseManager.CurrentPhase = PhaseManager.GamePhase.Draw;
+        ResetVariables();
+        ResetPoints();
+        _gameOver = true;
+        _gameStarted = false;
+        _isFull = false;
+        _index = 0;
+        _cantCardsInHand = 0;
+        _playerScript.ResetLife();
+        _enemyScript.ResetLife();
+        for (int i = 0; i < playersHand.transform.childCount; i++)
+        {
+            Transform slot = playersHand.transform.GetChild(i);
+            if (slot.childCount > 0)
+            {
+                Destroy(slot.GetChild(0).gameObject);
+            }
+        }
+    }
+
     #endregion
 
     #region Cards
@@ -245,9 +294,6 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
     }
-
-    public void PlayCard() => _cardsPlayed++;
-    public int GetCantPlayedCards() => _cardsPlayed;
     #endregion
     
     #region Getters
@@ -256,6 +302,7 @@ public class GameManager : MonoBehaviour
     public UIManager GetUIManager() => uiManager;
     public TransitionManager GetTransitionManager() => transitionManager;
     public AudioManager GetAudioManager() => audioManager;
+    public LevelsManager GetLevelsManager() => levelsManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;

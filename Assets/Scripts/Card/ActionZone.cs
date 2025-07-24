@@ -86,7 +86,6 @@ public class ActionZone : MonoBehaviour
         CopyCardToBoard();
         _cantCardsInZone++;
         gameManager.SaveCardType(zoneType);
-        gameManager.PlayCard();
     }
 
     private void CopyCardToBoard()

@@ -46,6 +46,12 @@ public class UIManager : MonoBehaviour
     public Button answerButton4;
     public TextMeshProUGUI answerText4;
     
+    [SerializeField] private Image[] levelImages;
+    [SerializeField] private TextMeshProUGUI[] levelTexts;
+    [SerializeField] private Sprite able;
+    [SerializeField] private Sprite blocked;
+    [SerializeField] private Sprite approved;
+    
     private TransitionManager _transitionManager;
 
     private void Start()
@@ -82,8 +88,6 @@ public class UIManager : MonoBehaviour
             case PhaseManager.GamePhase.Draw:
                 phaseText.text = "ROBANDO CARTAS";
                 break;
-            default:
-                break;
         }
     }
 
@@ -98,6 +102,26 @@ public class UIManager : MonoBehaviour
             winCanvas.gameObject.SetActive(true);
         else
             loseCanvas.gameObject.SetActive(true);
+    }
+
+    public void UpdateLevelButton(int level, LevelsManager.State levelState, string subject = "")
+    {
+        switch (levelState)
+        {
+            case LevelsManager.State.Approved:
+                levelImages[level].sprite = approved;
+                levelImages[level].color = Color.green;
+                break;
+            case LevelsManager.State.Blocked:
+                levelImages[level].sprite = blocked;
+                levelTexts[level].text = "???";
+                break;
+            case LevelsManager.State.Able:
+                levelImages[level].sprite = able;
+                levelTexts[level].text = subject;
+                break;
+                
+        }
     }
 
     public void UpdateStats(int currentAttack, int currentDefense, string character)

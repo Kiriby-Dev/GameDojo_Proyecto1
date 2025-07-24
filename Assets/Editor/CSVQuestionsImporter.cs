@@ -31,8 +31,13 @@ public class CSVQuestionsImporter
             {
                 newQuestion.difficulty = diff;
             }
+            
+            if (System.Enum.TryParse(values[6], true, out QuestionData.Subject sub))
+            {
+                newQuestion.subject = sub;
+            }
 
-            string fileName = $"Pregunta_{i}_{newQuestion.difficulty}";
+            string fileName = $"Pregunta_{i}_{newQuestion.difficulty}_{newQuestion.subject}";
             string assetPath = $"Assets/Resources/Questions/{fileName}.asset";
 
             AssetDatabase.CreateAsset(newQuestion, assetPath);
