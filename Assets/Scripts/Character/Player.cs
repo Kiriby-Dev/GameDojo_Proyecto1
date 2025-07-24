@@ -36,5 +36,39 @@ public class Player : Character
     {
         CurrentDefense += value;
     }
+    
+    public void HealCharacter(int value)
+    {
+        int maxHp = _hpBar.GetMaxHp();
+        int currentHp = _hpBar.GetCurrentHp();
+        
+        if ((currentHp + value) > maxHp)
+        {
+            AddDefense((currentHp + value) - maxHp);
+            _hpBar.Heal(maxHp - currentHp);
+        }
+        else
+        {
+            _hpBar.Heal(value);
+        }
+        gameManager.GetUIManager().UpdateStats(CurrentAttack, CurrentDefense, "Player");
+    }
+    
+    //Arregla esto por favor q es horrible
+    public void HealCharacterFight(int value)
+    {
+        int maxHp = _hpBar.GetMaxHp();
+        int currentHp = _hpBar.GetCurrentHp();
+        
+        if ((currentHp + value) > maxHp)
+        {
+            AddDefense((currentHp + value) - maxHp);
+            _hpBar.Heal(maxHp - currentHp);
+        }
+        else
+        {
+            _hpBar.Heal(value);
+        }
+    }
     #endregion
 }

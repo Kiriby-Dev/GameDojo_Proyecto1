@@ -6,7 +6,7 @@ public class Character : MonoBehaviour
     
     protected int CurrentAttack;
     protected int CurrentDefense;
-    private HPBar _hpBar;
+    protected HPBar _hpBar;
     
     public void Awake()
     {
@@ -16,11 +16,6 @@ public class Character : MonoBehaviour
     public void TakeDamage(int value)
     {
         _hpBar.Damage(-1 * value);
-    }
-    
-    public void HealCharacter(int value)
-    {
-        _hpBar.Heal(value);
     }
 
     public void ResetLife()

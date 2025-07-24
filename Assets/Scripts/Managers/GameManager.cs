@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
         _index++;
         uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         _playerScript.HealCharacter(3);
+        _playerFightScript.HealCharacterFight(3);
     }
     
     #region GameLoop

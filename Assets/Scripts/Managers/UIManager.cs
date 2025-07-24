@@ -129,6 +129,8 @@ public class UIManager : MonoBehaviour
         switch (character)
         {
             case "Player":
+                playerAttack.text = currentAttack.ToString();
+                playerDefense.text = currentDefense.ToString();
                 playerAttackText.text = currentAttack.ToString();
                 playerDefenseText.text = currentDefense.ToString();
                 playerFightAttackText.text = currentAttack.ToString();
