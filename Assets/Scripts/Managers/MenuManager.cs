@@ -80,7 +80,7 @@ public class MenuManager : MonoBehaviour
     private IEnumerator MenuLevelsCoroutine()
     {
         gameManager.ToggleFreeze(1);
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         

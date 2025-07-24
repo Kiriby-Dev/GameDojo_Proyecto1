@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     private ActionZone.ZoneType[] _cardTypes;
     private Player _playerScript;
     private Enemy _enemyScript;
+    private Player _playerFightScript;
+    private Enemy _enemyFightScript;
     private int _cardTypesIndex = 0;
     private Animator _playerFightAnimator;
     private Animator _enemyFightAnimator;
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
     private int _actualPoints;
     private bool _isFull;
     private bool _isPaused = false;
+    private bool _turnEnded = false;
 
     private void Awake()
     {
@@ -53,6 +56,8 @@ public class GameManager : MonoBehaviour
         _enemyScript = enemy.GetComponent<Enemy>();
         _playerFightAnimator = playerFight.GetComponent<Animator>();
         _enemyFightAnimator = enemyFight.GetComponent<Animator>();
+        _playerFightScript = playerFight.GetComponent<Player>();
+        _enemyFightScript = enemyFight.GetComponent<Enemy>();
     }
 
     private void Start()
@@ -119,6 +124,7 @@ public class GameManager : MonoBehaviour
     {
         _gameStarted = true;
         _gameOver = false;
+        _turnEnded = false;
         ResetVariables();
         uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         phaseManager.StartPhases();
@@ -127,11 +133,12 @@ public class GameManager : MonoBehaviour
     //Verificamos si alguno de los personajes murio y en ese caso terminamos el juego.
     private void CheckEndGame()
     {
+        if (!_turnEnded) return;
+        
         if (_playerScript.IsDead())
             GameOver(false);//Como murio el jugador termina el juego y perdemos
         if (_enemyScript.IsDead())
         {
-            print("CheckEndGame");
             GameOver(true);//Como murio el enemigo termina el juego y ganamos
             levelsManager.AdvanceLevel();
             menuManager.MenuLevelsButton();
@@ -159,14 +166,11 @@ public class GameManager : MonoBehaviour
     {
         phaseManager.CurrentPhase = PhaseManager.GamePhase.Draw;
         ResetVariables();
-        ResetPoints();
         _gameOver = true;
         _gameStarted = false;
-        _isFull = false;
-        _index = 0;
         _cantCardsInHand = 0;
-        _playerScript.ResetLife();
         _enemyScript.ResetLife();
+        _enemyFightScript.ResetLife();
         for (int i = 0; i < playersHand.transform.childCount; i++)
         {
             Transform slot = playersHand.transform.GetChild(i);
@@ -175,6 +179,12 @@ public class GameManager : MonoBehaviour
                 Destroy(slot.GetChild(0).gameObject);
             }
         }
+    }
+
+    public void EndTurn(bool value)
+    {
+        _turnEnded = value;
+        print("Turn ended: " + _turnEnded);
     }
 
     #endregion

@@ -40,7 +40,6 @@ public class LevelsManager : MonoBehaviour
 
     private void ChooseRandomSubject()
     {
-        print("Hola");
         if (_subjects.Count == 0)
         {
             Debug.LogWarning("No hay más materias disponibles para elegir.");

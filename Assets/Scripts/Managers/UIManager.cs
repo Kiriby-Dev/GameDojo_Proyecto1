@@ -131,10 +131,14 @@ public class UIManager : MonoBehaviour
             case "Player":
                 playerAttackText.text = currentAttack.ToString();
                 playerDefenseText.text = currentDefense.ToString();
+                playerFightAttackText.text = currentAttack.ToString();
+                playerFightDefenseText.text = currentDefense.ToString();
                 break;
             case "Enemy":
                 enemyAttackText.text = currentAttack.ToString();
                 enemyDefenseText.text = currentDefense.ToString();
+                enemyFightAttackText.text = currentAttack.ToString();
+                enemyFightDefenseText.text = currentDefense.ToString();
                 break;
         }
     }

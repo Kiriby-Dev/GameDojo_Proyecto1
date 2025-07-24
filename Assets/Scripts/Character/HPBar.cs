@@ -27,6 +27,12 @@ public class HPBar : MonoBehaviour
 
     private void Update()
     {
+        if (_isDead)
+        {
+            imageBar.fillAmount = Mathf.Lerp(imageBar.fillAmount, 0, hpBarSpeed * Time.deltaTime);
+            textBar.text = 0 + "/" + maxHp;
+        }
+        
         if (!_takesDamage || _isDead) return;
         
         imageBar.fillAmount = Mathf.Lerp(imageBar.fillAmount, _targetFill, hpBarSpeed * Time.deltaTime);

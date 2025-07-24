@@ -57,7 +57,7 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator DrawPhase()
     {
-        gameManager.ResetVariables();
+        gameManager.EndTurn(false);
         gameManager.DrawCards();
         gameManager.GetPlayersHand().Recalculate();
         yield return new WaitForSeconds(0.5f);
@@ -89,6 +89,10 @@ public class PhaseManager : MonoBehaviour
         yield return gameManager.GetUIManager().BattleMode();
         yield return gameManager.ResolveCombat();
         yield return gameManager.GetUIManager().NormalMode();
+        gameManager.ResetVariables();
+        gameManager.EndTurn(true);
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
     }
 
     #endregion
