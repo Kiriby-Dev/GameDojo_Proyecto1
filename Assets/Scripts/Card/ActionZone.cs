@@ -61,6 +61,7 @@ public class ActionZone : MonoBehaviour
             case PhaseManager.GamePhase.Colocation:
                 DisableSlotAndRemoveCard();
                 AddCardInZone();
+                gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
                 break;
         }
     }
@@ -76,10 +77,10 @@ public class ActionZone : MonoBehaviour
         switch (zoneType)
         {
             case ZoneType.Attack: 
-                _selectedCard.ChangeSprite(1);
+                _selectedCard.ChangeSprite(Card.CardSprites.Attack);
                 break;
             case ZoneType.Defense:
-                _selectedCard.ChangeSprite(2);
+                _selectedCard.ChangeSprite(Card.CardSprites.Defense);
                 break;
         }
         _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);

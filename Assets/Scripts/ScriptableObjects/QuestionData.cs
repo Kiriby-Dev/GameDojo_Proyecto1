@@ -9,7 +9,8 @@ public class QuestionData : ScriptableObject
     {
         History,
         Science,
-        Logic
+        Entertainment,
+        Geography
     }
 
     public string question;

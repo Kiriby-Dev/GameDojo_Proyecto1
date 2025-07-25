@@ -35,7 +35,8 @@ public class LevelsManager : MonoBehaviour
     {
         _subjects.Add(QuestionData.Subject.History);
         _subjects.Add(QuestionData.Subject.Science);
-        _subjects.Add(QuestionData.Subject.Logic);
+        _subjects.Add(QuestionData.Subject.Entertainment);
+        _subjects.Add(QuestionData.Subject.Geography);
     }
 
     private void ChooseRandomSubject()
@@ -69,7 +70,7 @@ public class LevelsManager : MonoBehaviour
         for (int i = 0; i < _levels.Length; i++)
         {
             State level = _levels[i]; 
-            gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject.ToString());
+            gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject);
         }
     }
     

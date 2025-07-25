@@ -104,7 +104,7 @@ public class UIManager : MonoBehaviour
             loseCanvas.gameObject.SetActive(true);
     }
 
-    public void UpdateLevelButton(int level, LevelsManager.State levelState, string subject = "")
+    public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
     {
         switch (levelState)
         {
@@ -118,7 +118,21 @@ public class UIManager : MonoBehaviour
                 break;
             case LevelsManager.State.Able:
                 levelImages[level].sprite = able;
-                levelTexts[level].text = subject;
+                switch (subject)
+                {
+                    case QuestionData.Subject.History:
+                        levelTexts[level].text = "Historia";
+                        break;
+                    case QuestionData.Subject.Science:
+                        levelTexts[level].text = "Ciencia";
+                        break;
+                    case QuestionData.Subject.Entertainment:
+                        levelTexts[level].text = "Entretenimiento";
+                        break;
+                    case QuestionData.Subject.Geography:
+                        levelTexts[level].text = "Geografia";
+                        break;
+                }
                 break;
                 
         }

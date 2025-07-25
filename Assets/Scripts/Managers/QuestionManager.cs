@@ -19,9 +19,13 @@ public class QuestionManager : MonoBehaviour
     private List<QuestionData> _scienceMedium;
     private List<QuestionData> _scienceHard;
     
-    private List<QuestionData> _logicEasy;
-    private List<QuestionData> _logicMedium;
-    private List<QuestionData> _logicHard;
+    private List<QuestionData> _entertainmentEasy;
+    private List<QuestionData> _entertainmentMedium;
+    private List<QuestionData> _entertainmentHard;
+    
+    private List<QuestionData> _geographyEasy;
+    private List<QuestionData> _geographyMedium;
+    private List<QuestionData> _geographyHard;
     
     private QuestionData _selectedQuestion;
     private bool _playerHasAnswered;
@@ -39,9 +43,13 @@ public class QuestionManager : MonoBehaviour
         _scienceMedium = new List<QuestionData>();
         _scienceHard = new List<QuestionData>();
 
-        _logicEasy = new List<QuestionData>();
-        _logicMedium = new List<QuestionData>();
-        _logicHard = new List<QuestionData>();
+        _entertainmentEasy = new List<QuestionData>();
+        _entertainmentMedium = new List<QuestionData>();
+        _entertainmentHard = new List<QuestionData>();
+        
+        _geographyEasy = new List<QuestionData>();
+        _geographyMedium = new List<QuestionData>();
+        _geographyHard = new List<QuestionData>();
 
         LoadQuestions();
     }
@@ -110,8 +118,11 @@ public class QuestionManager : MonoBehaviour
             case QuestionData.Subject.Science:
                 listToUse = GetListByDifficulty(_scienceEasy, _scienceMedium, _scienceHard, difficulty);
                 break;
-            case QuestionData.Subject.Logic:
-                listToUse = GetListByDifficulty(_logicEasy, _logicMedium, _logicHard, difficulty);
+            case QuestionData.Subject.Entertainment:
+                listToUse = GetListByDifficulty(_entertainmentEasy, _entertainmentMedium, _entertainmentHard, difficulty);
+                break;
+            case QuestionData.Subject.Geography:
+                listToUse = GetListByDifficulty(_geographyEasy, _geographyMedium, _geographyHard, difficulty);
                 break;
         }
 
@@ -199,12 +210,19 @@ public class QuestionManager : MonoBehaviour
             else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Science)
                 _scienceHard.Add(q);
 
-            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Logic)
-                _logicEasy.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Logic)
-                _logicMedium.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Logic)
-                _logicHard.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentHard.Add(q);
+            
+            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Geography)
+                _geographyEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Geography)
+                _geographyMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Geography)
+                _geographyHard.Add(q);
         }
     }
 

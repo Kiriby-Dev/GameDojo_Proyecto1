@@ -93,7 +93,6 @@ public class GameManager : MonoBehaviour
     public void ToggleFreeze(int value)
     {
         Time.timeScale = value;
-        print(Time.timeScale);
     }
 
     public void UpdatePoints(int value)
@@ -118,6 +117,7 @@ public class GameManager : MonoBehaviour
         uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         _playerScript.HealCharacter(3);
         _playerFightScript.HealCharacterFight(3);
+        audioManager.PlayAudio(AudioManager.AudioList.Heal);
     }
     
     #region GameLoop
@@ -135,12 +135,16 @@ public class GameManager : MonoBehaviour
     private void CheckEndGame()
     {
         if (!_turnEnded) return;
-        
+
         if (_playerScript.IsDead())
+        {
             GameOver(false);//Como murio el jugador termina el juego y perdemos
+            audioManager.PlayAudio(AudioManager.AudioList.GameOver);
+        }
         if (_enemyScript.IsDead())
         {
             GameOver(true);//Como murio el enemigo termina el juego y ganamos
+            audioManager.PlayAudio(AudioManager.AudioList.GameWin);
             levelsManager.AdvanceLevel();
             menuManager.MenuLevelsButton();
         }
@@ -185,7 +189,6 @@ public class GameManager : MonoBehaviour
     public void EndTurn(bool value)
     {
         _turnEnded = value;
-        print("Turn ended: " + _turnEnded);
     }
 
     #endregion
@@ -199,13 +202,78 @@ public class GameManager : MonoBehaviour
         {
             GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
             Card actualCard = go.GetComponent<Card>();
-            actualCard.GenerateCardValue();
+            int difficulty = actualCard.GenerateCardValue();
+            ChangeCardSprite(actualCard, difficulty);
             actualCard.ToggleAnimator(true);
             go.name = "Card" + i;
             AddCardToHand();
         }
 
         StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
+    }
+
+    private void ChangeCardSprite(Card actualCard, int difficulty)
+    {
+        QuestionData.Subject subject = levelsManager.GetActualSubject();
+        switch (subject)
+        {
+            case QuestionData.Subject.History:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Science:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Entertainment:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Geography:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyHard);
+                        break;
+                }
+                break;
+        }
     }
 
     private IEnumerator MovePlayersHand(Vector3 targetPosition, float duration = 0.5f)

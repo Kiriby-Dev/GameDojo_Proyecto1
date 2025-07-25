@@ -17,11 +17,13 @@ public class MenuManager : MonoBehaviour
     public Canvas canvasTutorial;
     
     private TransitionManager _transitionManager;
-
+    private AudioManager _audioManager;
+    
     private void Start()
     {
         ResetMenus();
         _transitionManager = gameManager.GetTransitionManager();
+        _audioManager = gameManager.GetAudioManager();
     }
 
     private void ResetMenus()
@@ -39,6 +41,7 @@ public class MenuManager : MonoBehaviour
         DisableAllCanvas();
         game.SetActive(true);
         gameManager.StartGame();
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     private void DisableAllCanvas()
@@ -108,6 +111,7 @@ public class MenuManager : MonoBehaviour
 
     public void QuitButton()
     {
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
         Application.Quit();
     }
 
@@ -117,6 +121,7 @@ public class MenuManager : MonoBehaviour
             MenuButton();
         else
             canvasOptions.enabled = optionsToggle;
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     #region Utilities
@@ -124,21 +129,25 @@ public class MenuManager : MonoBehaviour
     public void PlayButton()
     {
         StartCoroutine(PlayCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
     
     public void MenuButton()
     {
         StartCoroutine(MenuCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     public void MenuLevelsButton()
     {
         StartCoroutine(MenuLevelsCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     public void TutorialButton()
     {
         StartCoroutine(TutorialCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
     
     #endregion

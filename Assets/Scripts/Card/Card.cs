@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +20,28 @@ public class Card : MonoBehaviour
     
     public float returnSpeed;
     public Canvas textCanvas;
-    public Sprite[] cardSprites;
+
+    public enum CardSprites
+    {
+        Base,
+        Attack,
+        Defense,
+        HistoryEasy,
+        HistoryMedium,
+        HistoryHard,
+        ScienceEasy,
+        ScienceMedium,
+        ScienceHard,
+        EntertainmentEasy,
+        EntertainmentMedium,
+        EntertainmentHard,
+        GeographyEasy,
+        GeographyMedium,
+        GeographyHard,
+    };
     
+    [SerializeField] private List<Sprite> sprites;
+
     private bool _isReturning;
     private bool _isDragging;
     private int _cardLayer;
@@ -138,11 +159,12 @@ public class Card : MonoBehaviour
         transform.Find("DropZone").gameObject.SetActive(false);
     }
 
-    public void GenerateCardValue()
+    public int GenerateCardValue()
     {
         TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
         int number = Random.Range(1,4);
         cardText.text = "+" + number;
+        return number;
     }
 
     #region Utilities
@@ -171,9 +193,9 @@ public class Card : MonoBehaviour
         transform.localScale = new Vector3(size, size, transform.localScale.z);
     }
 
-    public void ChangeSprite(int i = 0)
+    public void ChangeSprite(CardSprites sprite)
     {
-        cardSprite.sprite = cardSprites[i];
+        cardSprite.sprite = sprites[(int)sprite];
     }
     
     public int GetParentIndex()
