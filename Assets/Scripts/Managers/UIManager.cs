@@ -46,6 +46,12 @@ public class UIManager : MonoBehaviour
     public Button answerButton4;
     public TextMeshProUGUI answerText4;
     
+    [SerializeField] private Image[] levelImages;
+    [SerializeField] private TextMeshProUGUI[] levelTexts;
+    [SerializeField] private Sprite able;
+    [SerializeField] private Sprite blocked;
+    [SerializeField] private Sprite approved;
+    
     private TransitionManager _transitionManager;
 
     private void Start()
@@ -82,8 +88,6 @@ public class UIManager : MonoBehaviour
             case PhaseManager.GamePhase.Draw:
                 phaseText.text = "ROBANDO CARTAS";
                 break;
-            default:
-                break;
         }
     }
 
@@ -100,17 +104,57 @@ public class UIManager : MonoBehaviour
             loseCanvas.gameObject.SetActive(true);
     }
 
+    public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
+    {
+        switch (levelState)
+        {
+            case LevelsManager.State.Approved:
+                levelImages[level].sprite = approved;
+                levelImages[level].color = Color.green;
+                break;
+            case LevelsManager.State.Blocked:
+                levelImages[level].sprite = blocked;
+                levelTexts[level].text = "???";
+                break;
+            case LevelsManager.State.Able:
+                levelImages[level].sprite = able;
+                switch (subject)
+                {
+                    case QuestionData.Subject.History:
+                        levelTexts[level].text = "Historia";
+                        break;
+                    case QuestionData.Subject.Science:
+                        levelTexts[level].text = "Ciencia";
+                        break;
+                    case QuestionData.Subject.Entertainment:
+                        levelTexts[level].text = "Entretenimiento";
+                        break;
+                    case QuestionData.Subject.Geography:
+                        levelTexts[level].text = "Geografia";
+                        break;
+                }
+                break;
+                
+        }
+    }
+
     public void UpdateStats(int currentAttack, int currentDefense, string character)
     {
         switch (character)
         {
             case "Player":
+                playerAttack.text = currentAttack.ToString();
+                playerDefense.text = currentDefense.ToString();
                 playerAttackText.text = currentAttack.ToString();
                 playerDefenseText.text = currentDefense.ToString();
+                playerFightAttackText.text = currentAttack.ToString();
+                playerFightDefenseText.text = currentDefense.ToString();
                 break;
             case "Enemy":
                 enemyAttackText.text = currentAttack.ToString();
                 enemyDefenseText.text = currentDefense.ToString();
+                enemyFightAttackText.text = currentAttack.ToString();
+                enemyFightDefenseText.text = currentDefense.ToString();
                 break;
         }
     }
@@ -147,6 +191,14 @@ public class UIManager : MonoBehaviour
             ChangeAnswerColor(answerText3, answerButton3, "Green");
         if (correctAnswer == answerText4.text)
             ChangeAnswerColor(answerText4, answerButton4, "Green");
+    }
+
+    public void ToggleButtonsInteraction(bool interactable)
+    {
+        answerButton1.interactable = interactable;
+        answerButton2.interactable = interactable;
+        answerButton3.interactable = interactable;
+        answerButton4.interactable = interactable;
     }
 
     public void ShowSelectedAnswer(string selectedText)

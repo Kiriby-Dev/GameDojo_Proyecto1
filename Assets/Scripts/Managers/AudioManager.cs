@@ -8,11 +8,16 @@ public class AudioManager : MonoBehaviour
 {
     public enum AudioList
     {
-        Discard,
-        Blocked,
+        RightAnswer,
         WrongAnswer,
+        GameOver,
+        GameWin,
+        Blocked,
         Attack,
-        RightAnswer
+        Click,
+        CardColocation,
+        Discard,
+        Heal,
     }
 
     [SerializeField] private List<AudioClip> audioClips;

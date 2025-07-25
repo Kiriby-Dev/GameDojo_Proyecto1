@@ -11,9 +11,21 @@ public class QuestionManager : MonoBehaviour
     public Timer timer;
     
     private QuestionData[] allQuestions;
-    private List<QuestionData> _easy;
-    private List<QuestionData> _medium;
-    private List<QuestionData> _hard;
+    private List<QuestionData> _historyEasy;
+    private List<QuestionData> _historyMedium;
+    private List<QuestionData> _historyHard;
+    
+    private List<QuestionData> _scienceEasy;
+    private List<QuestionData> _scienceMedium;
+    private List<QuestionData> _scienceHard;
+    
+    private List<QuestionData> _entertainmentEasy;
+    private List<QuestionData> _entertainmentMedium;
+    private List<QuestionData> _entertainmentHard;
+    
+    private List<QuestionData> _geographyEasy;
+    private List<QuestionData> _geographyMedium;
+    private List<QuestionData> _geographyHard;
     
     private QuestionData _selectedQuestion;
     private bool _playerHasAnswered;
@@ -23,9 +35,22 @@ public class QuestionManager : MonoBehaviour
 
     private void Start()
     {
-        _easy = new List<QuestionData>();
-        _medium = new List<QuestionData>();
-        _hard = new List<QuestionData>();
+        _historyEasy = new List<QuestionData>();
+        _historyMedium = new List<QuestionData>();
+        _historyHard = new List<QuestionData>();
+
+        _scienceEasy = new List<QuestionData>();
+        _scienceMedium = new List<QuestionData>();
+        _scienceHard = new List<QuestionData>();
+
+        _entertainmentEasy = new List<QuestionData>();
+        _entertainmentMedium = new List<QuestionData>();
+        _entertainmentHard = new List<QuestionData>();
+        
+        _geographyEasy = new List<QuestionData>();
+        _geographyMedium = new List<QuestionData>();
+        _geographyHard = new List<QuestionData>();
+
         LoadQuestions();
     }
     
@@ -44,6 +69,7 @@ public class QuestionManager : MonoBehaviour
         {
             GameObject cardGo = cardsZone.GetActualCardZone(i);
             yield return ProcessCard(cardGo);
+            gameManager.GetUIManager().ToggleButtonsInteraction(true);
         }
     }
 
@@ -81,18 +107,22 @@ public class QuestionManager : MonoBehaviour
     //Selecciona una pregunta dada una dificultad y la elimina de la lista correspondiente para no repetirla.
     private void SelectQuestion(int difficulty)
     {
+        QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
         List<QuestionData> listToUse = null;
 
-        switch (difficulty)
+        switch (subject)
         {
-            case 1:
-                listToUse = _easy;
+            case QuestionData.Subject.History:
+                listToUse = GetListByDifficulty(_historyEasy, _historyMedium, _historyHard, difficulty);
                 break;
-            case 2:
-                listToUse = _medium;
+            case QuestionData.Subject.Science:
+                listToUse = GetListByDifficulty(_scienceEasy, _scienceMedium, _scienceHard, difficulty);
                 break;
-            case 3:
-                listToUse = _hard;
+            case QuestionData.Subject.Entertainment:
+                listToUse = GetListByDifficulty(_entertainmentEasy, _entertainmentMedium, _entertainmentHard, difficulty);
+                break;
+            case QuestionData.Subject.Geography:
+                listToUse = GetListByDifficulty(_geographyEasy, _geographyMedium, _geographyHard, difficulty);
                 break;
         }
 
@@ -105,10 +135,22 @@ public class QuestionManager : MonoBehaviour
 
         gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
     }
+
+    private List<QuestionData> GetListByDifficulty(List<QuestionData> easy, List<QuestionData> medium, List<QuestionData> hard, int difficulty)
+    {
+        switch (difficulty)
+        {
+            case 1: return easy;
+            case 2: return medium;
+            case 3: return hard;
+            default: return null;
+        }
+    }
     
     //Indica que el jugador selecciono una respuesta.
     public void OnAnswerSelected(Button clickedButton)
     {
+        gameManager.GetUIManager().ToggleButtonsInteraction(false);
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
         _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;
@@ -154,18 +196,33 @@ public class QuestionManager : MonoBehaviour
 
         foreach (var q in allQuestions)
         {
-            switch (q.difficulty)
-            {
-                case QuestionData.Difficulty.Easy:
-                    _easy.Add(q);
-                    break;
-                case QuestionData.Difficulty.Medium:
-                    _medium.Add(q);
-                    break;
-                case QuestionData.Difficulty.Hard:
-                    _hard.Add(q);
-                    break;
-            }
+            if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.History)
+                _historyEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.History)
+                _historyMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.History)
+                _historyHard.Add(q);
+
+            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Science)
+                _scienceEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Science)
+                _scienceMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Science)
+                _scienceHard.Add(q);
+
+            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Entertainment)
+                _entertainmentHard.Add(q);
+            
+            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Geography)
+                _geographyEasy.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Geography)
+                _geographyMedium.Add(q);
+            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Geography)
+                _geographyHard.Add(q);
         }
     }
 

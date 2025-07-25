@@ -5,10 +5,19 @@ public class QuestionData : ScriptableObject
 {
     public enum Difficulty { Easy, Medium, Hard }
 
+    public enum Subject
+    {
+        History,
+        Science,
+        Entertainment,
+        Geography
+    }
+
     public string question;
     public string correctAnswer;
     public string[] wrongAnswers;
     public Difficulty difficulty;
+    public Subject subject;
 
     #region Getters
     public string GetCorrectAnswer() => correctAnswer;

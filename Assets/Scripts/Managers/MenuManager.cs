@@ -12,20 +12,18 @@ public class MenuManager : MonoBehaviour
     
     [Header("Canvas")]
     public Canvas canvasMenu;
-    public Canvas canvasPause;
     public Canvas canvasLevelsMenu;
     public Canvas canvasOptions;
     public Canvas canvasTutorial;
-
-    public Button[] levelsButtons;
     
     private TransitionManager _transitionManager;
-
+    private AudioManager _audioManager;
+    
     private void Start()
     {
         ResetMenus();
-        DisableBlockedLevels();
         _transitionManager = gameManager.GetTransitionManager();
+        _audioManager = gameManager.GetAudioManager();
     }
 
     private void ResetMenus()
@@ -40,9 +38,18 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        menu.SetActive(false);
+        DisableAllCanvas();
         game.SetActive(true);
         gameManager.StartGame();
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
+    }
+
+    private void DisableAllCanvas()
+    {
+        canvasMenu.enabled = false;
+        canvasLevelsMenu.enabled = false;
+        canvasOptions.enabled = false;
+        canvasTutorial.enabled = false;
     }
 
     private IEnumerator PlayCoroutine()
@@ -51,6 +58,7 @@ public class MenuManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
+        game.SetActive(false);
         canvasMenu.enabled = false;
         canvasLevelsMenu.enabled = true;
         
@@ -59,25 +67,43 @@ public class MenuManager : MonoBehaviour
     
     private IEnumerator MenuCoroutine()
     {
+        gameManager.ToggleFreeze(1);
         yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        canvasOptions.enabled = false;
-        canvasLevelsMenu.enabled = false;
+        gameManager.EndGame();
+        game.SetActive(false);
+        DisableAllCanvas();
         canvasMenu.enabled = true;
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+    }
+    
+    private IEnumerator MenuLevelsCoroutine()
+    {
+        gameManager.ToggleFreeze(1);
+        yield return new WaitForSeconds(0.5f);
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        gameManager.EndGame();
+        game.SetActive(false);
+        DisableAllCanvas();
+        canvasLevelsMenu.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
     }
     
     private IEnumerator TutorialCoroutine()
     {
-        canvasOptions.enabled = false;
+        gameManager.ToggleFreeze(1);
         yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
-        canvasLevelsMenu.enabled = false;
+        game.SetActive(false);
+        DisableAllCanvas();
         canvasTutorial.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
@@ -85,30 +111,17 @@ public class MenuManager : MonoBehaviour
 
     public void QuitButton()
     {
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
         Application.Quit();
     }
 
     public void ToggleOptions(bool optionsToggle)
     {
-        canvasOptions.enabled = optionsToggle;
-    }
-
-    public void TogglePause(bool pause)
-    {
-        canvasPause.enabled = pause;
-    }
-
-    private void DisableBlockedLevels()
-    {
-        foreach (Button button in levelsButtons)
-        {
-            button.interactable = false;
-            button.gameObject.GetComponentInParent<LevelButtonImage>().UpdateSprite(LevelButtonImage.State.Blocked);
-        }
-        
-        int cantButtons = levelsButtons.Length;
-        levelsButtons[cantButtons - 1].interactable = true;
-        levelsButtons[cantButtons - 1].gameObject.GetComponentInParent<LevelButtonImage>().UpdateSprite(LevelButtonImage.State.Able);
+        if (canvasLevelsMenu.isActiveAndEnabled)
+            MenuButton();
+        else
+            canvasOptions.enabled = optionsToggle;
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     #region Utilities
@@ -116,16 +129,25 @@ public class MenuManager : MonoBehaviour
     public void PlayButton()
     {
         StartCoroutine(PlayCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
     
     public void MenuButton()
     {
         StartCoroutine(MenuCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
+    }
+
+    public void MenuLevelsButton()
+    {
+        StartCoroutine(MenuLevelsCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     public void TutorialButton()
     {
         StartCoroutine(TutorialCoroutine());
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
     
     #endregion
