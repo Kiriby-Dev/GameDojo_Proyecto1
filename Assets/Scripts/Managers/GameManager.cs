@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -83,16 +84,13 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         menuManager.ToggleOptions(!_isPaused);
-        if (_isPaused)
-            ToggleFreeze(1);
-        else
-            ToggleFreeze(0);
+        _playersHandScript.DisableCardsInteraction(!_isPaused);
         _isPaused = !_isPaused;
     }
-
-    public void ToggleFreeze(int value)
+    
+    public void ResetGame()
     {
-        Time.timeScale = value;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void UpdatePoints(int value)
@@ -140,6 +138,8 @@ public class GameManager : MonoBehaviour
         {
             GameOver(false);//Como murio el jugador termina el juego y perdemos
             audioManager.PlayAudio(AudioManager.AudioList.GameOver);
+            EndGame();
+            uiManager.UpdateGameOverCanvas(false);
         }
         if (_enemyScript.IsDead())
         {
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
     public void ResetVariables()
     {
         _playerScript.ResetStats();
-        _enemyScript.GenerateStats();
+        levelsManager.SelectLevelDifficulty();
         attackZone.ResetZone();
         defenseZone.ResetZone();
         uiManager.ResetVisuals();
@@ -356,22 +356,25 @@ public class GameManager : MonoBehaviour
             audioManager.PlayAudio(AudioManager.AudioList.Blocked);
         }
         yield return new WaitForSeconds(2f);
-        
-        _enemyFightAnimator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.35f);
-        if (damageTaken < 0)
+
+        if (!_enemyScript.IsDead())
         {
-            _playerScript.TakeDamage(damageTaken);
-            playerFight.GetComponent<Player>().TakeDamage(damageTaken);
-            _playerFightAnimator.SetTrigger("Hurt");
-            audioManager.PlayAudio(AudioManager.AudioList.Attack);
+            _enemyFightAnimator.SetTrigger("Attack");
+            yield return new WaitForSeconds(0.35f);
+            if (damageTaken < 0)
+            {
+                _playerScript.TakeDamage(damageTaken);
+                playerFight.GetComponent<Player>().TakeDamage(damageTaken);
+                _playerFightAnimator.SetTrigger("Hurt");
+                audioManager.PlayAudio(AudioManager.AudioList.Attack);
+            }
+            else
+            {
+                _playerFightAnimator.SetTrigger("BlockAttack");
+                audioManager.PlayAudio(AudioManager.AudioList.Blocked);
+            }
+            yield return new WaitForSeconds(2f);
         }
-        else
-        {
-            _playerFightAnimator.SetTrigger("BlockAttack");
-            audioManager.PlayAudio(AudioManager.AudioList.Blocked);
-        }
-        yield return new WaitForSeconds(1f);
     }
     #endregion
     
@@ -388,6 +391,7 @@ public class GameManager : MonoBehaviour
     public ActionZone GetCardsZone() => cardsZone;
     public ActionZone GetDiscardZone() => discardZone;
     public Player GetPlayer() => _playerScript;
+    public Enemy GetEnemy() => _enemyScript;
     public bool IsGameOver() => _gameOver;
     #endregion
 }

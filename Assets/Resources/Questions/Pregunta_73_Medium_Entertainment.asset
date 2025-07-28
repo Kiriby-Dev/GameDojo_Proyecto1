@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_73_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 serie animada presenta a un cient\xEDfico loco y su nieto
-    viajando por el multiverso?"
-  correctAnswer: Rick and Morty
+  question: "\xBFQu\xE9 banda lanz\xF3 el \xE1lbum \u201CAbbey Road\u201D?"
+  correctAnswer: The Beatles
   wrongAnswers:
-  - Futurama
-  - Solar Opposites
-  - Gravity Falls
+  - The Rolling Stones
+  - Pink Floyd
+  - Queen
   difficulty: 1
   subject: 2

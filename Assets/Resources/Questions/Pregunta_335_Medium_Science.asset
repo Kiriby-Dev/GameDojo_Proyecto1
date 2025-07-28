@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_335_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 mol\xE9cula transporta ox\xEDgeno en la sangre?"
-  correctAnswer: Hemoglobina
+  question: "\xBFQu\xE9 elemento tiene el s\xEDmbolo 'Na'?"
+  correctAnswer: Sodio
   wrongAnswers:
-  - Glucosa
-  - Insulina
-  - "Col\xE1geno"
+  - "Nitr\xF3geno"
+  - "Ne\xF3n"
+  - "N\xEDquel"
   difficulty: 1
   subject: 1

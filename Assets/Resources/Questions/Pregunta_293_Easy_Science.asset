@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_293_Easy_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 fen\xF3meno natural se debe a la actividad del magma?"
-  correctAnswer: "Volc\xE1n"
+  question: "\xBFQu\xE9 funci\xF3n tiene el sistema inmunol\xF3gico?"
+  correctAnswer: Defender el cuerpo de enfermedades
   wrongAnswers:
-  - "Hurac\xE1n"
-  - Terremoto
-  - Tornado
+  - Producir hormonas
+  - "Regular el sue\xF1o"
+  - Controlar el hambre
   difficulty: 0
   subject: 1

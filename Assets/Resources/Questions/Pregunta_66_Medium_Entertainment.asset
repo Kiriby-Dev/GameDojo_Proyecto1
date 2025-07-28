@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_66_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l de estos es un Pok\xE9mon de tipo el\xE9ctrico?"
-  correctAnswer: Pikachu
+  question: "\xBFEn qu\xE9 videojuego aparece el personaje Kratos?"
+  correctAnswer: God of War
   wrongAnswers:
-  - Charmander
-  - Squirtle
-  - Bulbasaur
+  - "Assassin\u2019s Creed"
+  - Devil May Cry
+  - Darksiders
   difficulty: 1
   subject: 2

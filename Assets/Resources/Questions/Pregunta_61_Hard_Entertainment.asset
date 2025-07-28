@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_61_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQui\xE9n interpret\xF3 al Joker en la pel\xEDcula de 2019?"
-  correctAnswer: Joaquin Phoenix
+  question: "\xBFCu\xE1l es el nombre del protagonista de la saga Uncharted?"
+  correctAnswer: Nathan Drake
   wrongAnswers:
-  - Heath Ledger
-  - Jared Leto
-  - Jack Nicholson
+  - Joel Miller
+  - Ezio Auditore
+  - Marcus Fenix
   difficulty: 2
   subject: 2

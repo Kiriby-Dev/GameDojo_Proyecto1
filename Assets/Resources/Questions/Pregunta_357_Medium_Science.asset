@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_357_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 propiedad describe el volumen que ocupa un cuerpo?"
-  correctAnswer: Densidad
+  question: "\xBFQu\xE9 part\xEDcula subat\xF3mica no tiene carga el\xE9ctrica?"
+  correctAnswer: "Neutr\xF3n"
   wrongAnswers:
-  - Masa
-  - Temperatura
-  - Velocidad
+  - "Prot\xF3n"
+  - "Electr\xF3n"
+  - "Positr\xF3n"
   difficulty: 1
   subject: 1

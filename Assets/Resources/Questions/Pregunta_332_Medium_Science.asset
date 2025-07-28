@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_332_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 estructura celular contiene el ADN?"
-  correctAnswer: "El n\xFAcleo"
+  question: "\xBFQu\xE9 es un electr\xF3n?"
+  correctAnswer: "Una part\xEDcula con carga negativa"
   wrongAnswers:
-  - El citoplasma
-  - La membrana
-  - "El ret\xEDculo endoplasm\xE1tico"
+  - "Una part\xEDcula con carga positiva"
+  - "Una part\xEDcula sin carga"
+  - "Un tipo de \xE1tomo"
   difficulty: 1
   subject: 1

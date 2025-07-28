@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_51_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 videojuego tiene como protagonista a un asesino llamado Ezio
-    Auditore?"
-  correctAnswer: "Assassin\u2019s Creed"
+  question: "\xBFQu\xE9 director es conocido por pel\xEDculas como Inception y Interstellar?"
+  correctAnswer: Christopher Nolan
   wrongAnswers:
-  - God of War
-  - Metal Gear Solid
-  - Hitman
+  - Ridley Scott
+  - James Cameron
+  - Denis Villeneuve
   difficulty: 2
   subject: 2

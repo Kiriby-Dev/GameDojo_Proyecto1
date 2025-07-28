@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_43_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 a\xF1o se estren\xF3 la primera pel\xEDcula de \u201CJurassic
-    Park\u201D?"
-  correctAnswer: 1993
+  question: "\xBFQu\xE9 consola introdujo el juego \u201CThe Legend of Zelda: Breath
+    of the Wild\u201D?"
+  correctAnswer: Nintendo Switch
   wrongAnswers:
-  - 1997
-  - 1989
-  - 2001
+  - Nintendo Wii
+  - Nintendo DS
+  - GameCube
   difficulty: 2
   subject: 2

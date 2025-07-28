@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_347_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 fen\xF3meno ocurre cuando la luz cambia de direcci\xF3n al
-    pasar entre medios?"
-  correctAnswer: "Refracci\xF3n"
+  question: "\xBFCu\xE1l es el s\xEDmbolo qu\xEDmico del oro?"
+  correctAnswer: Au
   wrongAnswers:
-  - "Reflexi\xF3n"
-  - "Difracci\xF3n"
-  - "Dispersi\xF3n"
+  - Ag
+  - Fe
+  - Cu
   difficulty: 1
   subject: 1

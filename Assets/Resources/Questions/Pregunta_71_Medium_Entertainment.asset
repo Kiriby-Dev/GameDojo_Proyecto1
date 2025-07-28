@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_71_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 saga de pel\xEDculas tiene como protagonista a un arque\xF3logo?"
-  correctAnswer: Indiana Jones
+  question: "\xBFQu\xE9 director es conocido por pel\xEDculas como Pulp Fiction y
+    Kill Bill?"
+  correctAnswer: Quentin Tarantino
   wrongAnswers:
-  - "Misi\xF3n Imposible"
-  - Sherlock Holmes
-  - Tomb Raider
+  - Martin Scorsese
+  - Tim burton
+  - Steven Spielberg
   difficulty: 1
   subject: 2

@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_8_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula de Pixar trata sobre emociones que viven dentro
-    de la mente de una ni\xF1a?"
-  correctAnswer: Inside Out
+  question: "\xBFEn qu\xE9 ciudad vive Spider-Man en la mayor\xEDa de sus historias?"
+  correctAnswer: Nueva York
   wrongAnswers:
-  - Soul
-  - Coco
-  - Up
+  - Gotham
+  - "Metr\xF3polis"
+  - "Los \xC1ngeles"
   difficulty: 0
   subject: 2

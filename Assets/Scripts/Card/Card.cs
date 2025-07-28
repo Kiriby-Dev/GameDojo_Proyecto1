@@ -143,7 +143,7 @@ public class Card : MonoBehaviour
     
     public void PutCardInSlot(Transform slot)
     {
-        DisableInteraction();
+        DisableInteraction(true);
         transform.SetParent(slot);
         transform.localPosition = Vector3.zero;
         transform.eulerAngles = Vector3.zero;
@@ -151,12 +151,17 @@ public class Card : MonoBehaviour
         chalkEffect.Play();
     }
     
-    private void DisableInteraction()
+    public void DisableInteraction(bool value)
     {
-        _isDragging = false;
-        _isReturning = false;
-        GetComponent<Collider2D>().enabled = false;
-        transform.Find("DropZone").gameObject.SetActive(false);
+        if (value)
+        {
+            _isDragging = false;
+            _isReturning = false;
+            GetComponent<Collider2D>().enabled = false;
+            transform.Find("DropZone").gameObject.SetActive(false);
+        }
+        else
+            GetComponent<Collider2D>().enabled = true;
     }
 
     public int GenerateCardValue()
@@ -221,7 +226,12 @@ public class Card : MonoBehaviour
         else
             _animator.SetTrigger("MoveLeft");
     }
-    
+
+	public void PlayDiscardAnimation()
+    {
+        _animator.SetTrigger("Discard");
+    }
+
     public void ToggleAnimator(bool state)
     {
         _animator.enabled = state;

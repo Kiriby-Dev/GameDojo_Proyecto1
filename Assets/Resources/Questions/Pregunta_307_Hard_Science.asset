@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_307_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 ley dice que la energ\xEDa no se crea ni se destruye?"
-  correctAnswer: "Primera ley de la termodin\xE1mica"
+  question: "\xBFPor qu\xE9 el sonido se propaga m\xE1s r\xE1pido en el agua?"
+  correctAnswer: Mayor densidad del medio
   wrongAnswers:
-  - Segunda ley de Newton
-  - Ley de Coulomb
-  - Ley de Ohm
+  - Mayor temperatura
+  - "Mayor presi\xF3n"
+  - "Reflexi\xF3n del sonido"
   difficulty: 2
   subject: 1

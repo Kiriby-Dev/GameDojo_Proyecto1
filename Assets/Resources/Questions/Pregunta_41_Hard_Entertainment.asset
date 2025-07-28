@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_41_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l de estos personajes es un Pok\xE9mon legendario?"
-  correctAnswer: Mewtwo
+  question: "\"\xBFQu\xE9 cantante lanz\xF3 el \xE1lbum \"\"25\"\"?\""
+  correctAnswer: Adele
   wrongAnswers:
-  - Charizard
-  - Gengar
-  - Jigglypuff
+  - Taylor Swift
+  - "Beyonc\xE9"
+  - Lorde
   difficulty: 2
   subject: 2

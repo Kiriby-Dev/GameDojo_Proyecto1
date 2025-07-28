@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_20_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 canci\xF3n hizo famoso a Luis Fonsi a nivel mundial en 2017?"
-  correctAnswer: Despacito
+  question: "\xBFCu\xE1l es el nombre del fontanero verde en el universo de Mario?"
+  correctAnswer: Luigi
   wrongAnswers:
-  - "\xC9chame la culpa"
-  - No me doy por vencido
-  - "Aqu\xED estoy yo"
+  - Toad
+  - Yoshi
+  - Wario
   difficulty: 0
   subject: 2

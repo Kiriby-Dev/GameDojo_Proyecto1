@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_70_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFCu\xE1l de estos artistas es conocido por la canci\xF3n \"\"Bad
-    Guy\"\"?\""
-  correctAnswer: Billie Eilish
+  question: "\xBFCu\xE1l de estos personajes es un Pok\xE9mon legendario?"
+  correctAnswer: Mewtwo
   wrongAnswers:
-  - Dua Lipa
-  - Olivia Rodrigo
-  - Lana Del Rey
+  - Charizard
+  - Gengar
+  - Jigglypuff
   difficulty: 1
   subject: 2

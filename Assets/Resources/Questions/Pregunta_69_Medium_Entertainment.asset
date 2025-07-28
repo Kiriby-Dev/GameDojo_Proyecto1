@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_69_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 consola lanz\xF3 Nintendo en 2006 con sensores de movimiento?"
-  correctAnswer: Wii
+  question: "\xBFQu\xE9 cantante populariz\xF3 el tema \u201CAs It Was\u201D en 2022?"
+  correctAnswer: Harry Styles
   wrongAnswers:
-  - GameCube
-  - Switch
-  - DS
+  - Ed Sheeran
+  - Madonna
+  - Justin Timberlake
   difficulty: 1
   subject: 2

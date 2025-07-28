@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_302_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es la c\xE9lula responsable del transporte de ox\xEDgeno
-    en la sangre?"
-  correctAnswer: "Gl\xF3bulo rojo"
+  question: "\xBFCu\xE1l es la funci\xF3n principal de los ribosomas?"
+  correctAnswer: "S\xEDntesis de prote\xEDnas"
   wrongAnswers:
-  - "Gl\xF3bulo blanco"
-  - Plaqueta
-  - Neurona
+  - "Producci\xF3n de energ\xEDa"
+  - "Almacenamiento de l\xEDpidos"
+  - Transporte celular
   difficulty: 2
   subject: 1

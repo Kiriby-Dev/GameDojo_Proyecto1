@@ -13,8 +13,7 @@ public class UIManager : MonoBehaviour
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
     public TextMeshProUGUI discardText;
-    public Canvas winCanvas;
-    public Canvas loseCanvas;
+    public Canvas gameOverCanvas;
     public Canvas boardCanvas;
     public Canvas battleCanvas;
     public Canvas gameCanvas;
@@ -28,8 +27,9 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI playerDefense;
     public TextMeshProUGUI playerFightAttackText;
     public TextMeshProUGUI playerFightDefenseText;
-    
-    [Header("Enemy Stats")]
+
+    [Header("Enemy Stats")] 
+    public TextMeshProUGUI enemyName;
     public TextMeshProUGUI enemyAttackText;
     public TextMeshProUGUI enemyDefenseText;
     public TextMeshProUGUI enemyFightAttackText;
@@ -62,8 +62,9 @@ public class UIManager : MonoBehaviour
     public void ResetVisuals()
     {
         ResetBoardCardsColor();
-        winCanvas.gameObject.SetActive(false);
-        loseCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Win", false);
+        gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", false);
         boardCanvas.gameObject.SetActive(false);
         battleCanvas.gameObject.SetActive(false);
         playerAttack.text = "0";
@@ -91,6 +92,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateEnemyName(QuestionData.Subject subject)
+    {
+        switch (subject)
+        {
+            case QuestionData.Subject.History:
+                enemyName.text = "Srta. Anecdota";
+                break;
+            case QuestionData.Subject.Geography:
+                enemyName.text = "Srta. Brujula";
+                break;
+            case QuestionData.Subject.Entertainment:
+                enemyName.text = "Sr. Trailer";
+                break;
+            case QuestionData.Subject.Science:
+                enemyName.text = "Dr. Chispa";
+                break;
+            case QuestionData.Subject.Principal:
+                enemyName.text = "Dir. Sabelotodo";
+                break;
+        }
+    }
+
     public void UpdateDiscardText(int actualPoints, int neededPoints)
     {
         discardText.text = actualPoints+ "/" + neededPoints;
@@ -98,10 +121,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateGameOverCanvas(bool win)
     {
+        gameOverCanvas.gameObject.SetActive(true);
         if (win)
-            winCanvas.gameObject.SetActive(true);
+            gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Win", true);
         else
-            loseCanvas.gameObject.SetActive(true);
+            gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", true);
+            
     }
 
     public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
@@ -131,6 +156,9 @@ public class UIManager : MonoBehaviour
                         break;
                     case QuestionData.Subject.Geography:
                         levelTexts[level].text = "Geografia";
+                        break;
+                    case QuestionData.Subject.Principal:
+                        levelTexts[level].text = "Director";
                         break;
                 }
                 break;

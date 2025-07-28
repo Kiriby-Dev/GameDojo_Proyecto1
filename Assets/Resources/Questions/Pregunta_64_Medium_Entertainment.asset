@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_64_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQui\xE9n canta la canci\xF3n \u201CShape of You\u201D?"
-  correctAnswer: Ed Sheeran
+  question: "\xBFEn qu\xE9 serie aparece el personaje Once?"
+  correctAnswer: Stranger Things
   wrongAnswers:
-  - Justin Bieber
-  - Shawn Mendes
-  - Harry Styles
+  - The Umbrella Academy
+  - Dark
+  - The 100
   difficulty: 1
   subject: 2

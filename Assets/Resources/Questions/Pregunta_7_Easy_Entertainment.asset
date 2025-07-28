@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_7_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 serie aparece el personaje Eleven?"
-  correctAnswer: Stranger Things
+  question: "\xBFQu\xE9 pel\xEDcula de Pixar trata sobre emociones que viven dentro
+    de la mente de una ni\xF1a?"
+  correctAnswer: Intensamente
   wrongAnswers:
-  - The Umbrella Academy
-  - Dark
-  - The 100
+  - Soul
+  - Coco
+  - Up
   difficulty: 0
   subject: 2

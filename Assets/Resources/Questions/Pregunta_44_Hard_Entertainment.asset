@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_44_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 consola introdujo el juego \u201CThe Legend of Zelda: Breath
-    of the Wild\u201D?"
-  correctAnswer: Nintendo Switch
+  question: "\xBFCu\xE1l es el apellido de los hermanos en la serie \u201CStranger
+    Things\u201D?"
+  correctAnswer: Byers
   wrongAnswers:
-  - Nintendo Wii
-  - Nintendo DS
-  - GameCube
+  - Cooper
+  - Harrington
+  - Wheeler
   difficulty: 2
   subject: 2

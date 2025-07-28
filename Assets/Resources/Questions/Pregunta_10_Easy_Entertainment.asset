@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_10_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 videojuego incluye criaturas llamadas Creepers?"
-  correctAnswer: Minecraft
+  question: "\xBFCu\xE1l de estos videojuegos es un simulador de vida?"
+  correctAnswer: The Sims
   wrongAnswers:
-  - Terraria
-  - Roblox
-  - Fortnite
+  - Call of Duty
+  - Skyrim
+  - Rocket League
   difficulty: 0
   subject: 2

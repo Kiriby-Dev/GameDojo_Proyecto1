@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -14,12 +15,18 @@ public class LevelsManager : MonoBehaviour
     private QuestionData.Subject _actualSubject;
 
     private List<QuestionData.Subject> _subjects = new List<QuestionData.Subject>();
+    private Enemy _enemy;
     
     public enum State
     {
         Able,
         Blocked,
         Approved
+    }
+
+    private void Awake()
+    {
+        _enemy = gameManager.GetEnemy();
     }
 
     private void Start()
@@ -41,15 +48,51 @@ public class LevelsManager : MonoBehaviour
 
     private void ChooseRandomSubject()
     {
+        if (_actualSubject == QuestionData.Subject.Principal)
+        {
+            WinGame();
+        }
+        
         if (_subjects.Count == 0)
         {
-            Debug.LogWarning("No hay más materias disponibles para elegir.");
+            BossBattle();
             return;
         }
 
         int index = Random.Range(0, _subjects.Count);
         _actualSubject = _subjects[index];
+        gameManager.GetUIManager().UpdateEnemyName(_actualSubject);
         _subjects.RemoveAt(index);
+    }
+
+    private void BossBattle()
+    {
+        _actualSubject = QuestionData.Subject.Principal;
+        gameManager.GetUIManager().UpdateEnemyName(QuestionData.Subject.Principal);
+    }
+
+    private void WinGame()
+    {
+        gameManager.GetUIManager().UpdateGameOverCanvas(true);
+    }
+
+    public void SelectLevelDifficulty()
+    {
+        switch (_subjects.Count)
+        {
+            case 0:
+                _enemy.GenerateStats(2, 4, 2, 4);
+                break;
+            case 1:
+                _enemy.GenerateStats(2, 3, 2, 3);
+                break;
+            case 2:
+                _enemy.GenerateStats(1, 3, 1, 3);
+                break;
+            case 3:
+                _enemy.GenerateStats(1, 2, 1, 2);
+                break;
+        }
     }
 
     public void AdvanceLevel()

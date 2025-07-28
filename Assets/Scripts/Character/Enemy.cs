@@ -2,13 +2,7 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    [Header("Stats")] 
-    public int maxAttack;
-    public int minAttack;
-    public int maxDefense;
-    public int minDefense;
-    
-    public void GenerateStats()
+    public void GenerateStats(int minAttack, int maxAttack, int minDefense, int maxDefense)
     {
         CurrentAttack = Random.Range(minAttack, maxAttack + 1);
         CurrentDefense = Random.Range(minDefense, maxDefense + 1);

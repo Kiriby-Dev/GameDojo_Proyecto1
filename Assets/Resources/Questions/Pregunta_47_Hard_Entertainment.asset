@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_47_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula gan\xF3 el Oscar a Mejor Pel\xEDcula en 2023?"
-  correctAnswer: Everything Everywhere All at Once
+  question: "\xBFQu\xE9 compa\xF1\xEDa desarroll\xF3 el videojuego The Witcher 3:
+    Wild Hunt?"
+  correctAnswer: CD Projekt RED
   wrongAnswers:
-  - The Fabelmans
-  - Elvis
-  - 'Avatar: The Way of Water'
+  - Bethesda
+  - Bioware
+  - Ubisoft
   difficulty: 2
   subject: 2

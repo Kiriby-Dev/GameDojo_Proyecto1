@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_298_Easy_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 c\xE9lula detecta los est\xEDmulos externos?"
-  correctAnswer: Neurona sensorial
+  question: "\xBFCu\xE1l es la funci\xF3n del ADN?"
+  correctAnswer: "Almacenar informaci\xF3n gen\xE9tica"
   wrongAnswers:
-  - "Gl\xF3bulo blanco"
-  - Osteocito
-  - Plaqueta
+  - "Romper prote\xEDnas"
+  - "Crear energ\xEDa"
+  - Regular la temperatura
   difficulty: 0
   subject: 1

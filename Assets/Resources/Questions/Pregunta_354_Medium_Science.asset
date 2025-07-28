@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_354_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 planeta es el m\xE1s grande del sistema solar?"
-  correctAnswer: "J\xFApiter"
+  question: "\xBFQu\xE9 compuesto se forma al combinar sodio y cloro?"
+  correctAnswer: "Sal com\xFAn"
   wrongAnswers:
-  - Saturno
-  - Neptuno
-  - Urano
+  - Agua salada
+  - "\xC1cido clorh\xEDdrico"
+  - Cloruro de potasio
   difficulty: 1
   subject: 1

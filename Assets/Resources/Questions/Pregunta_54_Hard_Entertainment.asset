@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_54_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 director es conocido por pel\xEDculas como Inception y Interstellar?"
-  correctAnswer: Christopher Nolan
+  question: "\"\xBFQu\xE9 serie de televisi\xF3n est\xE1 ambientada en un bar llamado
+    \"\"MacLaren's\"\"?\""
+  correctAnswer: How I Met Your Mother
   wrongAnswers:
-  - Ridley Scott
-  - James Cameron
-  - Denis Villeneuve
+  - Friends
+  - The Office
+  - Seinfeld
   difficulty: 2
   subject: 2

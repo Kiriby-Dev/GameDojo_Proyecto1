@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_52_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es el nombre real de la cantante conocida como Shakira?"
-  correctAnswer: Shakira Isabel Mebarak Ripoll
+  question: "\"\xBFQu\xE9 saga de videojuegos se basa en criaturas llamadas \"\"Heartless\"\"?\""
+  correctAnswer: Kingdom Hearts
   wrongAnswers:
-  - Shakira Luz Marina Ortiz
-  - Isabel Shakira Restrepo
-  - "M\xF3nica Shakira P\xE9rez"
+  - Final Fantasy
+  - Ni No Kuni
+  - Chrono Trigger
   difficulty: 2
   subject: 2

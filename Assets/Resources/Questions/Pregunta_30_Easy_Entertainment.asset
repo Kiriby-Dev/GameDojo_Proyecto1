@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_30_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula animada tiene como protagonistas a emociones
-    como Alegr\xEDa y Tristeza?"
-  correctAnswer: Intensamente
+  question: "\"\xBFQu\xE9 cantante es conocida como \"\"La Reina del Pop\"\"?\""
+  correctAnswer: Madonna
   wrongAnswers:
-  - Red
-  - Soul
-  - "Del rev\xE9s"
+  - Britney Spears
+  - Lady Gaga
+  - Rihanna
   difficulty: 0
   subject: 2

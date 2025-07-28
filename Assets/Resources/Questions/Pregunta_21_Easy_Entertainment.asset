@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_21_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFEn qu\xE9 videojuego se usa una \u201Cpok\xE9bola\u201D?"
-  correctAnswer: "Pok\xE9mon"
+  question: "\xBFEn qu\xE9 pel\xEDcula aparece el personaje de Jack Sparrow?"
+  correctAnswer: Piratas del Caribe
   wrongAnswers:
-  - Digimon
-  - Monster Hunter
-  - Yu-Gi-Oh!
+  - Titanic
+  - "El N\xE1ufrago"
+  - El Llanero Solitario
   difficulty: 0
   subject: 2

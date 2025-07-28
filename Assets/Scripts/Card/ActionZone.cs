@@ -16,6 +16,7 @@ public class ActionZone : MonoBehaviour
     private bool _isDropping;
     private bool _activeZone;
     private Animator _animator;
+    private PhaseManager.GamePhase _currentPhase;
 
     private void Awake()
     {
@@ -44,9 +45,9 @@ public class ActionZone : MonoBehaviour
         if(_cantCardsInZone >= _cardsInZone.Length || !_isDropping || !_selectedCard || !_selectedCard.gameObject) return;
         _activeZone = false;
         
-        var currentPhase = gameManager.GetPhaseManager().CurrentPhase;
+        _currentPhase = gameManager.GetPhaseManager().CurrentPhase;
 
-        switch (currentPhase)
+        switch (_currentPhase)
         {
             case PhaseManager.GamePhase.Discard:
                 if (zoneType == ZoneType.Discard)
@@ -102,11 +103,19 @@ public class ActionZone : MonoBehaviour
     {
         _activeZone = true;
         _selectedCard = other.gameObject.GetComponentInParent<Card>();
+        _currentPhase = gameManager.GetPhaseManager().CurrentPhase;
+        
+        /*if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
+        {
+            _selectedCard.ToggleAnimator(true);
+            _selectedCard.PlayDiscardAnimation();
+        }*/
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         _activeZone = false;
+        //_selectedCard.ToggleAnimator(false);
     }
 
     #region Utilities

@@ -201,5 +201,13 @@ public class PlayersHand : MonoBehaviour
         StartCoroutine(MoveCardToPositionCoroutine(card, targetPosition, duration));
     }
 
+    public void DisableCardsInteraction(bool value)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).transform.GetChild(0).GetComponent<Card>().DisableInteraction(value);
+        }
+    }
+
     #endregion
 }

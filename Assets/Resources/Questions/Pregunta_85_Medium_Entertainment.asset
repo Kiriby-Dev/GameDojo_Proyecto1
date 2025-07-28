@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_85_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 cantante populariz\xF3 la canci\xF3n \u201CBad Romance\u201D?"
-  correctAnswer: Lady Gaga
+  question: "\xBFQu\xE9 cantante es conocido por su alter ego \u201CSlim Shady\u201D?"
+  correctAnswer: Eminem
   wrongAnswers:
-  - Rihanna
-  - Madonna
-  - Britney Spears
+  - Drake
+  - Jay-Z
+  - Kanye West
   difficulty: 1
   subject: 2

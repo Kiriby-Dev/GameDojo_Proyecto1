@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_285_Easy_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 planeta tiene un gran sistema de anillos?"
-  correctAnswer: Saturno
+  question: "\xBFQu\xE9 cient\xEDfico formul\xF3 la ley de la gravitaci\xF3n universal?"
+  correctAnswer: Isaac Newton
   wrongAnswers:
-  - Neptuno
-  - "J\xFApiter"
-  - Venus
+  - Albert Einstein
+  - Johannes Kepler
+  - James Clerk Maxwell
   difficulty: 0
   subject: 1

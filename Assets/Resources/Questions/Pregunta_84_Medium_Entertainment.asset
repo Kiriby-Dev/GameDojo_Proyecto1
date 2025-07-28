@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_84_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 serie animada sigue las aventuras de Aang?"
-  correctAnswer: Avatar
+  question: "\xBFQu\xE9 videojuego popularizado por Epic Games es un battle royale?"
+  correctAnswer: Fortnite
   wrongAnswers:
-  - Naruto
-  - Dragon Ball
-  - One Piece
+  - Apex Legends
+  - PUBG
+  - 'Call of Duty: Warzone'
   difficulty: 1
   subject: 2

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_79_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l de estos juegos es de estrategia en tiempo real?"
-  correctAnswer: Age of Empires
+  question: "\xBFQu\xE9 serie animada presenta a un cient\xEDfico loco y su nieto
+    viajando por el multiverso?"
+  correctAnswer: Rick and Morty
   wrongAnswers:
-  - Doom
-  - FIFA
-  - Grand Theft Auto
+  - Futurama
+  - Solar Opposites
+  - Gravity Falls
   difficulty: 1
   subject: 2

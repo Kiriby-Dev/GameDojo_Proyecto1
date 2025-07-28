@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_92_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFQu\xE9 artista lanz\xF3 el \xE1lbum \"\"Motomami\"\"?\""
-  correctAnswer: "Rosal\xEDa"
+  question: "\xBFCu\xE1l de estos personajes NO pertenece al universo de The Legend
+    of Zelda?"
+  correctAnswer: Kirby
   wrongAnswers:
-  - Karol G
-  - Nathy Peluso
-  - Bad Gyal
+  - Link
+  - Ganondorf
+  - Zelda
   difficulty: 1
   subject: 2

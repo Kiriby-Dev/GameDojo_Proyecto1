@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -108,6 +110,19 @@ public class QuestionManager : MonoBehaviour
     private void SelectQuestion(int difficulty)
     {
         QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
+        
+        if (subject == QuestionData.Subject.Principal)
+        {
+            // Obtener todos los valores posibles del enum
+            var values = Enum.GetValues(typeof(QuestionData.Subject)).Cast<QuestionData.Subject>().ToList();
+
+            // Eliminar el valor 'Principal'
+            values.Remove(QuestionData.Subject.Principal);
+
+            // Elegir uno al azar
+            subject = values[Random.Range(0, values.Count)];
+        }
+                
         List<QuestionData> listToUse = null;
 
         switch (subject)

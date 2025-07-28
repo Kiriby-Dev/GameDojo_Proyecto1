@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_93_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFEn qu\xE9 videojuego es com\xFAn construir portales al \"\"Nether\"\"?\""
-  correctAnswer: Minecraft
+  question: "\"\xBFQu\xE9 artista lanz\xF3 el \xE1lbum \"\"Motomami\"\"?\""
+  correctAnswer: "Rosal\xEDa"
   wrongAnswers:
-  - Terraria
-  - Skyrim
-  - 'Ark: Survival Evolved'
+  - Karol G
+  - Nathy Peluso
+  - Bad Gyal
   difficulty: 1
   subject: 2

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_360_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 \xF3rgano produce bilis?"
-  correctAnswer: "H\xEDgado"
+  question: "\xBFQu\xE9 tipo de energ\xEDa se libera en una reacci\xF3n de combusti\xF3n?"
+  correctAnswer: "Energ\xEDa t\xE9rmica"
   wrongAnswers:
-  - "P\xE1ncreas"
-  - "Est\xF3mago"
-  - "Ri\xF1\xF3n"
+  - "Energ\xEDa el\xE9ctrica"
+  - "Energ\xEDa nuclear"
+  - "Energ\xEDa potencial"
   difficulty: 1
   subject: 1

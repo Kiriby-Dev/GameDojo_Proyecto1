@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_317_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 unidad mide la resistencia el\xE9ctrica?"
-  correctAnswer: Ohmio
+  question: "\xBFQu\xE9 tipo de roca se forma por enfriamiento del magma?"
+  correctAnswer: "\xCDgnea"
   wrongAnswers:
-  - Voltio
-  - Amperio
-  - Julio
+  - Sedimentaria
+  - "Metam\xF3rfica"
+  - Caliza
   difficulty: 2
   subject: 1

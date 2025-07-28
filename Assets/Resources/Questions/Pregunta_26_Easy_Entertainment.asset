@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_26_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 serie popular comienza con un grupo de cient\xEDficos en
-    Pasadena?"
-  correctAnswer: The Big Bang Theory
+  question: "\xBFEn qu\xE9 videojuego deb\xE9s eliminar impostores en una nave espacial?"
+  correctAnswer: Among Us
   wrongAnswers:
-  - Silicon Valley
-  - How I Met Your Mother
-  - Community
+  - No Man's Sky
+  - Dead Space
+  - Outer Wilds
   difficulty: 0
   subject: 2

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_11_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFQui\xE9n canta el tema \"\"Blinding Lights\"\"?\""
-  correctAnswer: The Weeknd
+  question: "\xBFQu\xE9 pel\xEDcula animada tiene como protagonista a un robot que
+    limpia basura en la Tierra?"
+  correctAnswer: "WALL\xB7E"
   wrongAnswers:
-  - Bruno Mars
-  - Shawn Mendes
-  - Post Malone
+  - Big Hero 6
+  - Robots
+  - Astro Boy
   difficulty: 0
   subject: 2

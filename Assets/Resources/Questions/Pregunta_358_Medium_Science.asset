@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_358_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 elemento es fundamental para la combusti\xF3n?"
-  correctAnswer: "Ox\xEDgeno"
+  question: "\xBFQu\xE9 gas es un contaminante atmosf\xE9rico principal?"
+  correctAnswer: "Di\xF3xido de carbono"
   wrongAnswers:
-  - "Nitr\xF3geno"
-  - "Hidr\xF3geno"
-  - Carbono
+  - "Arg\xF3n"
+  - Helio
+  - "Ne\xF3n"
   difficulty: 1
   subject: 1

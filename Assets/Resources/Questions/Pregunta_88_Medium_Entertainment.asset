@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_88_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula dirigida por James Cameron fue la m\xE1s taquillera
-    del mundo por a\xF1os?"
-  correctAnswer: Avatar
+  question: "\xBFQu\xE9 cantante populariz\xF3 la canci\xF3n \u201CBad Romance\u201D?"
+  correctAnswer: Lady Gaga
   wrongAnswers:
-  - Titanic
-  - 'Avengers: Endgame'
-  - Jurassic World
+  - Rihanna
+  - Madonna
+  - Britney Spears
   difficulty: 1
   subject: 2

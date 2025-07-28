@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_323_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 \xE1cido se encuentra en el est\xF3mago?"
-  correctAnswer: "\xC1cido clorh\xEDdrico"
+  question: "\xBFQu\xE9 \xF3rgano produce bilis?"
+  correctAnswer: "H\xEDgado"
   wrongAnswers:
-  - "\xC1cido sulf\xFArico"
-  - "\xC1cido ac\xE9tico"
-  - "\xC1cido l\xE1ctico"
+  - "P\xE1ncreas"
+  - "Est\xF3mago"
+  - "Ri\xF1\xF3n"
   difficulty: 2
   subject: 1

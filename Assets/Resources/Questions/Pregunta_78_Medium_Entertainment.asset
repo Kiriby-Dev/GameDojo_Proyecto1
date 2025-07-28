@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_78_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es el nombre del protagonista de la saga Uncharted?"
-  correctAnswer: Nathan Drake
+  question: "\xBFQu\xE9 saga de pel\xEDculas tiene como protagonista a un arque\xF3logo?"
+  correctAnswer: Indiana Jones
   wrongAnswers:
-  - Joel Miller
-  - Ezio Auditore
-  - Marcus Fenix
+  - "Misi\xF3n Imposible"
+  - Sherlock Holmes
+  - Tomb Raider
   difficulty: 1
   subject: 2

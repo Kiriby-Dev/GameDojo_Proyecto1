@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_56_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula cuenta la historia de una inteligencia artificial
-    llamada HAL 9000?"
-  correctAnswer: '2001: Odisea del espacio'
+  question: "\"\xBFQu\xE9 grupo musical lanz\xF3 el \xE1lbum \"\"Dark Side of the
+    Moon\"\"?\""
+  correctAnswer: Pink Floyd
   wrongAnswers:
-  - Blade Runner
-  - Her
-  - Ex Machina
+  - The Beatles
+  - Queen
+  - Led Zeppelin
   difficulty: 2
   subject: 2

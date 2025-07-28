@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_76_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 videojuego de terror se centra en una pizzer\xEDa con animatr\xF3nicos?"
-  correctAnswer: "Five Nights at Freddy\u2019s"
+  question: "\xBFQui\xE9n es el creador de la saga de libros que inspir\xF3 Game
+    of Thrones?"
+  correctAnswer: George R. R. Martin
   wrongAnswers:
-  - Silent Hill
-  - Resident Evil
-  - Little Nightmares
+  - J. R. R. Tolkien
+  - Stephen King
+  - J. K. Rowling
   difficulty: 1
   subject: 2

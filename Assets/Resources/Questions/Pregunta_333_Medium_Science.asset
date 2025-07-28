@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_333_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 part\xEDcula subat\xF3mica tiene carga positiva?"
-  correctAnswer: "Prot\xF3n"
+  question: "\xBFQu\xE9 estructura celular contiene al ADN?"
+  correctAnswer: "El n\xFAcleo"
   wrongAnswers:
-  - "Electr\xF3n"
-  - "Neutr\xF3n"
-  - Quark
+  - El citoplasma
+  - La membrana
+  - "El ret\xEDculo endoplasm\xE1tico"
   difficulty: 1
   subject: 1

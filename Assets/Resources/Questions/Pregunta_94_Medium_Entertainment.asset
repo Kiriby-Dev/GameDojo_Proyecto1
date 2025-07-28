@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_94_Medium_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFQu\xE9 cantante es apodado \"\"La Voz\"\"?\""
-  correctAnswer: Luis Miguel
+  question: "\"\xBFEn qu\xE9 videojuego es com\xFAn construir portales al \"\"Nether\"\"?\""
+  correctAnswer: Minecraft
   wrongAnswers:
-  - "Alejandro Fern\xE1ndez"
-  - Ricky Martin
-  - Marc Anthony
+  - Terraria
+  - Skyrim
+  - 'Ark: Survival Evolved'
   difficulty: 1
   subject: 2

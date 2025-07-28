@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_42_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFQu\xE9 cantante lanz\xF3 el \xE1lbum \"\"25\"\"?\""
-  correctAnswer: Adele
+  question: "\xBFEn qu\xE9 a\xF1o se estren\xF3 la primera pel\xEDcula de \u201CJurassic
+    Park\u201D?"
+  correctAnswer: 1993
   wrongAnswers:
-  - Taylor Swift
-  - "Beyonc\xE9"
-  - Lorde
+  - 1997
+  - 1989
+  - 2001
   difficulty: 2
   subject: 2

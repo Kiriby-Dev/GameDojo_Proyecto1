@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_49_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 director es conocido por pel\xEDculas como Pulp Fiction y
-    Kill Bill?"
-  correctAnswer: Quentin Tarantino
+  question: "\xBFCu\xE1l es el nombre real de la cantante conocida como Shakira?"
+  correctAnswer: Shakira Isabel Mebarak Ripoll
   wrongAnswers:
-  - Martin Scorsese
-  - Christopher Nolan
-  - Steven Spielberg
+  - Shakira Luz Marina Ortiz
+  - Isabel Shakira Restrepo
+  - "M\xF3nica Shakira P\xE9rez"
   difficulty: 2
   subject: 2

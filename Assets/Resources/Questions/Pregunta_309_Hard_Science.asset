@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_309_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 parte del ojo percibe la luz?"
-  correctAnswer: La retina
+  question: "\xBFQu\xE9 es una enzima?"
+  correctAnswer: "Una prote\xEDna que acelera reacciones qu\xEDmicas"
   wrongAnswers:
-  - "La c\xF3rnea"
-  - El cristalino
-  - El iris
+  - "Un tipo de az\xFAcar"
+  - "Un \xE1cido graso"
+  - "Un gl\xF3bulo blanco"
   difficulty: 2
   subject: 1

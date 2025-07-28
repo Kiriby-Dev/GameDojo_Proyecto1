@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_350_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 tipo de c\xE9lula combate infecciones?"
-  correctAnswer: "Gl\xF3bulo blanco"
+  question: "\xBFQu\xE9 elemento es l\xEDquido a temperatura ambiente?"
+  correctAnswer: Mercurio
   wrongAnswers:
-  - "Gl\xF3bulo rojo"
-  - Plaqueta
-  - Neurona
+  - Aluminio
+  - Plomo
+  - Cobre
   difficulty: 1
   subject: 1

@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_303_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 tipo de enlace une los \xE1tomos en una mol\xE9cula de ox\xEDgeno
-    (O\u2082)?"
-  correctAnswer: Enlace covalente
+  question: "\xBFQui\xE9n descubri\xF3 la penicilina?"
+  correctAnswer: Alexander Fleming
   wrongAnswers:
-  - "Enlace i\xF3nico"
-  - "Puente de hidr\xF3geno"
-  - "Enlace met\xE1lico"
+  - Louis Pasteur
+  - Robert Koch
+  - Gregor Mendel
   difficulty: 2
   subject: 1

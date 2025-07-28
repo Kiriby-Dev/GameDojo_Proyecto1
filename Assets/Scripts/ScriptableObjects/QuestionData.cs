@@ -10,7 +10,8 @@ public class QuestionData : ScriptableObject
         History,
         Science,
         Entertainment,
-        Geography
+        Geography,
+        Principal
     }
 
     public string question;

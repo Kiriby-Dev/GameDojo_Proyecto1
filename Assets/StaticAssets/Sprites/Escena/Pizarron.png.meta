@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pizarron_0: -2458537908201503961
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

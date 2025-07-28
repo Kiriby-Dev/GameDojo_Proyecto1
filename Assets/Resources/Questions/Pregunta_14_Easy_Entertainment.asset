@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_14_Easy_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 pel\xEDcula animada de Disney tiene una princesa llamada
-    Elsa?"
-  correctAnswer: Frozen
+  question: "\xBFQu\xE9 cantante lanz\xF3 el tema \u201CFlowers\u201D en 2023?"
+  correctAnswer: Miley Cyrus
   wrongAnswers:
-  - Valiente
-  - Enredados
-  - Moana
+  - Ariana Grande
+  - Dua Lipa
+  - Katy Perry
   difficulty: 0
   subject: 2

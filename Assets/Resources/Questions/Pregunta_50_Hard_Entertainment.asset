@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_50_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 consola port\xE1til fue lanzada por Nintendo en 1989?"
-  correctAnswer: Game Boy
+  question: "\xBFQu\xE9 consola sucedi\xF3 a la Nintendo 64?"
+  correctAnswer: GameCube
   wrongAnswers:
-  - Game Gear
-  - PSP
-  - DS Lite
+  - Wii
+  - NES
+  - Switch
   difficulty: 2
   subject: 2

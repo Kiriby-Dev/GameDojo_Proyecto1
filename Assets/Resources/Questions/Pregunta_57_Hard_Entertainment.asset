@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_57_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\"\xBFQu\xE9 serie de televisi\xF3n est\xE1 ambientada en un bar llamado
-    \"\"MacLaren's\"\"?\""
-  correctAnswer: How I Met Your Mother
+  question: "\"\xBFQu\xE9 videojuego de \"\"Pok\xE9mon\"\" sali\xF3 en la consola
+    Game Boy?\""
+  correctAnswer: "Pok\xE9mon Red y Blue"
   wrongAnswers:
-  - Friends
-  - The Office
-  - Seinfeld
+  - "Pok\xE9mon Sol y Luna"
+  - "Pok\xE9mon Rub\xED y Zafiro"
+  - "Pok\xE9mon Escarlata y P\xFArpura"
   difficulty: 2
   subject: 2

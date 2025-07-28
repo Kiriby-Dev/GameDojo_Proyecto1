@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_355_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 tejido conecta m\xFAsculos con huesos?"
-  correctAnswer: "Tend\xF3n"
+  question: "\xBFQu\xE9 propiedad describe el volumen que ocupa un cuerpo?"
+  correctAnswer: Densidad
   wrongAnswers:
-  - Ligamento
-  - "Cart\xEDlago"
-  - Nervio
+  - Masa
+  - Temperatura
+  - Velocidad
   difficulty: 1
   subject: 1

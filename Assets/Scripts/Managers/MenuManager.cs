@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class MenuManager : MonoBehaviour
     public Canvas canvasLevelsMenu;
     public Canvas canvasOptions;
     public Canvas canvasTutorial;
+
+    public TextMeshProUGUI buttonText;
     
     private TransitionManager _transitionManager;
     private AudioManager _audioManager;
@@ -59,6 +62,7 @@ public class MenuManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         game.SetActive(false);
+        buttonText.text = "Reanudar";
         canvasMenu.enabled = false;
         canvasLevelsMenu.enabled = true;
         
@@ -67,7 +71,6 @@ public class MenuManager : MonoBehaviour
     
     private IEnumerator MenuCoroutine()
     {
-        gameManager.ToggleFreeze(1);
         yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
@@ -82,12 +85,12 @@ public class MenuManager : MonoBehaviour
     
     private IEnumerator MenuLevelsCoroutine()
     {
-        gameManager.ToggleFreeze(1);
         yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
         
         gameManager.EndGame();
+        buttonText.text = "Tutorial";
         game.SetActive(false);
         DisableAllCanvas();
         canvasLevelsMenu.enabled = true;
@@ -97,7 +100,6 @@ public class MenuManager : MonoBehaviour
     
     private IEnumerator TutorialCoroutine()
     {
-        gameManager.ToggleFreeze(1);
         yield return new WaitForSeconds(0.5f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(1f);
@@ -146,9 +148,24 @@ public class MenuManager : MonoBehaviour
 
     public void TutorialButton()
     {
+        if (canvasMenu.isActiveAndEnabled)
+        {
+            StartCoroutine(TutorialCoroutine());
+            buttonText.text = "Tutorial";
+        }
+        else
+        {
+            gameManager.Pause();
+            buttonText.text = "Reanudar";
+        }
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
+    }
+
+    public void HelpButton()
+    {
         StartCoroutine(TutorialCoroutine());
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
-    
+
     #endregion
 }

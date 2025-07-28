@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_334_Medium_Science
   m_EditorClassIdentifier: 
-  question: "\xBFQu\xE9 elemento tiene el s\xEDmbolo 'Na'?"
-  correctAnswer: Sodio
+  question: "\xBFQu\xE9 part\xEDcula subat\xF3mica tiene carga positiva?"
+  correctAnswer: "Prot\xF3n"
   wrongAnswers:
-  - "Nitr\xF3geno"
-  - "Ne\xF3n"
-  - "N\xEDquel"
+  - "Electr\xF3n"
+  - "Neutr\xF3n"
+  - Quark
   difficulty: 1
   subject: 1

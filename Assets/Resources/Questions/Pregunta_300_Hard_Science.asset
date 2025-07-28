@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_300_Hard_Science
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es el gas m\xE1s abundante en la atm\xF3sfera terrestre?"
-  correctAnswer: "Nitr\xF3geno"
+  question: "\xBFQu\xE9 unidad se utiliza para medir la intensidad de corriente el\xE9ctrica?"
+  correctAnswer: Amperio
   wrongAnswers:
-  - "Ox\xEDgeno"
-  - "Di\xF3xido de carbono"
-  - "Arg\xF3n"
+  - Voltio
+  - Ohmio
+  - Watt
   difficulty: 2
   subject: 1

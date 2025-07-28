@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
   m_Name: Pregunta_45_Hard_Entertainment
   m_EditorClassIdentifier: 
-  question: "\xBFCu\xE1l es el apellido de los hermanos en la serie \u201CStranger
-    Things\u201D?"
-  correctAnswer: Byers
+  question: "\xBFQui\xE9n fue el creador del videojuego Super Mario Bros.?"
+  correctAnswer: Shigeru Miyamoto
   wrongAnswers:
-  - Cooper
-  - Harrington
-  - Wheeler
+  - Hideo Kojima
+  - Satoru Iwata
+  - Ken Kutaragi
   difficulty: 2
   subject: 2
