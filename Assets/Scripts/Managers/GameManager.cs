@@ -19,8 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject card;
     public GameObject player;
     public GameObject enemy;
-    public GameObject playerFight;
-    public GameObject enemyFight;
+    
     
     [Header("ActionZones")]
     public ActionZone discardZone;
@@ -28,8 +27,6 @@ public class GameManager : MonoBehaviour
     public ActionZone defenseZone;
     public ActionZone cardsZone;
     
-    [Header("Config")]
-    public int[] neededPoints;
     
     private int _cantCardsInHand;
     private int _actualBoardcard;
@@ -39,14 +36,8 @@ public class GameManager : MonoBehaviour
     private ActionZone.ZoneType[] _cardTypes;
     private Player _playerScript;
     private Enemy _enemyScript;
-    private Player _playerFightScript;
-    private Enemy _enemyFightScript;
     private int _cardTypesIndex = 0;
-    private Animator _playerFightAnimator;
-    private Animator _enemyFightAnimator;
-    private int _index;
-    private int _actualPoints;
-    private bool _isFull;
+    
     private bool _isPaused = false;
     private bool _turnEnded = false;
 
@@ -55,18 +46,11 @@ public class GameManager : MonoBehaviour
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
         _playerScript = player.GetComponent<Player>();
         _enemyScript = enemy.GetComponent<Enemy>();
-        _playerFightAnimator = playerFight.GetComponent<Animator>();
-        _enemyFightAnimator = enemyFight.GetComponent<Animator>();
-        _playerFightScript = playerFight.GetComponent<Player>();
-        _enemyFightScript = enemyFight.GetComponent<Enemy>();
     }
 
     private void Start()
     {
         _cardTypes = new ActionZone.ZoneType[3];
-        _isFull = false;
-        _actualPoints = 0;
-        _index = 0;
     }
 
     private void Update()
@@ -76,9 +60,6 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Escape))
             Pause();
-        
-        if (!_isFull) return;
-        ResetPoints();
     }
 
     public void Pause()
@@ -93,30 +74,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void UpdatePoints(int value)
-    {
-        if (!_isFull)
-        {
-            _actualPoints += value;
-            if (_actualPoints >= neededPoints[_index])
-            {
-                _actualPoints = neededPoints[_index];
-                _isFull = true;
-            }
-            uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
-        }
-    }
     
-    private void ResetPoints()
-    {
-        _actualPoints = 0;
-        _isFull = false;
-        _index++;
-        uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
-        _playerScript.HealCharacter(3);
-        _playerFightScript.HealCharacterFight(3);
-        audioManager.PlayAudio(AudioManager.AudioList.Heal);
-    }
     
     #region GameLoop
     public void StartGame()
@@ -336,46 +294,7 @@ public class GameManager : MonoBehaviour
     }
     
     //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
-    public IEnumerator ResolveCombat()
-    {
-        int damageDealed = _enemyScript.GetDefense() - _playerScript.GetAttack();
-        int damageTaken = _playerScript.GetDefense() - _enemyScript.GetAttack();
-        
-        _playerFightAnimator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.35f);
-        if (damageDealed < 0)
-        {
-            _enemyScript.TakeDamage(damageDealed);
-            enemyFight.GetComponent<Enemy>().TakeDamage(damageDealed);
-            _enemyFightAnimator.SetTrigger("Hurt");
-            audioManager.PlayAudio(AudioManager.AudioList.Attack);
-        }
-        else
-        {
-            _enemyFightAnimator.SetTrigger("BlockAttack");
-            audioManager.PlayAudio(AudioManager.AudioList.Blocked);
-        }
-        yield return new WaitForSeconds(2f);
-
-        if (!_enemyScript.IsDead())
-        {
-            _enemyFightAnimator.SetTrigger("Attack");
-            yield return new WaitForSeconds(0.35f);
-            if (damageTaken < 0)
-            {
-                _playerScript.TakeDamage(damageTaken);
-                playerFight.GetComponent<Player>().TakeDamage(damageTaken);
-                _playerFightAnimator.SetTrigger("Hurt");
-                audioManager.PlayAudio(AudioManager.AudioList.Attack);
-            }
-            else
-            {
-                _playerFightAnimator.SetTrigger("BlockAttack");
-                audioManager.PlayAudio(AudioManager.AudioList.Blocked);
-            }
-            yield return new WaitForSeconds(2f);
-        }
-    }
+    
     #endregion
     
     #region Getters

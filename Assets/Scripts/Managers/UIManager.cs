@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,33 +8,20 @@ using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Config")]
     public GameManager gameManager;
+
+    [Header("Config")] 
     
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
-    public TextMeshProUGUI discardText;
     public Canvas gameOverCanvas;
     public Canvas boardCanvas;
     public Canvas battleCanvas;
     public Canvas gameCanvas;
     
-    [Header("Player Stats On Board")]
-    public TextMeshProUGUI playerAttackText;
-    public TextMeshProUGUI playerDefenseText;
-    
-    [Header("Player Stats")]
-    public TextMeshProUGUI playerAttack;
-    public TextMeshProUGUI playerDefense;
-    public TextMeshProUGUI playerFightAttackText;
-    public TextMeshProUGUI playerFightDefenseText;
-
-    [Header("Enemy Stats")] 
-    public TextMeshProUGUI enemyName;
-    public TextMeshProUGUI enemyAttackText;
-    public TextMeshProUGUI enemyDefenseText;
-    public TextMeshProUGUI enemyFightAttackText;
-    public TextMeshProUGUI enemyFightDefenseText;
+    [Header("Board")]
+    [SerializeField] private TextMeshProUGUI boardAttackText;
+    [SerializeField] private TextMeshProUGUI boardDefenseText;
     
     [Header("Question")]
     public TextMeshProUGUI questionText;
@@ -54,6 +42,16 @@ public class UIManager : MonoBehaviour
     
     private TransitionManager _transitionManager;
 
+    private void OnEnable()
+    {
+        Player.OnPlayerStatsChanged += UpdateBoardStats;
+    }
+
+    private void OnDisable()
+    {
+        Player.OnPlayerStatsChanged -= UpdateBoardStats;
+    }
+
     private void Start()
     {
         _transitionManager = gameManager.GetTransitionManager();
@@ -67,8 +65,6 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", false);
         boardCanvas.gameObject.SetActive(false);
         battleCanvas.gameObject.SetActive(false);
-        playerAttack.text = "0";
-        playerDefense.text = "0";
         questionText.text = "";
         answerText1.text = "";
         answerText2.text = "";
@@ -92,33 +88,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateEnemyName(QuestionData.Subject subject)
-    {
-        switch (subject)
-        {
-            case QuestionData.Subject.History:
-                enemyName.text = "Srta. Anecdota";
-                break;
-            case QuestionData.Subject.Geography:
-                enemyName.text = "Srta. Brujula";
-                break;
-            case QuestionData.Subject.Entertainment:
-                enemyName.text = "Sr. Trailer";
-                break;
-            case QuestionData.Subject.Science:
-                enemyName.text = "Dr. Chispa";
-                break;
-            case QuestionData.Subject.Principal:
-                enemyName.text = "Dir. Sabelotodo";
-                break;
-        }
-    }
-
-    public void UpdateDiscardText(int actualPoints, int neededPoints)
-    {
-        discardText.text = actualPoints+ "/" + neededPoints;
-    }
-
     public void UpdateGameOverCanvas(bool win)
     {
         gameOverCanvas.gameObject.SetActive(true);
@@ -127,6 +96,12 @@ public class UIManager : MonoBehaviour
         else
             gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", true);
             
+    }
+
+    private void UpdateBoardStats(int currentAttack, int currentDefense)
+    {
+        boardAttackText.text = currentAttack.ToString();
+        boardDefenseText.text = currentDefense.ToString();
     }
 
     public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
@@ -163,27 +138,6 @@ public class UIManager : MonoBehaviour
                 }
                 break;
                 
-        }
-    }
-
-    public void UpdateStats(int currentAttack, int currentDefense, string character)
-    {
-        switch (character)
-        {
-            case "Player":
-                playerAttack.text = currentAttack.ToString();
-                playerDefense.text = currentDefense.ToString();
-                playerAttackText.text = currentAttack.ToString();
-                playerDefenseText.text = currentDefense.ToString();
-                playerFightAttackText.text = currentAttack.ToString();
-                playerFightDefenseText.text = currentDefense.ToString();
-                break;
-            case "Enemy":
-                enemyAttackText.text = currentAttack.ToString();
-                enemyDefenseText.text = currentDefense.ToString();
-                enemyFightAttackText.text = currentAttack.ToString();
-                enemyFightDefenseText.text = currentDefense.ToString();
-                break;
         }
     }
 
@@ -269,10 +223,6 @@ public class UIManager : MonoBehaviour
         
         boardCanvas.gameObject.SetActive(false);
         battleCanvas.gameObject.SetActive(true);
-        playerFightAttackText.text = playerAttackText.text;
-        playerFightDefenseText.text = playerDefenseText.text;
-        enemyFightAttackText.text = enemyAttackText.text;
-        enemyFightDefenseText.text = enemyDefenseText.text;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
@@ -286,8 +236,6 @@ public class UIManager : MonoBehaviour
         
         ToggleUIItems(false);
         battleCanvas.gameObject.SetActive(false);
-        playerAttack.text = playerAttackText.text;
-        playerDefense.text = playerDefenseText.text;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);

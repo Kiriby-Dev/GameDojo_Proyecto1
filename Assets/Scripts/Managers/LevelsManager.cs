@@ -10,12 +10,22 @@ public class LevelsManager : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] Button[] levelsButtons;
     
-    private State[] _levels = new State[5];
-    private int _currentLevel = 0;
-    private QuestionData.Subject _actualSubject;
+    [Header("Config")]
+    [SerializeField] int cantLevels;
+    [SerializeField] private StatsRange firstSubject;
+    [SerializeField] private StatsRange secondSubject;
+    [SerializeField] private StatsRange thirdSubject;
+    [SerializeField] private StatsRange boss;
 
-    private List<QuestionData.Subject> _subjects = new List<QuestionData.Subject>();
+    private State[] _levels;
+    private List<QuestionData.Subject> _subjects;
+    private QuestionData.Subject _actualSubject;
+    
+    private int _currentLevel = 0;
+    
     private Enemy _enemy;
+    
+    public static event Action<QuestionData.Subject> OnSubjectChosen;
     
     public enum State
     {
@@ -23,36 +33,30 @@ public class LevelsManager : MonoBehaviour
         Blocked,
         Approved
     }
+    
+    [System.Serializable]
+    public class StatsRange
+    {
+        public int minAttack;
+        public int maxAttack;
+        public int minDefense;
+        public int maxDefense;
+    }
 
     private void Awake()
     {
+        _levels = new State[cantLevels];
         _enemy = gameManager.GetEnemy();
     }
 
     private void Start()
     {
-        InitializeSubjectList();
-        InitializeLevelsState();
-        _levels[_currentLevel] = State.Able;
+        Reset();
         UpdateLevelsButtons();
-        DisableBlockedLevels();
-    }
-
-    private void InitializeSubjectList()
-    {
-        _subjects.Add(QuestionData.Subject.History);
-        _subjects.Add(QuestionData.Subject.Science);
-        _subjects.Add(QuestionData.Subject.Entertainment);
-        _subjects.Add(QuestionData.Subject.Geography);
     }
 
     private void ChooseRandomSubject()
     {
-        if (_actualSubject == QuestionData.Subject.Principal)
-        {
-            WinGame();
-        }
-        
         if (_subjects.Count == 0)
         {
             BossBattle();
@@ -61,44 +65,47 @@ public class LevelsManager : MonoBehaviour
 
         int index = Random.Range(0, _subjects.Count);
         _actualSubject = _subjects[index];
-        gameManager.GetUIManager().UpdateEnemyName(_actualSubject);
+        OnSubjectChosen?.Invoke(_actualSubject);
         _subjects.RemoveAt(index);
     }
 
     private void BossBattle()
     {
         _actualSubject = QuestionData.Subject.Principal;
-        gameManager.GetUIManager().UpdateEnemyName(QuestionData.Subject.Principal);
-    }
-
-    private void WinGame()
-    {
-        gameManager.GetUIManager().UpdateGameOverCanvas(true);
+        OnSubjectChosen?.Invoke(_actualSubject);
     }
 
     public void SelectLevelDifficulty()
     {
+        StatsRange stats = null;
+        
         switch (_subjects.Count)
         {
             case 0:
-                _enemy.GenerateStats(2, 4, 2, 4);
+                stats = boss;
                 break;
             case 1:
-                _enemy.GenerateStats(2, 3, 2, 3);
+                stats = thirdSubject;
                 break;
             case 2:
-                _enemy.GenerateStats(1, 3, 1, 3);
+                stats = secondSubject;
                 break;
             case 3:
-                _enemy.GenerateStats(1, 2, 1, 2);
+                stats = firstSubject;
                 break;
         }
+        
+        if (stats != null)
+            _enemy.GenerateStats(stats.minAttack, stats.maxAttack, stats.minDefense, stats.maxDefense);
     }
 
     public void AdvanceLevel()
     {
         _levels[_currentLevel] = State.Approved;
         _currentLevel++;
+        
+        ChooseRandomSubject();
+        
         if (_currentLevel < _levels.Length)
         {
             _levels[_currentLevel] = State.Able;
@@ -109,30 +116,48 @@ public class LevelsManager : MonoBehaviour
 
     private void UpdateLevelsButtons()
     {
-        ChooseRandomSubject();
         for (int i = 0; i < _levels.Length; i++)
         {
             State level = _levels[i]; 
             gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject);
         }
     }
-    
-    private void DisableBlockedLevels()
-    {
-        for (int i = 0; i < _levels.Length; i++)
-        {
-            if (_levels[i] == State.Blocked)
-                levelsButtons[i].interactable = false;
-        }
-    }
 
+    #region Utilities
     private void InitializeLevelsState()
     {
         for (int i = 0; i < _levels.Length; i++)
         {
             _levels[i] = State.Blocked;
+            levelsButtons[i].interactable = false;
         }
     }
     
+    private void InitializeSubjectList()
+    {
+        _subjects = new List<QuestionData.Subject>();
+        
+        _subjects.Add(QuestionData.Subject.History);
+        _subjects.Add(QuestionData.Subject.Science);
+        _subjects.Add(QuestionData.Subject.Entertainment);
+        _subjects.Add(QuestionData.Subject.Geography);
+    }
+
+    private void Reset()
+    {
+        _currentLevel = 0;
+        InitializeLevelsState();
+        InitializeSubjectList();
+        
+        ChooseRandomSubject();
+        _levels[_currentLevel] = State.Able;
+        levelsButtons[_currentLevel].interactable = true;
+    }
+
+    #endregion
+
+    #region Getters
     public QuestionData.Subject GetActualSubject() => _actualSubject;
+    #endregion
+    
 }

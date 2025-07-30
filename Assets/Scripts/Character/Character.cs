@@ -1,12 +1,19 @@
+using System;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
     public GameManager gameManager;
     
+    protected HPBar _hpBar;
     protected int CurrentAttack;
     protected int CurrentDefense;
-    protected HPBar _hpBar;
+    
+    public enum CharacterType
+    {
+        Player,
+        Enemy
+    }
     
     public void Awake()
     {

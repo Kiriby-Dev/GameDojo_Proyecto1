@@ -991,6 +991,7 @@ GameObject:
   - component: {fileID: 7731790932185954386}
   - component: {fileID: 3054103850659156600}
   - component: {fileID: 6361103452527479697}
+  - component: {fileID: 1794027200490005056}
   - component: {fileID: 822336610566039309}
   m_Layer: 5
   m_Name: EnemyFight
@@ -1074,10 +1075,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
-  maxAttack: 3
-  minAttack: 1
-  maxDefense: 3
-  minDefense: 1
+--- !u!114 &1794027200490005056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7873209784950652237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c99b1e7baf84a49905e8579153443d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyName: {fileID: 0}
+  enemySprite: {fileID: 3054103850659156600}
+  enemySprites:
+  - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
+  - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
+  - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
+  - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
+  - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
+  enemyDialogs: []
+  enemyAttackText: {fileID: 3594460392598294310}
+  enemyDefenseText: {fileID: 5007341234943614636}
 --- !u!95 &822336610566039309
 Animator:
   serializedVersion: 7

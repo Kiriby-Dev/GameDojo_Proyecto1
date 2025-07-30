@@ -16,7 +16,7 @@ public class HPBar : MonoBehaviour
     private int _currentHp;
     private float _targetFill;
     private bool _isDead;
-    private bool _takesDamage;
+    private bool _healthChanged;
 
     private void Start()
     {
@@ -27,32 +27,36 @@ public class HPBar : MonoBehaviour
 
     private void Update()
     {
-        if (_isDead)
-        {
-            imageBar.fillAmount = Mathf.Lerp(imageBar.fillAmount, 0, hpBarSpeed * Time.deltaTime);
-            textBar.text = 0 + "/" + maxHp;
-        }
-        
-        if (!_takesDamage || _isDead) return;
-        
+        if (!_healthChanged) return;
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
         imageBar.fillAmount = Mathf.Lerp(imageBar.fillAmount, _targetFill, hpBarSpeed * Time.deltaTime);
         textBar.text = _currentHp + "/" + maxHp;
+        
+        if (Mathf.Abs(imageBar.fillAmount - _targetFill) < 0.001f)
+        {
+            imageBar.fillAmount = _targetFill; // Fuerza el valor exacto
+            _healthChanged = false;
+        }
     }
 
     public void Damage(int damage)
     {
         if (_isDead) return;
         
-        _takesDamage = true;
         _currentHp -= damage;
 
         if (_currentHp <= 0)
         {
             _isDead = true;
-            return;
+            _currentHp = 0;
         }
         
         _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);
+        _healthChanged = true;
     }
 
     public void Heal(int heal)
@@ -60,21 +64,7 @@ public class HPBar : MonoBehaviour
         if (_isDead) return;
         _currentHp += heal;
         _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);
-    }
-
-    public int GetCurrentHp()
-    {
-        return _currentHp;
-    }
-
-    public int GetMaxHp()
-    {
-        return maxHp;
-    }
-
-    public bool IsDead()
-    {
-        return _isDead;
+        _healthChanged = true;
     }
 
     public void RestoreAllLife()
@@ -82,6 +72,13 @@ public class HPBar : MonoBehaviour
         _isDead = false;
         _currentHp = maxHp;
         imageBar.fillAmount = 1f;
-        _targetFill = 1F;
+        _targetFill = 1f;
+        _healthChanged = true;
     }
+
+    #region Getters
+    public int GetCurrentHp() => _currentHp;
+    public int GetMaxHp() => maxHp;
+    public bool IsDead() => _isDead;
+    #endregion
 }
