@@ -16,6 +16,7 @@ public class AudioManager : MonoBehaviour
         CardColocation,
         Discard,
         Heal,
+        Hurt
     }
 
     [SerializeField] private List<AudioClip> audioClips;

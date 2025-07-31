@@ -170,17 +170,15 @@ MonoBehaviour:
   menuManager: {fileID: 1365974838}
   audioManager: {fileID: 735759343}
   levelsManager: {fileID: 672463619}
+  combatManager: {fileID: 1225224949}
   playersHand: {fileID: 1960863513}
   card: {fileID: 3110436283706915347, guid: 632b8d8320d42914a93363d201b04360, type: 3}
   player: {fileID: 1022910758}
   enemy: {fileID: 761867408}
-  playerFight: {fileID: 8646906087022797111}
-  enemyFight: {fileID: 4148875959023355125}
   discardZone: {fileID: 1768564638}
   attackZone: {fileID: 1127105426}
   defenseZone: {fileID: 609977973}
   cardsZone: {fileID: 416686411}
-  neededPoints: 0a0000000f00000014000000190000001b0000001e00000020000000210000002200000023000000
 --- !u!1 &23774910
 GameObject:
   m_ObjectHideFlags: 0
@@ -9202,6 +9200,7 @@ Transform:
   - {fileID: 1365974837}
   - {fileID: 735759342}
   - {fileID: 587267886}
+  - {fileID: 1225224948}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1173623273
@@ -9662,6 +9661,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222787880}
   m_CullTransparentMesh: 1
+--- !u!1 &1225224947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1225224948}
+  - component: {fileID: 1225224949}
+  m_Layer: 0
+  m_Name: CombatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1225224948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225224947}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1142276263}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1225224949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225224947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffc4dd3e4793ed45ab3c0f62830a1fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 21674069}
+  playerFight: {fileID: 9061123370481805463}
+  enemyFight: {fileID: 4148875959023355126}
 --- !u!1 &1228809618
 GameObject:
   m_ObjectHideFlags: 0
@@ -11109,7 +11155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 21674069}
   phaseText: {fileID: 686052633}
-  discardText: {fileID: 1264615176}
   gameOverCanvas: {fileID: 1963665388}
   boardCanvas: {fileID: 1190802649}
   battleCanvas: {fileID: 107840906}
@@ -13297,6 +13342,7 @@ GameObject:
   - component: {fileID: 1768564636}
   - component: {fileID: 1768564635}
   - component: {fileID: 1768564638}
+  - component: {fileID: 1768564640}
   - component: {fileID: 1768564639}
   m_Layer: 0
   m_Name: Discard
@@ -13432,6 +13478,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1768564640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768564633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b0a50b5ab25dc43931387493b1be16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neededPoints: 0a0000000f0000001400000019000000
+  healValue: 3
+  discardText: {fileID: 1264615176}
 --- !u!1 &1776013843
 GameObject:
   m_ObjectHideFlags: 0
@@ -16558,9 +16619,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3afa918781ffbff4fa4df9673f0f1080, type: 3}
---- !u!1 &4148875959023355125 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7873209784950652237, guid: bc5dc9c0bddab8b4499404b558e2cad7, type: 3}
+--- !u!95 &4148875959023355126 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 822336610566039309, guid: bc5dc9c0bddab8b4499404b558e2cad7, type: 3}
   m_PrefabInstance: {fileID: 7571032797605315036}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &4359943378148135564 stripped

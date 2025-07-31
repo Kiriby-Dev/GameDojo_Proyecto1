@@ -87,7 +87,7 @@ public class PhaseManager : MonoBehaviour
     private IEnumerator ResolutionPhase()
     {
         yield return gameManager.GetUIManager().BattleMode();
-        yield return gameManager.ResolveCombat();
+        yield return gameManager.GetCombatManager().ResolveCombat();
         yield return gameManager.GetUIManager().NormalMode();
         gameManager.ResetVariables();
         gameManager.EndTurn(true);

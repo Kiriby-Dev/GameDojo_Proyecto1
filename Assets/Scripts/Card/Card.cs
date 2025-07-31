@@ -18,8 +18,8 @@ public class Card : MonoBehaviour
     [SerializeField] private SpriteRenderer shadowSprite;
     [SerializeField] private ParticleSystem chalkEffect;
     
-    public float returnSpeed;
-    public Canvas textCanvas;
+    [SerializeField] private float returnSpeed;
+    [SerializeField] private Canvas textCanvas;
 
     public enum CardSprites
     {
@@ -48,6 +48,7 @@ public class Card : MonoBehaviour
     
     private Vector3 _lastMousePosition;
     private float _currentRotationZ;
+    private TextMeshProUGUI _cardDifficulty;
     
     private Camera _camera;
     private GameManager _gameManager;
@@ -60,6 +61,7 @@ public class Card : MonoBehaviour
         _gameManager = FindAnyObjectByType<GameManager>();
         _playersHand = _gameManager.GetPlayersHand();
         _animator = GetComponent<Animator>();
+        _cardDifficulty = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Update()
@@ -166,9 +168,8 @@ public class Card : MonoBehaviour
 
     public int GenerateCardValue()
     {
-        TextMeshProUGUI cardText = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
         int number = Random.Range(1,4);
-        cardText.text = "+" + number;
+        _cardDifficulty.text = "+" + number;
         return number;
     }
 
@@ -207,7 +208,12 @@ public class Card : MonoBehaviour
     {
         return transform.parent.GetSiblingIndex();
     }
-    
+
+    public int GetCardDifficulty()
+    {
+        return int.Parse(_cardDifficulty.text);
+    }
+
     private void LerpRotation(float targetRotationZ)
     {
         // Suavizar rotación actual hacia 0

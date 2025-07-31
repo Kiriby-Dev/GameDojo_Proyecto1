@@ -15,15 +15,22 @@ public class DiscardPoints : MonoBehaviour
     private int _actualPoints;
     private bool _isFull;
 
+    public static event Action<int> OnFullPoints;
+
     private void Awake()
     {
         ActionZone.OnDiscard += UpdatePoints;
     }
 
+    private void Start()
+    {
+        UpdatePoints();
+    }
+
     private void Update()
     {
         if (!_isFull) return;
-        ResetPoints();
+        AdvanceNeededPoints();
     }
 
     private void UpdatePoints(int value = 0)
@@ -35,19 +42,18 @@ public class DiscardPoints : MonoBehaviour
             {
                 _actualPoints = neededPoints[_index];
                 _isFull = true;
+                OnFullPoints?.Invoke(healValue);
             }
             discardText.text = _actualPoints + "/" + neededPoints[_index];
         }
     }
     
-    private void ResetPoints()
+    private void AdvanceNeededPoints()
     {
         _actualPoints = 0;
         _isFull = false;
         _index++;
         UpdatePoints();
-        OnPlayerHealthChanged?.Invoke(healValue);
-        _audioManager.PlayAudio(AudioManager.AudioList.Heal);
     }
     
     public void Reset()

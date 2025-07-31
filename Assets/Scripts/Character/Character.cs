@@ -15,14 +15,15 @@ public class Character : MonoBehaviour
         Enemy
     }
     
-    public void Awake()
+    protected virtual void Awake()
     {
         _hpBar = GetComponentInChildren<HPBar>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
     
-    public void TakeDamage(int value)
+    protected void TakeDamage(int value)
     {
-        _hpBar.Damage(-1 * value);
+        _hpBar.Damage(Mathf.Abs(value));
     }
 
     public void ResetLife()
@@ -34,9 +35,4 @@ public class Character : MonoBehaviour
     {
         return _hpBar.IsDead();
     }
-
-    #region Getters
-    public int GetAttack() => CurrentAttack;
-    public int GetDefense() => CurrentDefense;
-    #endregion
 }

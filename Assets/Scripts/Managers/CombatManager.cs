@@ -16,6 +16,7 @@ public class CombatManager : MonoBehaviour
     private int _enemyDefense;
     private int _damageDealt;
     private int _damageTaken;
+    private bool _enemyIsDead;
     
     private AudioManager _audioManager;
 
@@ -33,25 +34,8 @@ public class CombatManager : MonoBehaviour
     {
         Player.OnPlayerStatsChanged += PlayerStats;
         Enemy.OnEnemyStatsChanged += EnemyStats;
+        Enemy.OnEnemyDeath += EnemyIsDead;
         _audioManager = gameManager.GetAudioManager();
-    }
-
-    private void PlayerStats(int currentAttack, int currentDefense)
-    {
-        _playerAttack = currentAttack;
-        _playerDefense = currentDefense;
-    }
-    
-    private void EnemyStats(int currentAttack, int currentDefense)
-    {
-        _enemyAttack = currentAttack;
-        _enemyDefense = currentDefense;
-    }
-
-    private void CalculateDamage()
-    {
-        _damageDealt = _playerAttack - _enemyDefense;
-        _damageTaken = _enemyAttack - _playerDefense;
     }
 
     public IEnumerator ResolveCombat()
@@ -61,31 +45,34 @@ public class CombatManager : MonoBehaviour
         DoAction(Character.CharacterType.Player, Actions.Attack);
         yield return new WaitForSeconds(0.35f);
         
-        if (_damageDealt > 0)
-        {
-            OnEnemyHealthChanged?.Invoke(_damageDealt);
-            DoAction(Character.CharacterType.Enemy, Actions.Hurt);
-        }
-        else
-            DoAction(Character.CharacterType.Enemy, Actions.BlockAttack);
+        ManageReaction(_damageDealt, Character.CharacterType.Enemy);
         
         yield return new WaitForSeconds(2f);
 
-        if (!_enemyScript.IsDead())
+        if (!_enemyIsDead)
         {
             DoAction(Character.CharacterType.Enemy, Actions.Attack);
             yield return new WaitForSeconds(0.35f);
             
-            if (_damageTaken > 0)
-            {
-                OnPlayerHealthChanged?.Invoke(_damageTaken);
-                DoAction(Character.CharacterType.Player, Actions.Hurt);
-            }
-            else
-                DoAction(Character.CharacterType.Player, Actions.BlockAttack);
+            ManageReaction(_damageTaken, Character.CharacterType.Player);
             
             yield return new WaitForSeconds(2f);
         }
+    }
+
+    private void ManageReaction(int damage, Character.CharacterType characterType)
+    {
+        if (damage < 0)
+        {
+            if (characterType == Character.CharacterType.Player)
+                OnPlayerHealthChanged?.Invoke(damage);
+            else
+                OnEnemyHealthChanged?.Invoke(damage);
+            
+            DoAction(characterType, Actions.Hurt);
+        }
+        else
+            DoAction(characterType, Actions.BlockAttack);
     }
 
     private void DoAction(Character.CharacterType characterType, Actions action)
@@ -105,8 +92,38 @@ public class CombatManager : MonoBehaviour
                 _audioManager.PlayAudio(AudioManager.AudioList.Blocked);
                 break;
             case Actions.Hurt:
-                _audioManager.PlayAudio(AudioManager.AudioList.Heal);
+                _audioManager.PlayAudio(AudioManager.AudioList.Hurt);
                 break;
         }
     }
+
+    #region Utilities
+    private void EnemyIsDead()
+    {
+        _enemyIsDead = true;
+    }
+
+    private void PlayerStats(int currentAttack, int currentDefense)
+    {
+        _playerAttack = currentAttack;
+        _playerDefense = currentDefense;
+    }
+    
+    private void EnemyStats(int currentAttack, int currentDefense)
+    {
+        _enemyAttack = currentAttack;
+        _enemyDefense = currentDefense;
+    }
+
+    private void CalculateDamage()
+    {
+        _damageDealt = _enemyDefense - _playerAttack;
+        _damageTaken = _playerDefense - _enemyAttack;
+    }
+    
+    public void Reset()
+    {
+        _enemyIsDead = false;
+    }
+    #endregion
 }

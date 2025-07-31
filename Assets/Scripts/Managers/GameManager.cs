@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [Header("Managers")]
-    public QuestionManager questionManager;
-    public PhaseManager phaseManager;
-    public UIManager uiManager;
-    public TransitionManager transitionManager;
-    public MenuManager menuManager;
-    public AudioManager audioManager;
-    public LevelsManager levelsManager;
+    [SerializeField] private QuestionManager questionManager;
+    [SerializeField] private PhaseManager phaseManager;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private TransitionManager transitionManager;
+    [SerializeField] private MenuManager menuManager;
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private LevelsManager levelsManager;
+    [SerializeField] private CombatManager combatManager;
     
     [Header("Game Objects")]
     public GameObject playersHand;
@@ -83,7 +84,6 @@ public class GameManager : MonoBehaviour
         _gameOver = false;
         _turnEnded = false;
         ResetVariables();
-        uiManager.UpdateDiscardText(_actualPoints, neededPoints[_index]);
         phaseManager.StartPhases();
     }
     
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
         _gameStarted = false;
         _cantCardsInHand = 0;
         _enemyScript.ResetLife();
-        _enemyFightScript.ResetLife();
+        //_enemyFightScript.ResetLife();
         for (int i = 0; i < playersHand.transform.childCount; i++)
         {
             Transform slot = playersHand.transform.GetChild(i);
@@ -304,6 +304,7 @@ public class GameManager : MonoBehaviour
     public TransitionManager GetTransitionManager() => transitionManager;
     public AudioManager GetAudioManager() => audioManager;
     public LevelsManager GetLevelsManager() => levelsManager;
+    public CombatManager GetCombatManager() => combatManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;

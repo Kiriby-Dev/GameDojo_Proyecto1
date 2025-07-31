@@ -18,6 +18,8 @@ public class ActionZone : MonoBehaviour
     private Animator _animator;
     private PhaseManager.GamePhase _currentPhase;
 
+    public static event Action<int> OnDiscard;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -51,30 +53,34 @@ public class ActionZone : MonoBehaviour
         {
             case PhaseManager.GamePhase.Discard:
                 if (zoneType == ZoneType.Discard)
-                {
-                    Destroy(_selectedCard.gameObject);
-                    gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
-                    gameManager.UpdatePoints(int.Parse(_selectedCard.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1)));
-                    DisableSlotAndRemoveCard();
-                }
+                    DiscardCard();
                 break;
 
             case PhaseManager.GamePhase.Colocation:
-                DisableSlotAndRemoveCard();
                 AddCardInZone();
-                gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
                 break;
         }
     }
 
+    private void DiscardCard()
+    {
+        OnDiscard?.Invoke(_selectedCard.GetCardDifficulty());
+        Destroy(_selectedCard.gameObject);
+        DisableSlotAndRemoveCard();
+        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
+    }
+
     private void DisableSlotAndRemoveCard()
     {
-        gameManager.GetPlayersHand().DisableSlot(_selectedCard.transform.parent.GetSiblingIndex());
+        int slot = _selectedCard.transform.parent.GetSiblingIndex();
+        gameManager.GetPlayersHand().DisableSlot(slot);
         gameManager.RemoveCardFromHand();
     }
 
     private void AddCardInZone()
     {
+        DisableSlotAndRemoveCard();
+        
         switch (zoneType)
         {
             case ZoneType.Attack: 
@@ -84,10 +90,14 @@ public class ActionZone : MonoBehaviour
                 _selectedCard.ChangeSprite(Card.CardSprites.Defense);
                 break;
         }
-        _selectedCard.PutCardInSlot(_cardsInZone[_cantCardsInZone].transform);
+
+        Transform slot = _cardsInZone[_cantCardsInZone].transform;
+        _selectedCard.PutCardInSlot(slot);
+        
         CopyCardToBoard();
         _cantCardsInZone++;
         gameManager.SaveCardType(zoneType);
+        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
     }
 
     private void CopyCardToBoard()

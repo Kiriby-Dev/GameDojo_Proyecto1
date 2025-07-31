@@ -6,6 +6,20 @@ public class Player : Character
 {
     public static event Action<int, int> OnPlayerStatsChanged;
 
+    protected override void Awake()
+    {
+        base.Awake(); // Llama al Awake de Character
+        
+        DiscardPoints.OnFullPoints += HealCharacter;
+        CombatManager.OnPlayerHealthChanged += ChangeLife;
+    }
+
+    private void OnDestroy()
+    {
+        DiscardPoints.OnFullPoints -= HealCharacter;
+        CombatManager.OnPlayerHealthChanged -= ChangeLife;
+    }
+
     //Le añade ataque o defensa al jugador con el valor correspondiente.
     public void AddStats(ActionZone.ZoneType cardType, int value)
     {
@@ -39,8 +53,17 @@ public class Player : Character
         CurrentDefense += value;
         OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }
+
+    private void ChangeLife(int value)
+    {
+        Debug.Log($"[Player] ChangeLife called with value: {value}");
+        if (value < 0)
+            TakeDamage(value);
+        else
+            HealCharacter(value);
+    }
     
-    public void HealCharacter(int value)
+    private void HealCharacter(int value)
     {
         int maxHp = _hpBar.GetMaxHp();
         int currentHp = _hpBar.GetCurrentHp();
@@ -54,6 +77,7 @@ public class Player : Character
         {
             _hpBar.Heal(value);
         }
+        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Heal);
     }
     
     #endregion
