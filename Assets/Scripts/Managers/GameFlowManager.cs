@@ -1,0 +1,108 @@
+using System;
+using UnityEngine;
+
+public class GameFlowManager : MonoBehaviour
+{
+    public static event Action OnGameStarted;
+    public static event Action OnGameEnded;
+    public static event Action<bool> OnGamePaused;
+    public static event Action OnLevelStart;
+    public static event Action OnLevelOver; // bool: true si ganamos
+
+    [SerializeField] private GameManager gameManager;
+    
+    private bool _gameStarted;
+    private bool _subjectOver;
+    private bool _isPaused;
+    
+    private AudioManager _audioManager;
+    private MenuManager _menuManager;
+
+    private void Awake()
+    {
+        Player.OnDeath += TriggerDefeat;
+        Enemy.OnDeath += TriggerVictory;
+        MenuButton.OnLevelButtonClicked += StartLevel;
+    }
+
+    private void OnDestroy()
+    {
+        Player.OnDeath -= TriggerDefeat;
+        Enemy.OnDeath -= TriggerVictory;
+        MenuButton.OnLevelButtonClicked -= StartLevel;
+    }
+
+    private void Start()
+    {
+        _audioManager = gameManager.GetAudioManager();
+        _menuManager = gameManager.GetMenuManager();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Pause();
+    }
+
+    public void StartGame()
+    {
+        _gameStarted = !_gameStarted;
+        OnGameStarted?.Invoke();
+    }
+    
+    public void StartLevel()
+    {
+        _subjectOver = false;
+        OnLevelStart?.Invoke();
+    }
+
+    public void EndGame()
+    {
+        OnGameEnded?.Invoke();
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
+        Application.Quit();
+    }
+    
+    public void Pause()
+    {
+        _isPaused = !_isPaused;
+        OnGamePaused?.Invoke(_isPaused);
+    }
+
+    private void TriggerLevelVictory()
+    {
+        if (_subjectOver) return;
+
+        _subjectOver = true;
+        OnLevelOver?.Invoke();
+        
+        gameManager.GetLevelsManager().AdvanceLevel();
+        _menuManager.MenuLevelsButton();
+        _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
+    }
+
+    private void TriggerVictory()
+    {
+        if (_subjectOver) return;
+        
+        _subjectOver = true;
+        OnGameEnded?.Invoke();
+        
+        _menuManager.GameOver(true);
+        _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
+    }
+
+    private void TriggerDefeat()
+    {
+        if (_subjectOver) return;
+
+        _subjectOver = true;
+        OnLevelOver?.Invoke();
+        OnGameEnded?.Invoke();
+        
+        _menuManager.GameOver(false);
+        _audioManager.PlayAudio(AudioManager.AudioList.GameOver);
+    }
+
+    public bool IsGameRunning() => _gameStarted && !_subjectOver;
+}

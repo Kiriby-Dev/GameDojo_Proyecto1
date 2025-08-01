@@ -6,8 +6,9 @@ using Random = UnityEngine.Random;
 
 public class LevelsManager : MonoBehaviour
 {
-    [SerializeField] GameManager gameManager;
-    [SerializeField] Button[] levelsButtons;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject levelButtonPrefab;
+    [SerializeField] private GameObject levelsContainer;
     
     [Header("Config")]
     [SerializeField] int cantLevels;
@@ -17,6 +18,7 @@ public class LevelsManager : MonoBehaviour
     [SerializeField] private StatsRange boss;
 
     private State[] _levels;
+    private Button[] _levelsButtons;
     private List<QuestionData.Subject> _subjects;
     private QuestionData.Subject _actualSubject;
     
@@ -44,14 +46,40 @@ public class LevelsManager : MonoBehaviour
 
     private void Awake()
     {
+        GameFlowManager.OnLevelStart += SelectLevelDifficulty;
+        
         _levels = new State[cantLevels];
         _enemy = gameManager.GetEnemy();
     }
 
+    private void OnDestroy()
+    {
+        GameFlowManager.OnLevelStart -= SelectLevelDifficulty;
+    }
+
     private void Start()
     {
+        InitializeLevels();
+    }
+
+    private void InitializeLevels()
+    {
+        InstantiateLevels();
         Reset();
         UpdateLevelsButtons();
+    }
+
+    private void InstantiateLevels()
+    {
+        _levelsButtons = new Button[cantLevels];
+        for (int i = 0; i < cantLevels; i++)
+        {
+            GameObject level = Instantiate(levelButtonPrefab, levelsContainer.transform);
+            Button levelButton = level.GetComponentInChildren<Button>();
+            _levelsButtons[i] = levelButton;
+            _levelsButtons[i].interactable = false;
+            _levels[i] = State.Blocked;
+        }
     }
 
     private void ChooseRandomSubject()
@@ -74,7 +102,7 @@ public class LevelsManager : MonoBehaviour
         OnSubjectChosen?.Invoke(_actualSubject);
     }
 
-    public void SelectLevelDifficulty()
+    private void SelectLevelDifficulty()
     {
         StatsRange stats = null;
         
@@ -108,7 +136,7 @@ public class LevelsManager : MonoBehaviour
         if (_currentLevel < _levels.Length)
         {
             _levels[_currentLevel] = State.Able;
-            levelsButtons[_currentLevel].interactable = true;
+            _levelsButtons[_currentLevel].interactable = true;
         }
         UpdateLevelsButtons();
     }
@@ -118,20 +146,11 @@ public class LevelsManager : MonoBehaviour
         for (int i = 0; i < _levels.Length; i++)
         {
             State level = _levels[i]; 
-            gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject);
+            //gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject);
         }
     }
 
     #region Utilities
-    private void InitializeLevelsState()
-    {
-        for (int i = 0; i < _levels.Length; i++)
-        {
-            _levels[i] = State.Blocked;
-            levelsButtons[i].interactable = false;
-        }
-    }
-    
     private void InitializeSubjectList()
     {
         _subjects = new List<QuestionData.Subject>();
@@ -145,12 +164,11 @@ public class LevelsManager : MonoBehaviour
     private void Reset()
     {
         _currentLevel = 0;
-        InitializeLevelsState();
         InitializeSubjectList();
         
         ChooseRandomSubject();
         _levels[_currentLevel] = State.Able;
-        levelsButtons[_currentLevel].interactable = true;
+        _levelsButtons[_currentLevel].interactable = true;
     }
 
     #endregion

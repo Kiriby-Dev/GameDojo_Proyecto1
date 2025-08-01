@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +9,17 @@ public class PhaseManager : MonoBehaviour
     
     private GamePhase _currentPhase;
 
-    public void StartPhases()
+    private void Awake()
+    {
+        GameFlowManager.OnLevelStart += StartPhases;
+    }
+
+    private void OnDestroy()
+    {
+        GameFlowManager.OnLevelStart -= StartPhases;
+    }
+
+    private void StartPhases()
     {
         CurrentPhase = GamePhase.Draw;
         AdvancePhase();
@@ -16,7 +27,6 @@ public class PhaseManager : MonoBehaviour
     
     private void AdvancePhase()
     {
-        if (gameManager.IsGameOver()) return;
         StartCoroutine(ExecutePhase());
     }
     
@@ -57,9 +67,7 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator DrawPhase()
     {
-        gameManager.EndTurn(false);
-        gameManager.DrawCards();
-        gameManager.GetPlayersHand().Recalculate();
+        gameManager.GetPlayersHand().DrawCards();
         yield return new WaitForSeconds(0.5f);
     }
     
@@ -67,14 +75,14 @@ public class PhaseManager : MonoBehaviour
     {
         gameManager.UpdateZones(_currentPhase.ToString());
         gameManager.GetDiscardZone().ToggleLightAnimation();
-        yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 3);
+        yield return new WaitUntil(() => gameManager.GetPlayersHand().CantCardsInHand() <= 3);
     }
     
     private IEnumerator ColocationPhase()
     {
         gameManager.UpdateZones(_currentPhase.ToString());
         gameManager.GetDiscardZone().ToggleLightAnimation();
-        yield return new WaitUntil(() => gameManager.CantCardsInHand() <= 0);
+        yield return new WaitUntil(() => gameManager.GetPlayersHand().CantCardsInHand() <= 0);
     }
 
     private IEnumerator QuestionsPhase()
@@ -89,8 +97,7 @@ public class PhaseManager : MonoBehaviour
         yield return gameManager.GetUIManager().BattleMode();
         yield return gameManager.GetCombatManager().ResolveCombat();
         yield return gameManager.GetUIManager().NormalMode();
-        gameManager.ResetVariables();
-        gameManager.EndTurn(true);
+        gameManager.EndTurn();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
     }

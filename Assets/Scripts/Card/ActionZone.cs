@@ -19,6 +19,7 @@ public class ActionZone : MonoBehaviour
     private PhaseManager.GamePhase _currentPhase;
 
     public static event Action<int> OnDiscard;
+    public static event Action<Sprite, int> OnCardPlaced;
 
     private void Awake()
     {
@@ -64,7 +65,8 @@ public class ActionZone : MonoBehaviour
 
     private void DiscardCard()
     {
-        OnDiscard?.Invoke(_selectedCard.GetCardDifficulty());
+        int cardValue = _selectedCard.GetCardDifficulty();
+        OnDiscard?.Invoke(cardValue);
         Destroy(_selectedCard.gameObject);
         DisableSlotAndRemoveCard();
         gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
@@ -72,41 +74,35 @@ public class ActionZone : MonoBehaviour
 
     private void DisableSlotAndRemoveCard()
     {
-        int slot = _selectedCard.transform.parent.GetSiblingIndex();
-        gameManager.GetPlayersHand().DisableSlot(slot);
-        gameManager.RemoveCardFromHand();
+        int actualSlot = _selectedCard.transform.parent.GetSiblingIndex();
+        gameManager.GetPlayersHand().DisableSlot(actualSlot);
+        gameManager.GetPlayersHand().RemoveCardFromHand();
     }
 
     private void AddCardInZone()
     {
         DisableSlotAndRemoveCard();
         
+        int cardValue = _selectedCard.GetCardDifficulty();
+        Sprite cardSprite = null;
         switch (zoneType)
         {
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(Card.CardSprites.Attack);
+                cardSprite = _selectedCard.GetCardSprite();
+                OnCardPlaced?.Invoke(cardSprite, cardValue);
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(Card.CardSprites.Defense);
+                cardSprite = _selectedCard.GetCardSprite();
+                OnCardPlaced?.Invoke(cardSprite, cardValue);
                 break;
         }
-
         Transform slot = _cardsInZone[_cantCardsInZone].transform;
         _selectedCard.PutCardInSlot(slot);
         
-        CopyCardToBoard();
         _cantCardsInZone++;
-        gameManager.SaveCardType(zoneType);
         gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
-    }
-
-    private void CopyCardToBoard()
-    {
-        GameObject card = gameManager.GetActualCardForQuestion();
-        Image cardImage = card.GetComponent<Image>();
-        TextMeshProUGUI cardText = card.GetComponentInChildren<TextMeshProUGUI>();
-        cardImage.sprite = _selectedCard.GetComponentInChildren<SpriteRenderer>().sprite;
-        cardText.text = _selectedCard.GetComponentInChildren<TextMeshProUGUI>().text;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -142,14 +138,16 @@ public class ActionZone : MonoBehaviour
 
     public void ResetZone()
     {
+        if (zoneType == ZoneType.Discard) return;
+        
         for (int i = 0; i < _cantCardsInZone; i++)
         {
-            StartCoroutine(DiscardCardInZone(i));
+            StartCoroutine(DiscardCardsInZone(i));
         }
         _cantCardsInZone = 0;
     }
 
-    private IEnumerator DiscardCardInZone(int i)
+    private IEnumerator DiscardCardsInZone(int i)
     {
         Card card = _cardsInZone[i].transform.GetChild(0).GetComponent<Card>();
         Vector3 discardZonePosition = gameManager.GetDiscardZone().transform.position;

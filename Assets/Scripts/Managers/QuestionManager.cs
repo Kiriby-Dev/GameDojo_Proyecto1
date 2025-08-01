@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 
 public class QuestionManager : MonoBehaviour
 {
+    public static event Action<bool> OnAnswer;
+    
     public GameManager gameManager;
     public Timer timer;
     
@@ -86,12 +88,12 @@ public class QuestionManager : MonoBehaviour
     private IEnumerator ProcessCard(GameObject cardGo)
     {
         if (!cardGo) yield break;
-
-        int difficulty = GetCardDifficulty(cardGo);
-        Card cardScript = cardGo.GetComponentInChildren<Card>();
+        
+        CardBoard card = cardGo.GetComponentInChildren<CardBoard>();
+        int difficulty = card.GetCardValue();
 
         SelectQuestion(difficulty);
-        cardScript.ChangeColor(Card.CardColor.Yellow);
+        card.ChangeColor(CardBoard.CardColor.Yellow);
 
         _playerHasAnswered = false;
         _timeRanOut = false;
@@ -99,7 +101,7 @@ public class QuestionManager : MonoBehaviour
         timer.StartTimer();
         yield return new WaitUntil(() => _playerHasAnswered || _timeRanOut);
 
-        HandleAnswerResult(cardScript, difficulty);
+        HandleAnswerResult(card, difficulty);
 
         yield return new WaitForSeconds(2f);
         
@@ -181,20 +183,20 @@ public class QuestionManager : MonoBehaviour
     }
 
     //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).
-    private void HandleAnswerResult(Card card, int difficulty)
+    private void HandleAnswerResult(CardBoard card, int difficulty)
     {
         if (!card) return;
 
         if (_playerAnswersCorrectly)
         {
-            card.ChangeColor(Card.CardColor.Green);
+            card.ChangeColor(CardBoard.CardColor.Green);
             ActionZone.ZoneType cardType = gameManager.GetCardType(_actualCardIndex);
             gameManager.GetPlayer().AddStats(cardType, difficulty);
             gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.RightAnswer);
         }
         else
         {
-            card.ChangeColor(Card.CardColor.Red);
+            card.ChangeColor(CardBoard.CardColor.Red);
             gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.WrongAnswer);
         }
 

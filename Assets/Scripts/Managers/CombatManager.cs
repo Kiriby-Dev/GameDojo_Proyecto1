@@ -34,7 +34,7 @@ public class CombatManager : MonoBehaviour
     {
         Player.OnPlayerStatsChanged += PlayerStats;
         Enemy.OnEnemyStatsChanged += EnemyStats;
-        Enemy.OnEnemyDeath += EnemyIsDead;
+        Enemy.OnDeath += EnemyIsDead;
         _audioManager = gameManager.GetAudioManager();
     }
 

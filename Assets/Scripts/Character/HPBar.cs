@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class HPBar : MonoBehaviour
 {
+    public static event Action OnDeath;
+    
     [Header("Config")] 
     public int maxHp;
     public float hpBarSpeed;
@@ -53,6 +55,7 @@ public class HPBar : MonoBehaviour
         {
             _isDead = true;
             _currentHp = 0;
+            OnDeath?.Invoke();
         }
         
         _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);

@@ -8,39 +8,28 @@ using Random = UnityEngine.Random;
 
 public class Card : MonoBehaviour
 {
-    public enum CardColor { Red, Yellow, Green, White }
-    
+    [Header("Config")]
     [SerializeField] private float followSmoothness;
+    [SerializeField] private float returnSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float maxTiltAngle;
     
-    [SerializeField] private SpriteRenderer cardSprite;
+    [Header("Card Visuals")]
     [SerializeField] private SpriteRenderer shadowSprite;
     [SerializeField] private ParticleSystem chalkEffect;
-    
-    [SerializeField] private float returnSpeed;
     [SerializeField] private Canvas textCanvas;
+    [SerializeField] private SpriteRenderer cardSprite;
+    [SerializeField] private List<Sprite> sprites;
 
     public enum CardSprites
     {
         Base,
-        Attack,
-        Defense,
-        HistoryEasy,
-        HistoryMedium,
-        HistoryHard,
-        ScienceEasy,
-        ScienceMedium,
-        ScienceHard,
-        EntertainmentEasy,
-        EntertainmentMedium,
-        EntertainmentHard,
-        GeographyEasy,
-        GeographyMedium,
-        GeographyHard,
+        Attack, Defense,
+        HistoryEasy, HistoryMedium, HistoryHard,
+        ScienceEasy, ScienceMedium, ScienceHard,
+        EntertainmentEasy, EntertainmentMedium, EntertainmentHard,
+        GeographyEasy, GeographyMedium, GeographyHard,
     };
-    
-    [SerializeField] private List<Sprite> sprites;
 
     private bool _isReturning;
     private bool _isDragging;
@@ -174,25 +163,6 @@ public class Card : MonoBehaviour
     }
 
     #region Utilities
-    public void ChangeColor(CardColor color = CardColor.White)
-    {
-        Image cardImage = gameObject.GetComponent<Image>();
-        switch (color)
-        {
-            case CardColor.Red: 
-                cardImage.color = Color.red; 
-                break;
-            case CardColor.Yellow: 
-                cardImage.color = Color.yellow; 
-                break;
-            case CardColor.Green: 
-                cardImage.color = Color.green; 
-                break;
-            case CardColor.White: 
-                cardImage.color = Color.white; 
-                break;
-        }
-    }
 
     private void ChangeSize(float size)
     {
@@ -203,10 +173,15 @@ public class Card : MonoBehaviour
     {
         cardSprite.sprite = sprites[(int)sprite];
     }
-    
+
     public int GetParentIndex()
     {
         return transform.parent.GetSiblingIndex();
+    }
+
+    public Sprite GetCardSprite()
+    {
+        return cardSprite.sprite;
     }
 
     public int GetCardDifficulty()

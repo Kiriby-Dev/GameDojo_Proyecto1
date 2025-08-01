@@ -14,32 +14,29 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private LevelsManager levelsManager;
     [SerializeField] private CombatManager combatManager;
+    [SerializeField] private GameFlowManager gameFlowManager;
     
     [Header("Game Objects")]
-    public GameObject playersHand;
-    public GameObject card;
-    public GameObject player;
-    public GameObject enemy;
+    [SerializeField] private GameObject playersHand;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject enemy;
     
     
     [Header("ActionZones")]
-    public ActionZone discardZone;
-    public ActionZone attackZone;
-    public ActionZone defenseZone;
-    public ActionZone cardsZone;
+    [SerializeField] private ActionZone discardZone;
+    [SerializeField] private ActionZone attackZone;
+    [SerializeField] private ActionZone defenseZone;
+    [SerializeField] private ActionZone cardsZone;
     
     
-    private int _cantCardsInHand;
     private int _actualBoardcard;
-    private bool _gameStarted;
-    private bool _gameOver;
+   
     private PlayersHand _playersHandScript;
     private ActionZone.ZoneType[] _cardTypes;
     private Player _playerScript;
     private Enemy _enemyScript;
     private int _cardTypesIndex = 0;
     
-    private bool _isPaused = false;
     private bool _turnEnded = false;
 
     private void Awake()
@@ -53,74 +50,15 @@ public class GameManager : MonoBehaviour
     {
         _cardTypes = new ActionZone.ZoneType[3];
     }
-
-    private void Update()
-    {
-        if (!_gameStarted || _gameOver) return;
-        CheckEndGame();
-        
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Pause();
-    }
-
-    public void Pause()
-    {
-        menuManager.ToggleOptions(!_isPaused);
-        _playersHandScript.DisableCardsInteraction(!_isPaused);
-        _isPaused = !_isPaused;
-    }
-    
-    public void ResetGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    
     
     #region GameLoop
     public void StartGame()
     {
-        _gameStarted = true;
-        _gameOver = false;
-        _turnEnded = false;
         ResetVariables();
-        phaseManager.StartPhases();
-    }
-    
-    //Verificamos si alguno de los personajes murio y en ese caso terminamos el juego.
-    private void CheckEndGame()
-    {
-        if (!_turnEnded) return;
-
-        if (_playerScript.IsDead())
-        {
-            GameOver(false);//Como murio el jugador termina el juego y perdemos
-            audioManager.PlayAudio(AudioManager.AudioList.GameOver);
-            EndGame();
-            uiManager.UpdateGameOverCanvas(false);
-        }
-        if (_enemyScript.IsDead())
-        {
-            GameOver(true);//Como murio el enemigo termina el juego y ganamos
-            audioManager.PlayAudio(AudioManager.AudioList.GameWin);
-            levelsManager.AdvanceLevel();
-            menuManager.MenuLevelsButton();
-        }
-    }
-
-    private void GameOver(bool win)
-    {
-        _gameOver = true;
-        _gameStarted = false;
     }
 
     public void ResetVariables()
     {
-        _playerScript.ResetStats();
-        levelsManager.SelectLevelDifficulty();
-        attackZone.ResetZone();
-        defenseZone.ResetZone();
-        uiManager.ResetVisuals();
         ResetCardTypes();
         _actualBoardcard = 1;
     }
@@ -129,126 +67,22 @@ public class GameManager : MonoBehaviour
     {
         phaseManager.CurrentPhase = PhaseManager.GamePhase.Draw;
         ResetVariables();
-        _gameOver = true;
-        _gameStarted = false;
-        _cantCardsInHand = 0;
+        //_cantCardsInHand = 0;
         _enemyScript.ResetLife();
         //_enemyFightScript.ResetLife();
-        for (int i = 0; i < playersHand.transform.childCount; i++)
-        {
-            Transform slot = playersHand.transform.GetChild(i);
-            if (slot.childCount > 0)
-            {
-                Destroy(slot.GetChild(0).gameObject);
-            }
-        }
+        
     }
 
-    public void EndTurn(bool value)
+    public void EndTurn()
     {
-        _turnEnded = value;
+        attackZone.ResetZone();
+        defenseZone.ResetZone();
+        uiManager.ResetVisuals();
     }
 
     #endregion
 
     #region Cards
-    //Se instancian las 5 cartas con valores random en la mano del jugador.
-    public void DrawCards()
-    {
-        _playersHandScript.EnableAllSlots();
-        for (int i = 0; i <= 4; i++)
-        {
-            GameObject go = Instantiate(card, playersHand.transform.GetChild(i));
-            Card actualCard = go.GetComponent<Card>();
-            int difficulty = actualCard.GenerateCardValue();
-            ChangeCardSprite(actualCard, difficulty);
-            actualCard.ToggleAnimator(true);
-            go.name = "Card" + i;
-            AddCardToHand();
-        }
-
-        StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
-    }
-
-    private void ChangeCardSprite(Card actualCard, int difficulty)
-    {
-        QuestionData.Subject subject = levelsManager.GetActualSubject();
-        switch (subject)
-        {
-            case QuestionData.Subject.History:
-                switch (difficulty)
-                {
-                    case 1:
-                        actualCard.ChangeSprite(Card.CardSprites.HistoryEasy);
-                        break;
-                    case 2:
-                        actualCard.ChangeSprite(Card.CardSprites.HistoryMedium);
-                        break;
-                    case 3:
-                        actualCard.ChangeSprite(Card.CardSprites.HistoryHard);
-                        break;
-                }
-                break;
-            case QuestionData.Subject.Science:
-                switch (difficulty)
-                {
-                    case 1:
-                        actualCard.ChangeSprite(Card.CardSprites.ScienceEasy);
-                        break;
-                    case 2:
-                        actualCard.ChangeSprite(Card.CardSprites.ScienceMedium);
-                        break;
-                    case 3:
-                        actualCard.ChangeSprite(Card.CardSprites.ScienceHard);
-                        break;
-                }
-                break;
-            case QuestionData.Subject.Entertainment:
-                switch (difficulty)
-                {
-                    case 1:
-                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentEasy);
-                        break;
-                    case 2:
-                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentMedium);
-                        break;
-                    case 3:
-                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentHard);
-                        break;
-                }
-                break;
-            case QuestionData.Subject.Geography:
-                switch (difficulty)
-                {
-                    case 1:
-                        actualCard.ChangeSprite(Card.CardSprites.GeographyEasy);
-                        break;
-                    case 2:
-                        actualCard.ChangeSprite(Card.CardSprites.GeographyMedium);
-                        break;
-                    case 3:
-                        actualCard.ChangeSprite(Card.CardSprites.GeographyHard);
-                        break;
-                }
-                break;
-        }
-    }
-
-    private IEnumerator MovePlayersHand(Vector3 targetPosition, float duration = 0.5f)
-    {
-        float elapsedTime = 0f;
-        Vector3 startingPos = playersHand.transform.position;
-
-        while (elapsedTime < duration)
-        {
-            playersHand.transform.position = Vector3.Lerp(startingPos, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        playersHand.transform.position = targetPosition; // Asegura que termina exactamente en destino
-    }
-
     public GameObject GetActualCardForQuestion()
     {
         GameObject card = cardsZone.transform.GetChild(_actualBoardcard).gameObject;
@@ -256,14 +90,6 @@ public class GameManager : MonoBehaviour
         return card;
     }
     
-    public int CantCardsInHand() => _cantCardsInHand;
-
-    public void RemoveCardFromHand()
-    {
-        _cantCardsInHand--;
-        _playersHandScript.Recalculate();
-    }
-    private void AddCardToHand() => _cantCardsInHand++;
     #endregion
 
     #region  Utilities
@@ -292,9 +118,6 @@ public class GameManager : MonoBehaviour
     {
         _cardTypesIndex = 0;
     }
-    
-    //Se resuelve la fase de combate haciendo daño a los personajes con los valores generados anteriormente.
-    
     #endregion
     
     #region Getters
@@ -303,8 +126,10 @@ public class GameManager : MonoBehaviour
     public UIManager GetUIManager() => uiManager;
     public TransitionManager GetTransitionManager() => transitionManager;
     public AudioManager GetAudioManager() => audioManager;
+    public MenuManager GetMenuManager() => menuManager;
     public LevelsManager GetLevelsManager() => levelsManager;
     public CombatManager GetCombatManager() => combatManager;
+    public GameFlowManager GetGameFlowManager() => gameFlowManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
     public ActionZone GetAttackZone() => attackZone;
     public ActionZone GetDefenseZone() => defenseZone;
@@ -312,6 +137,5 @@ public class GameManager : MonoBehaviour
     public ActionZone GetDiscardZone() => discardZone;
     public Player GetPlayer() => _playerScript;
     public Enemy GetEnemy() => _enemyScript;
-    public bool IsGameOver() => _gameOver;
     #endregion
 }

@@ -4,17 +4,30 @@ using UnityEngine;
 
 public class PlayersHand : MonoBehaviour
 {
-    public GameManager gameManager;
-    public float cardSpacing;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private float cardSpacing;
     
     private int _cardsCount;
     private Card[] _cards;
     private Card _selectedCard;
     private bool _isCrossing;
+    private int _cantCardsInHand;
+    private bool _isDisabled;
+
+    private void Awake()
+    {
+        GameFlowManager.OnGamePaused += DisableCardsInteraction;
+    }
+
+    private void OnDestroy()
+    {
+        GameFlowManager.OnGamePaused -= DisableCardsInteraction;
+    }
 
     private void Start()
     {
-        _cards = new Card[gameManager.CantCardsInHand()];
+        _cards = new Card[CantCardsInHand()];
         EnableAllSlots();
     }
 
@@ -23,6 +36,124 @@ public class PlayersHand : MonoBehaviour
         CheckForSwap();
     }
 
+    public void DrawCards()
+    {
+        EnableAllSlots();
+        for (int i = 0; i <= 4; i++)
+        {
+            GameObject card = Instantiate(cardPrefab, transform.GetChild(i));
+            Card actualCard = card.GetComponent<Card>();
+            int difficulty = actualCard.GenerateCardValue();
+            ChangeCardSprite(actualCard, difficulty);
+            actualCard.ToggleAnimator(true);
+            card.name = "Card" + i;
+            AddCardToHand();
+        }
+
+        StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
+        Recalculate();
+    }
+
+    public void DiscardCards()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform slot = transform.GetChild(i);
+            if (slot.childCount > 0)
+            {
+                Destroy(slot.GetChild(0).gameObject);
+            }
+        }
+    }
+    
+    private void ChangeCardSprite(Card actualCard, int difficulty)
+    {
+        QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
+        switch (subject)
+        {
+            case QuestionData.Subject.History:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.HistoryHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Science:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.ScienceHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Entertainment:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.EntertainmentHard);
+                        break;
+                }
+                break;
+            case QuestionData.Subject.Geography:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.GeographyHard);
+                        break;
+                }
+                break;
+        }
+    }
+
+    private IEnumerator MovePlayersHand(Vector3 targetPosition, float duration = 0.5f)
+    {
+        float elapsedTime = 0f;
+        Vector3 startingPos = transform.position;
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startingPos, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition; // Asegura que termina exactamente en destino
+    }
+
+    public int CantCardsInHand() => _cantCardsInHand;
+
+    public void RemoveCardFromHand()
+    {
+        _cantCardsInHand--;
+        Recalculate();
+    }
+    private void AddCardToHand() => _cantCardsInHand++;
+    
     #region SwapCards
 
     private void CheckForSwap()
@@ -138,7 +269,7 @@ public class PlayersHand : MonoBehaviour
     public IEnumerator RecalculateCoroutine()
     {
         yield return new WaitForEndOfFrame();
-        _cardsCount = gameManager.CantCardsInHand();
+        _cardsCount = CantCardsInHand();
         
         GetCardsInHand();
         SetCardsOrder();
@@ -201,11 +332,13 @@ public class PlayersHand : MonoBehaviour
         StartCoroutine(MoveCardToPositionCoroutine(card, targetPosition, duration));
     }
 
-    public void DisableCardsInteraction(bool value)
+    private void DisableCardsInteraction(bool isDisabled)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).transform.GetChild(0).GetComponent<Card>().DisableInteraction(value);
+            Transform cardSlot = transform.GetChild(i);
+            Transform card = cardSlot.GetChild(0);
+            card.GetComponent<Card>().DisableInteraction(isDisabled);
         }
     }
 

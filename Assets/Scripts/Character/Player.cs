@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Player : Character
 {
     public static event Action<int, int> OnPlayerStatsChanged;
+    public static event Action OnDeath;
 
     protected override void Awake()
     {
@@ -12,12 +13,23 @@ public class Player : Character
         
         DiscardPoints.OnFullPoints += HealCharacter;
         CombatManager.OnPlayerHealthChanged += ChangeLife;
+        GameFlowManager.OnGameStarted += ResetStats;
+        GameFlowManager.OnGameStarted += ResetLife;
+        HPBar.OnDeath += PlayerDie;
     }
 
     private void OnDestroy()
     {
         DiscardPoints.OnFullPoints -= HealCharacter;
         CombatManager.OnPlayerHealthChanged -= ChangeLife;
+        GameFlowManager.OnGameStarted -= ResetStats;
+        GameFlowManager.OnGameStarted -= ResetLife;
+        HPBar.OnDeath -= PlayerDie;
+    }
+
+    private void PlayerDie()
+    {
+        OnDeath?.Invoke();
     }
 
     //Le añade ataque o defensa al jugador con el valor correspondiente.
@@ -56,7 +68,6 @@ public class Player : Character
 
     private void ChangeLife(int value)
     {
-        Debug.Log($"[Player] ChangeLife called with value: {value}");
         if (value < 0)
             TakeDamage(value);
         else

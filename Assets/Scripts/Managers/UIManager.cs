@@ -14,7 +14,6 @@ public class UIManager : MonoBehaviour
     
     [Header("UI Elements")]
     public TextMeshProUGUI phaseText;
-    public Canvas gameOverCanvas;
     public Canvas boardCanvas;
     public Canvas battleCanvas;
     public Canvas gameCanvas;
@@ -22,6 +21,9 @@ public class UIManager : MonoBehaviour
     [Header("Board")]
     [SerializeField] private TextMeshProUGUI boardAttackText;
     [SerializeField] private TextMeshProUGUI boardDefenseText;
+    [SerializeField] private CardBoard[] boardCards;
+
+    private int _cantCardsPlaced;
     
     [Header("Question")]
     public TextMeshProUGUI questionText;
@@ -42,13 +44,15 @@ public class UIManager : MonoBehaviour
     
     private TransitionManager _transitionManager;
 
-    private void OnEnable()
+    private void Awake()
     {
+        ActionZone.OnCardPlaced += UpdateBoardCards;
         Player.OnPlayerStatsChanged += UpdateBoardStats;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
+        ActionZone.OnCardPlaced -= UpdateBoardCards;
         Player.OnPlayerStatsChanged -= UpdateBoardStats;
     }
 
@@ -60,9 +64,7 @@ public class UIManager : MonoBehaviour
     public void ResetVisuals()
     {
         ResetBoardCardsColor();
-        gameOverCanvas.gameObject.SetActive(false);
-        gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Win", false);
-        gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", false);
+        ResetVariables();
         boardCanvas.gameObject.SetActive(false);
         battleCanvas.gameObject.SetActive(false);
         questionText.text = "";
@@ -70,6 +72,11 @@ public class UIManager : MonoBehaviour
         answerText2.text = "";
         answerText3.text = "";
         answerText4.text = "";
+    }
+
+    private void ResetVariables()
+    {
+        _cantCardsPlaced = 0;
     }
 
     public void UpdatePhaseText(PhaseManager.GamePhase phase)
@@ -80,7 +87,7 @@ public class UIManager : MonoBehaviour
                 phaseText.text = "DESCARTE 2 CARTAS";
                 break;
             case PhaseManager.GamePhase.Colocation:
-                phaseText.text = "COLOCACIÓN";
+                phaseText.text = "COLOQUE 3 CARTAS";
                 break;
             case PhaseManager.GamePhase.Draw:
                 phaseText.text = "ROBANDO CARTAS";
@@ -88,20 +95,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateGameOverCanvas(bool win)
-    {
-        gameOverCanvas.gameObject.SetActive(true);
-        if (win)
-            gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Win", true);
-        else
-            gameOverCanvas.gameObject.GetComponent<Animator>().SetBool("Lose", true);
-            
-    }
-
     private void UpdateBoardStats(int currentAttack, int currentDefense)
     {
         boardAttackText.text = currentAttack.ToString();
         boardDefenseText.text = currentDefense.ToString();
+    }
+
+    private void UpdateBoardCards(Sprite sprite, int cardValue)
+    {
+        CardBoard card = boardCards[_cantCardsPlaced];
+        
+        card.ChangeImage(sprite);
+        card.ChangeText(cardValue);
+        
+        _cantCardsPlaced++;
     }
 
     public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
@@ -252,7 +259,7 @@ public class UIManager : MonoBehaviour
     
     private void ResetBoardCardsColor()
     {
-        foreach (Card card in gameManager.GetCardsZone().gameObject.GetComponentsInChildren<Card>())
+        foreach (CardBoard card in boardCards)
         {
             card.ChangeColor();
         }

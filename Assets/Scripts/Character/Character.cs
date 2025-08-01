@@ -30,9 +30,4 @@ public class Character : MonoBehaviour
     {
         _hpBar.RestoreAllLife();
     }
-
-    public bool IsDead()
-    {
-        return _hpBar.IsDead();
-    }
 }

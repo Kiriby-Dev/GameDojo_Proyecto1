@@ -1,171 +1,147 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     [Header("GameObjects")]
-    public GameManager gameManager;
-    public GameObject game;
-    public GameObject menu;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject game;
+    [SerializeField] private GameObject menu;
     
     [Header("Canvas")]
-    public Canvas canvasMenu;
-    public Canvas canvasLevelsMenu;
-    public Canvas canvasOptions;
-    public Canvas canvasTutorial;
+    [SerializeField] private Canvas canvasMenu;
+    [SerializeField] private Canvas canvasLevelsMenu;
+    [SerializeField] private Canvas canvasOptions;
+    [SerializeField] private Canvas canvasTutorial;
+    [SerializeField] private Canvas canvasGameOver;
 
-    public TextMeshProUGUI buttonText;
+    [SerializeField] private TextMeshProUGUI pauseBottomButton;
+    
+    private bool _gameStarted;
+    private bool _isPaused;
     
     private TransitionManager _transitionManager;
     private AudioManager _audioManager;
-    
+
+    private void Awake()
+    {
+        GameFlowManager.OnGamePaused += ToggleOptions;
+        GameFlowManager.OnGameStarted += StartGame;
+        GameFlowManager.OnLevelStart += StartLevel;
+    }
+
+    private void OnDestroy()
+    {
+        GameFlowManager.OnGamePaused -= ToggleOptions;
+        GameFlowManager.OnGameStarted -= StartGame;
+        GameFlowManager.OnLevelStart -= StartLevel;
+    }
+
     private void Start()
     {
         ResetMenus();
+        canvasMenu.enabled = true;
+        
         _transitionManager = gameManager.GetTransitionManager();
         _audioManager = gameManager.GetAudioManager();
     }
-
-    private void ResetMenus()
+    
+    private void StartGame()
     {
-        game.SetActive(false);
-        menu.SetActive(true);
-        canvasMenu.enabled = true;
-        canvasLevelsMenu.enabled = false;
-        canvasOptions.enabled = false;
-        canvasTutorial.enabled = false;
-    }
-
-    public void StartGame()
-    {
-        DisableAllCanvas();
-        game.SetActive(true);
-        gameManager.StartGame();
+        _gameStarted = !_gameStarted;
+        StartCoroutine(TransitionCoroutine(canvasLevelsMenu));
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
+    private void StartLevel()
+    {
+        game.SetActive(true);
+    }
+    
+    public void GameOver(bool win)
+    {
+        canvasGameOver.enabled = true;
+        if (win)
+            canvasGameOver.gameObject.GetComponent<Animator>().SetBool("Win", true);
+        else
+            canvasGameOver.gameObject.GetComponent<Animator>().SetBool("Lose", true);
+    }
+
+    private IEnumerator TransitionCoroutine(Canvas canvas = null)
+    {
+        yield return new WaitForSeconds(0.5f);
+        _transitionManager.PlayTransition("Paper", "TransitionIn");
+        yield return new WaitForSeconds(1f);
+        
+        DisableAllCanvas();
+        if (canvas)
+            canvas.enabled = true;
+
+        if (pauseBottomButton)
+        {
+            if (_gameStarted)
+                pauseBottomButton.text = "Reanudar";
+            else
+                pauseBottomButton.text = "Tutorial";
+        }
+        
+        _transitionManager.PlayTransition("Paper", "TransitionOut");
+    }
+
+    #region Utilities
     private void DisableAllCanvas()
     {
         canvasMenu.enabled = false;
         canvasLevelsMenu.enabled = false;
         canvasOptions.enabled = false;
         canvasTutorial.enabled = false;
-    }
-
-    private IEnumerator PlayCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
-        
+        canvasGameOver.enabled = false;
         game.SetActive(false);
-        buttonText.text = "Reanudar";
-        canvasMenu.enabled = false;
-        canvasLevelsMenu.enabled = true;
-        
-        _transitionManager.PlayTransition("Paper", "TransitionOut");
     }
     
-    private IEnumerator MenuCoroutine()
+    private void ResetMenus()
     {
-        yield return new WaitForSeconds(0.5f);
-        _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
-        
-        gameManager.EndGame();
-        game.SetActive(false);
+        menu.SetActive(true);
         DisableAllCanvas();
-        canvasMenu.enabled = true;
-        
-        _transitionManager.PlayTransition("Paper", "TransitionOut");
     }
+    #endregion
     
-    private IEnumerator MenuLevelsCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
-        
-        gameManager.EndGame();
-        buttonText.text = "Tutorial";
-        game.SetActive(false);
-        DisableAllCanvas();
-        canvasLevelsMenu.enabled = true;
-        
-        _transitionManager.PlayTransition("Paper", "TransitionOut");
-    }
-    
-    private IEnumerator TutorialCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
-        
-        game.SetActive(false);
-        DisableAllCanvas();
-        canvasTutorial.enabled = true;
-        
-        _transitionManager.PlayTransition("Paper", "TransitionOut");
-    }
-
-    public void QuitButton()
-    {
-        _audioManager.PlayAudio(AudioManager.AudioList.Click);
-        Application.Quit();
-    }
-
-    public void ToggleOptions(bool optionsToggle)
-    {
-        if (canvasLevelsMenu.isActiveAndEnabled)
-            MenuButton();
-        else
-            canvasOptions.enabled = optionsToggle;
-        _audioManager.PlayAudio(AudioManager.AudioList.Click);
-    }
-
-    #region Utilities
-    
-    public void PlayButton()
-    {
-        StartCoroutine(PlayCoroutine());
-        _audioManager.PlayAudio(AudioManager.AudioList.Click);
-    }
-    
+    #region Buttons
     public void MenuButton()
     {
-        StartCoroutine(MenuCoroutine());
+        StartCoroutine(TransitionCoroutine(canvasMenu));
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     public void MenuLevelsButton()
     {
-        StartCoroutine(MenuLevelsCoroutine());
+        StartCoroutine(TransitionCoroutine(canvasLevelsMenu));
+        _audioManager.PlayAudio(AudioManager.AudioList.Click);
+    }
+
+    public void PauseBottomButton()
+    {
+        if (!_gameStarted)
+            TutorialButton();
+        else
+            gameManager.GetGameFlowManager().Pause(); //Si el juego comenzó actúa como un reanudar
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
     public void TutorialButton()
     {
-        if (canvasMenu.isActiveAndEnabled)
-        {
-            StartCoroutine(TutorialCoroutine());
-            buttonText.text = "Tutorial";
-        }
-        else
-        {
-            gameManager.Pause();
-            buttonText.text = "Reanudar";
-        }
+        StartCoroutine(TransitionCoroutine(canvasTutorial));
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
-
-    public void HelpButton()
+    
+    public void ToggleOptions(bool pause)
     {
-        StartCoroutine(TutorialCoroutine());
+        if (_gameStarted)
+            MenuButton();
+        else
+            canvasOptions.enabled = pause;
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
-
     #endregion
 }
