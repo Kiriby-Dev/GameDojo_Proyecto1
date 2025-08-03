@@ -24,12 +24,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private Button[] answerButtons;
     
-    [SerializeField] private Image[] levelImages;
-    [SerializeField] private TextMeshProUGUI[] levelTexts;
-    [SerializeField] private Sprite able;
-    [SerializeField] private Sprite blocked;
-    [SerializeField] private Sprite approved;
-    
     private int _cantCardsPlaced;
     private Button _correctAnswerButton;
     
@@ -59,6 +53,8 @@ public class UIManager : MonoBehaviour
         ResetBoardCardsColor();
         ResetAnswersColors();
         _cantCardsPlaced = 0;
+        boardCanvas.enabled = false;
+        battleCanvas.enabled = false;
     }
 
     public void UpdatePhaseText(PhaseManager.GamePhase phase)

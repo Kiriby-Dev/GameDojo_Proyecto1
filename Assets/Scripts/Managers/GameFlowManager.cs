@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameFlowManager : MonoBehaviour
@@ -7,12 +8,11 @@ public class GameFlowManager : MonoBehaviour
     public static event Action OnGameEnded;
     public static event Action<bool> OnGamePaused;
     public static event Action OnLevelStart;
-    public static event Action OnLevelOver; // bool: true si ganamos
+    public static event Action OnLevelOver;
 
     [SerializeField] private GameManager gameManager;
     
     private bool _gameStarted;
-    private bool _subjectOver;
     private bool _isPaused;
     
     private AudioManager _audioManager;
@@ -54,7 +54,6 @@ public class GameFlowManager : MonoBehaviour
     
     public void StartLevel()
     {
-        _subjectOver = false;
         OnLevelStart?.Invoke();
     }
 
@@ -73,31 +72,18 @@ public class GameFlowManager : MonoBehaviour
 
     private void TriggerLevelVictory()
     {
-        if (_subjectOver) return;
-
-        _subjectOver = true;
         OnLevelOver?.Invoke();
-        
-        gameManager.GetLevelsManager().AdvanceLevel();
-        _menuManager.MenuLevelsButton();
         _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
     }
 
     private void TriggerVictory()
     {
-        if (_subjectOver) return;
-        
-        _subjectOver = true;
         OnGameEnded?.Invoke();
-        
         _menuManager.GameOver(true);
     }
 
     private void TriggerDefeat()
     {
-        if (_subjectOver) return;
-
-        _subjectOver = true;
         OnLevelOver?.Invoke();
         OnGameEnded?.Invoke();
         

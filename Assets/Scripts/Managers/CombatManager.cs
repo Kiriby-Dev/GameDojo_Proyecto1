@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
+    public static event Action<int> OnPlayerHealthChanged;
+    public static event Action<int> OnEnemyHealthChanged;
+    
     [SerializeField] private GameManager gameManager;
     
     [Header("Characters")]
@@ -20,15 +23,12 @@ public class CombatManager : MonoBehaviour
     
     private AudioManager _audioManager;
 
-    public enum Actions
+    private enum Actions
     {
         Attack,
         BlockAttack,
         Hurt,
     }
-
-    public static event Action<int> OnPlayerHealthChanged;
-    public static event Action<int> OnEnemyHealthChanged;
 
     private void Awake()
     {

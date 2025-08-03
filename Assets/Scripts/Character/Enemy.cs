@@ -31,8 +31,6 @@ public class Enemy : Character
     public void GenerateStats()
     {
         CurrentAttack = Random.Range(_minAttack, _maxAttack + 1);
-        print(CurrentAttack);
-        print(CurrentDefense);
         CurrentDefense = Random.Range(_minDefense, _maxDefense + 1);
         OnEnemyStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }

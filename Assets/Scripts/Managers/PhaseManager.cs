@@ -8,25 +8,35 @@ public class PhaseManager : MonoBehaviour
     public enum GamePhase {Draw, Discard, Colocation, Questions, Resolution}
     
     private GamePhase _currentPhase;
+    private bool _gameOver;
 
     private void Awake()
     {
         GameFlowManager.OnLevelStart += StartPhases;
+        GameFlowManager.OnLevelOver += EndPhases;
     }
 
     private void OnDestroy()
     {
         GameFlowManager.OnLevelStart -= StartPhases;
+        GameFlowManager.OnLevelOver -= EndPhases;
     }
 
     private void StartPhases()
     {
         CurrentPhase = GamePhase.Draw;
+        _gameOver = false;
         AdvancePhase();
     }
-    
+
+    private void EndPhases()
+    {
+        _gameOver = true;
+    }
+
     private void AdvancePhase()
     {
+        if (_gameOver) return;
         StartCoroutine(ExecutePhase());
     }
     
@@ -87,7 +97,6 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator QuestionsPhase()
     {
-        gameManager.GetPlayersHand().transform.position = new Vector3(0, -8, 0);
         yield return gameManager.GetUIManager().QuestionMode();
         yield return gameManager.GetQuestionManager().StartQuestions();
     }

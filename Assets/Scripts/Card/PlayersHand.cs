@@ -27,7 +27,7 @@ public class PlayersHand : MonoBehaviour
 
     private void Start()
     {
-        _cards = new Card[CantCardsInHand()];
+        _cards = new Card[transform.childCount];
         EnableAllSlots();
     }
 
@@ -39,7 +39,7 @@ public class PlayersHand : MonoBehaviour
     public void DrawCards()
     {
         EnableAllSlots();
-        for (int i = 0; i <= 4; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             GameObject card = Instantiate(cardPrefab, transform.GetChild(i));
             Card actualCard = card.GetComponent<Card>();
@@ -52,18 +52,6 @@ public class PlayersHand : MonoBehaviour
 
         StartCoroutine(MovePlayersHand(new Vector3(0, -3.3f, 0)));
         Recalculate();
-    }
-
-    public void DiscardCards()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform slot = transform.GetChild(i);
-            if (slot.childCount > 0)
-            {
-                Destroy(slot.GetChild(0).gameObject);
-            }
-        }
     }
     
     private void ChangeCardSprite(Card actualCard, int difficulty)
@@ -304,7 +292,7 @@ public class PlayersHand : MonoBehaviour
             return -1 * (cardSpacing * half);
     }
 
-    public void Recalculate()
+    private void Recalculate()
     {
         StartCoroutine("RecalculateCoroutine");
     }
@@ -314,7 +302,7 @@ public class PlayersHand : MonoBehaviour
         _selectedCard = card;
     }
 
-    public void EnableAllSlots()
+    private void EnableAllSlots()
     {
         for (int i = 0; i < transform.childCount; i++)
         {

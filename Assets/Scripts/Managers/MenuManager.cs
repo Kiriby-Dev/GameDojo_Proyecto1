@@ -6,8 +6,6 @@ public class MenuManager : MonoBehaviour
 {
     [Header("GameObjects")]
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject game;
-    [SerializeField] private GameObject menu;
     
     [Header("Canvas")]
     [SerializeField] private Canvas canvasMenu;
@@ -40,7 +38,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        ResetMenus();
+        DisableAllCanvas();
         canvasMenu.enabled = true;
         
         _transitionManager = gameManager.GetTransitionManager();
@@ -56,7 +54,7 @@ public class MenuManager : MonoBehaviour
 
     private void StartLevel()
     {
-        game.SetActive(true);
+        DisableAllCanvas();
     }
     
     public void GameOver(bool win)
@@ -96,13 +94,6 @@ public class MenuManager : MonoBehaviour
         canvasOptions.enabled = false;
         canvasTutorial.enabled = false;
         canvasGameOver.enabled = false;
-        game.SetActive(false);
-    }
-    
-    private void ResetMenus()
-    {
-        menu.SetActive(true);
-        DisableAllCanvas();
     }
     #endregion
     

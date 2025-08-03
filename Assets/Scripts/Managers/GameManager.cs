@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,7 +31,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         GameFlowManager.OnLevelStart += StartGame;
-        GameFlowManager.OnGameEnded += EndGame;
+        GameFlowManager.OnLevelOver += EndGame;
         
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
         _playerScript = player.GetComponent<Player>();
@@ -43,19 +41,21 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         GameFlowManager.OnLevelStart -= StartGame;
-        GameFlowManager.OnGameEnded -= EndGame;
+        GameFlowManager.OnLevelOver -= EndGame;
     }
 
-    #region GameLoop
+    #region LevelLoop
     private void StartGame()
     {
         _enemyScript.GenerateStats();
+        uiManager.ResetVisuals();
     }
     
     private void EndGame()
     {
-        EndTurn();
         _enemyScript.ResetLife();
+        menuManager.MenuLevelsButton();
+        levelsManager.AdvanceLevel();
     }
 
     public void EndTurn()

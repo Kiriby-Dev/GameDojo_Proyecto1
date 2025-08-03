@@ -914,7 +914,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1132474407
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &149580306
 GameObject:
@@ -1965,7 +1965,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2049130273
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1 &299888474
@@ -7087,7 +7087,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2049130273
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1001 &999160917
@@ -7574,7 +7574,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 2049130273
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &1055499413
 GameObject:
@@ -8570,7 +8570,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1132474407
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!4 &1205998890 stripped
 Transform:
@@ -9784,14 +9784,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 21674069}
-  game: {fileID: 1855906464}
-  menu: {fileID: 411282671}
   canvasMenu: {fileID: 991275008}
   canvasLevelsMenu: {fileID: 1993327133}
   canvasOptions: {fileID: 1050483420}
   canvasTutorial: {fileID: 278144880}
   canvasGameOver: {fileID: 1963665388}
-  pauseBottomButton: {fileID: 0}
+  pauseBottomButton: {fileID: 201963352}
 --- !u!1001 &1386947119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10179,21 +10177,6 @@ MonoBehaviour:
   - {fileID: 562178716}
   - {fileID: 1354942198}
   - {fileID: 1420549778}
-  levelImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  levelTexts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  able: {fileID: 0}
-  blocked: {fileID: 6496594122317640316, guid: e78e8bd8896897448bd776b51d20dfdc, type: 3}
-  approved: {fileID: -2097567955323748348, guid: b1040b79c2716dd489546cccc97f585f, type: 3}
 --- !u!1 &1420549776
 GameObject:
   m_ObjectHideFlags: 0
@@ -13843,7 +13826,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2049130273
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1993327134
