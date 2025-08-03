@@ -21,14 +21,16 @@ public class GameFlowManager : MonoBehaviour
     private void Awake()
     {
         Player.OnDeath += TriggerDefeat;
-        Enemy.OnDeath += TriggerVictory;
+        Enemy.OnDeath += TriggerLevelVictory;
+        LevelsManager.OnGameWin += TriggerVictory;
         MenuButton.OnLevelButtonClicked += StartLevel;
     }
 
     private void OnDestroy()
     {
         Player.OnDeath -= TriggerDefeat;
-        Enemy.OnDeath -= TriggerVictory;
+        Enemy.OnDeath -= TriggerLevelVictory;
+        LevelsManager.OnGameWin -= TriggerVictory;
         MenuButton.OnLevelButtonClicked -= StartLevel;
     }
 
@@ -89,7 +91,6 @@ public class GameFlowManager : MonoBehaviour
         OnGameEnded?.Invoke();
         
         _menuManager.GameOver(true);
-        _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
     }
 
     private void TriggerDefeat()
@@ -103,6 +104,4 @@ public class GameFlowManager : MonoBehaviour
         _menuManager.GameOver(false);
         _audioManager.PlayAudio(AudioManager.AudioList.GameOver);
     }
-
-    public bool IsGameRunning() => _gameStarted && !_subjectOver;
 }

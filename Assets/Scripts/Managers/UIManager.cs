@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,32 +8,21 @@ using Random = UnityEngine.Random;
 public class UIManager : MonoBehaviour
 {
     public GameManager gameManager;
-
-    [Header("Config")] 
     
     [Header("UI Elements")]
-    public TextMeshProUGUI phaseText;
-    public Canvas boardCanvas;
-    public Canvas battleCanvas;
-    public Canvas gameCanvas;
+    [SerializeField] private TextMeshProUGUI phaseText;
+    [SerializeField] private Canvas boardCanvas;
+    [SerializeField] private Canvas battleCanvas;
+    [SerializeField] private Canvas gameCanvas;
     
     [Header("Board")]
     [SerializeField] private TextMeshProUGUI boardAttackText;
     [SerializeField] private TextMeshProUGUI boardDefenseText;
     [SerializeField] private CardBoard[] boardCards;
-
-    private int _cantCardsPlaced;
     
     [Header("Question")]
-    public TextMeshProUGUI questionText;
-    public Button answerButton1;
-    public TextMeshProUGUI answerText1;
-    public Button answerButton2;
-    public TextMeshProUGUI answerText2;
-    public Button answerButton3;
-    public TextMeshProUGUI answerText3;
-    public Button answerButton4;
-    public TextMeshProUGUI answerText4;
+    [SerializeField] private TextMeshProUGUI questionText;
+    [SerializeField] private Button[] answerButtons;
     
     [SerializeField] private Image[] levelImages;
     [SerializeField] private TextMeshProUGUI[] levelTexts;
@@ -42,17 +30,22 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite blocked;
     [SerializeField] private Sprite approved;
     
+    private int _cantCardsPlaced;
+    private Button _correctAnswerButton;
+    
     private TransitionManager _transitionManager;
 
     private void Awake()
     {
         ActionZone.OnCardPlaced += UpdateBoardCards;
+        QuestionManager.OnAnswer += ChangeAnswersColors;
         Player.OnPlayerStatsChanged += UpdateBoardStats;
     }
 
     private void OnDestroy()
     {
         ActionZone.OnCardPlaced -= UpdateBoardCards;
+        QuestionManager.OnAnswer -= ChangeAnswersColors;
         Player.OnPlayerStatsChanged -= UpdateBoardStats;
     }
 
@@ -64,18 +57,7 @@ public class UIManager : MonoBehaviour
     public void ResetVisuals()
     {
         ResetBoardCardsColor();
-        ResetVariables();
-        boardCanvas.gameObject.SetActive(false);
-        battleCanvas.gameObject.SetActive(false);
-        questionText.text = "";
-        answerText1.text = "";
-        answerText2.text = "";
-        answerText3.text = "";
-        answerText4.text = "";
-    }
-
-    private void ResetVariables()
-    {
+        ResetAnswersColors();
         _cantCardsPlaced = 0;
     }
 
@@ -101,60 +83,27 @@ public class UIManager : MonoBehaviour
         boardDefenseText.text = currentDefense.ToString();
     }
 
-    private void UpdateBoardCards(Sprite sprite, int cardValue)
+    private void UpdateBoardCards(Sprite sprite, int cardValue, ActionZone.ZoneType cardType)
     {
         CardBoard card = boardCards[_cantCardsPlaced];
         
         card.ChangeImage(sprite);
         card.ChangeText(cardValue);
+        card.ChangeCardType(cardType);
         
         _cantCardsPlaced++;
     }
 
-    public void UpdateLevelButton(int level, LevelsManager.State levelState, QuestionData.Subject subject)
-    {
-        switch (levelState)
-        {
-            case LevelsManager.State.Approved:
-                levelImages[level].sprite = approved;
-                levelImages[level].color = Color.green;
-                break;
-            case LevelsManager.State.Blocked:
-                levelImages[level].sprite = blocked;
-                levelTexts[level].text = "???";
-                break;
-            case LevelsManager.State.Able:
-                levelImages[level].sprite = able;
-                switch (subject)
-                {
-                    case QuestionData.Subject.History:
-                        levelTexts[level].text = "Historia";
-                        break;
-                    case QuestionData.Subject.Science:
-                        levelTexts[level].text = "Ciencia";
-                        break;
-                    case QuestionData.Subject.Entertainment:
-                        levelTexts[level].text = "Entretenimiento";
-                        break;
-                    case QuestionData.Subject.Geography:
-                        levelTexts[level].text = "Geografia";
-                        break;
-                    case QuestionData.Subject.Principal:
-                        levelTexts[level].text = "Director";
-                        break;
-                }
-                break;
-                
-        }
-    }
-
     public void ShowQuestion(QuestionData selectedQuestion)
     {
+        ToggleButtonsInteraction(true);
+        
         questionText.text = selectedQuestion.GetQuestion();
 
         List<string> allOptions = new List<string>(selectedQuestion.GetOptions());
         allOptions.Add(selectedQuestion.GetCorrectAnswer());
-        
+
+        // Mezclar opciones
         for (int i = 0; i < allOptions.Count; i++)
         {
             string temp = allOptions[i];
@@ -162,63 +111,39 @@ public class UIManager : MonoBehaviour
             allOptions[i] = allOptions[randomIndex];
             allOptions[randomIndex] = temp;
         }
-        
-        answerText1.text = allOptions[0];
-        answerText2.text = allOptions[1];
-        answerText3.text = allOptions[2];
-        answerText4.text = allOptions[3];
+
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            TextMeshProUGUI answerText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            answerText.text = allOptions[i];
+            
+            if (allOptions[i] == selectedQuestion.GetCorrectAnswer())
+            {
+                _correctAnswerButton = answerButtons[i];
+            }
+        }
     }
     
-    //estas 3 funciones hay que cambiarlas para poner los valores en un arreglo y recorrerlo
-    public void ShowCorrectAnswer(string correctAnswer)
+    private void ChangeAnswersColors(bool playerAnswersCorrectly, Button selectedAnswer)
     {
-        if (correctAnswer == answerText1.text)
-            ChangeAnswerColor(answerText1, answerButton1, "Green");
-        if (correctAnswer == answerText2.text)
-            ChangeAnswerColor(answerText2, answerButton2, "Green");
-        if (correctAnswer == answerText3.text)
-            ChangeAnswerColor(answerText3, answerButton3, "Green");
-        if (correctAnswer == answerText4.text)
-            ChangeAnswerColor(answerText4, answerButton4, "Green");
+        ToggleButtonsInteraction(false);
+        
+        ChangeButtonColor(_correctAnswerButton, CardBoard.CardColor.Green);
+        if (!playerAnswersCorrectly)
+            ChangeButtonColor(selectedAnswer, CardBoard.CardColor.Red);
     }
 
-    public void ToggleButtonsInteraction(bool interactable)
-    {
-        answerButton1.interactable = interactable;
-        answerButton2.interactable = interactable;
-        answerButton3.interactable = interactable;
-        answerButton4.interactable = interactable;
-    }
-
-    public void ShowSelectedAnswer(string selectedText)
-    {
-        if (selectedText == answerText1.text)
-            ChangeAnswerColor(answerText1, answerButton1, "Red");
-        if (selectedText == answerText2.text)
-            ChangeAnswerColor(answerText2, answerButton2, "Red");
-        if (selectedText == answerText3.text)
-            ChangeAnswerColor(answerText3, answerButton3, "Red");
-        if (selectedText == answerText4.text)
-            ChangeAnswerColor(answerText4, answerButton4, "Red");
-    }
-
-    public void ResetAnswerColor()
-    {
-        ChangeAnswerColor(answerText1, answerButton1, "");
-        ChangeAnswerColor(answerText2, answerButton2, "");
-        ChangeAnswerColor(answerText3, answerButton3, "");
-        ChangeAnswerColor(answerText4, answerButton4, "");
-    }
-
-    #region Utilities
+    #region Modes
     // Entra en el modo preguntas, se hace la transición y se muestra el pizarrón agrandado.
     public IEnumerator QuestionMode()
     {
         yield return new WaitForSeconds(1f);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         
-        ToggleUIItems(true);
+        gameManager.DeactivateGameObjects(true);
+        boardCanvas.enabled = true;
+        gameCanvas.enabled = false;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
     }
@@ -226,10 +151,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator BattleMode()
     {
         _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         
-        boardCanvas.gameObject.SetActive(false);
-        battleCanvas.gameObject.SetActive(true);
+        boardCanvas.enabled = false;
+        battleCanvas.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
@@ -239,24 +164,18 @@ public class UIManager : MonoBehaviour
     public IEnumerator NormalMode()
     {
         _transitionManager.PlayTransition("Paper", "TransitionIn");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         
-        ToggleUIItems(false);
-        battleCanvas.gameObject.SetActive(false);
+        gameManager.DeactivateGameObjects(false);
+        battleCanvas.enabled = false;
+        gameCanvas.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
         yield return new WaitForSeconds(2f);
     }
-
-    private void ToggleUIItems(bool toggle)
-    {
-        gameManager.GetDiscardZone().gameObject.SetActive(!toggle); //Desactivo o activo la discard zone
-        gameManager.GetAttackZone().gameObject.SetActive(!toggle);
-        gameManager.GetDefenseZone().gameObject.SetActive(!toggle);
-        gameCanvas.gameObject.SetActive(!toggle);
-        boardCanvas.gameObject.SetActive(toggle);
-    }
+    #endregion
     
+    #region Utilities
     private void ResetBoardCardsColor()
     {
         foreach (CardBoard card in boardCards)
@@ -264,25 +183,46 @@ public class UIManager : MonoBehaviour
             card.ChangeColor();
         }
     }
-
-    private void ChangeAnswerColor(TextMeshProUGUI answerText, Button answerButton, string color)
+    
+    private void ToggleButtonsInteraction(bool interactable)
     {
+        foreach (Button button in answerButtons)
+        {
+            button.interactable = interactable;
+        }
+    }
+
+    public void ResetAnswersColors()
+    {
+        foreach (Button button in answerButtons)
+        {
+            ChangeButtonColor(button);
+        }
+    }
+    
+    private void ChangeButtonColor(Button answerButton, CardBoard.CardColor color = CardBoard.CardColor.White)
+    {
+        TextMeshProUGUI answerText = answerButton.GetComponentInChildren<TextMeshProUGUI>();
         switch (color)
         {
-            case "Green":
-                answerText.color = Color.green;
+            case CardBoard.CardColor.Green:
                 answerButton.image.color = Color.green;
+                answerText.color = Color.green;
                 break;
-            case "Red":
-                answerText.color = Color.red;
+            case CardBoard.CardColor.Red:
                 answerButton.image.color = Color.red;
+                answerText.color = Color.red;
                 break;
             default:
-                answerText.color = Color.white;
                 answerButton.image.color = Color.white;
+                answerText.color = Color.white;
                 break;
         }
     }
 
+    #endregion
+
+    #region Getters
+    public CardBoard[] GetBoardCards() => boardCards;
     #endregion
 }

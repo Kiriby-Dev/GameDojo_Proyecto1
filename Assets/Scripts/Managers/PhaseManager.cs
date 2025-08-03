@@ -98,8 +98,6 @@ public class PhaseManager : MonoBehaviour
         yield return gameManager.GetCombatManager().ResolveCombat();
         yield return gameManager.GetUIManager().NormalMode();
         gameManager.EndTurn();
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
     }
 
     #endregion

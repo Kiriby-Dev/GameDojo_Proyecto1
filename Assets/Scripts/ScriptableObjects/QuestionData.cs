@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "QuestionData", menuName = "Scriptable Objects/QuestionData")]
 public class QuestionData : ScriptableObject
 {
-    public enum Difficulty { Easy, Medium, Hard }
+    public enum Difficulty {Easy, Medium, Hard }
 
     public enum Subject
     {

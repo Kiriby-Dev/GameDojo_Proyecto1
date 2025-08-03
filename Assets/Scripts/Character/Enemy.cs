@@ -7,6 +7,11 @@ public class Enemy : Character
     public static event Action<int, int> OnEnemyStatsChanged;
     public static event Action OnDeath;
 
+    private int _minAttack;
+    private int _maxAttack;
+    private int _minDefense;
+    private int _maxDefense;
+
     protected override void Awake()
     {
         base.Awake(); // Llama al Awake de Character
@@ -23,13 +28,23 @@ public class Enemy : Character
         HPBar.OnDeath -= EnemyDie;
     }
 
-    public void GenerateStats(int minAttack, int maxAttack, int minDefense, int maxDefense)
+    public void GenerateStats()
     {
-        CurrentAttack = Random.Range(minAttack, maxAttack + 1);
-        CurrentDefense = Random.Range(minDefense, maxDefense + 1);
+        CurrentAttack = Random.Range(_minAttack, _maxAttack + 1);
+        print(CurrentAttack);
+        print(CurrentDefense);
+        CurrentDefense = Random.Range(_minDefense, _maxDefense + 1);
         OnEnemyStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }
-    
+
+    public void SetEnemyStats(int minAttack, int maxAttack, int minDefense, int maxDefense)
+    {
+        _minAttack = minAttack;
+        _maxAttack = maxAttack;
+        _minDefense = minDefense;
+        _maxDefense = maxDefense;
+    }
+
     private void EnemyDie()
     {
         OnDeath?.Invoke();

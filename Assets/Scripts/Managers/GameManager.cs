@@ -21,75 +21,52 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject enemy;
     
-    
     [Header("ActionZones")]
     [SerializeField] private ActionZone discardZone;
     [SerializeField] private ActionZone attackZone;
     [SerializeField] private ActionZone defenseZone;
-    [SerializeField] private ActionZone cardsZone;
     
-    
-    private int _actualBoardcard;
-   
     private PlayersHand _playersHandScript;
-    private ActionZone.ZoneType[] _cardTypes;
     private Player _playerScript;
     private Enemy _enemyScript;
-    private int _cardTypesIndex = 0;
-    
-    private bool _turnEnded = false;
 
     private void Awake()
     {
+        GameFlowManager.OnLevelStart += StartGame;
+        GameFlowManager.OnGameEnded += EndGame;
+        
         _playersHandScript = playersHand.GetComponent<PlayersHand>();
         _playerScript = player.GetComponent<Player>();
         _enemyScript = enemy.GetComponent<Enemy>();
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        _cardTypes = new ActionZone.ZoneType[3];
+        GameFlowManager.OnLevelStart -= StartGame;
+        GameFlowManager.OnGameEnded -= EndGame;
+    }
+
+    #region GameLoop
+    private void StartGame()
+    {
+        _enemyScript.GenerateStats();
     }
     
-    #region GameLoop
-    public void StartGame()
+    private void EndGame()
     {
-        ResetVariables();
-    }
-
-    public void ResetVariables()
-    {
-        ResetCardTypes();
-        _actualBoardcard = 1;
-    }
-
-    public void EndGame()
-    {
-        phaseManager.CurrentPhase = PhaseManager.GamePhase.Draw;
-        ResetVariables();
-        //_cantCardsInHand = 0;
+        EndTurn();
         _enemyScript.ResetLife();
-        //_enemyFightScript.ResetLife();
-        
     }
 
     public void EndTurn()
     {
         attackZone.ResetZone();
         defenseZone.ResetZone();
+        _playerScript.ResetStats();
+        _enemyScript.GenerateStats();
         uiManager.ResetVisuals();
     }
 
-    #endregion
-
-    #region Cards
-    public GameObject GetActualCardForQuestion()
-    {
-        GameObject card = cardsZone.transform.GetChild(_actualBoardcard).gameObject;
-        _actualBoardcard += 2;
-        return card;
-    }
-    
     #endregion
 
     #region  Utilities
@@ -102,22 +79,14 @@ public class GameManager : MonoBehaviour
         attackZone.enabled = !active;
         defenseZone.enabled = !active;
     }
-    
-    public void SaveCardType(ActionZone.ZoneType type)
+
+    public void DeactivateGameObjects(bool toggle)
     {
-        _cardTypes[_cardTypesIndex] = type;
-        _cardTypesIndex++;
+        discardZone.gameObject.SetActive(!toggle);
+        attackZone.gameObject.SetActive(!toggle);
+        defenseZone.gameObject.SetActive(!toggle);
     }
 
-    public ActionZone.ZoneType GetCardType(int index)
-    {
-        return _cardTypes[index];
-    }
-
-    private void ResetCardTypes()
-    {
-        _cardTypesIndex = 0;
-    }
     #endregion
     
     #region Getters
@@ -131,9 +100,6 @@ public class GameManager : MonoBehaviour
     public CombatManager GetCombatManager() => combatManager;
     public GameFlowManager GetGameFlowManager() => gameFlowManager;
     public PlayersHand GetPlayersHand() => _playersHandScript;
-    public ActionZone GetAttackZone() => attackZone;
-    public ActionZone GetDefenseZone() => defenseZone;
-    public ActionZone GetCardsZone() => cardsZone;
     public ActionZone GetDiscardZone() => discardZone;
     public Player GetPlayer() => _playerScript;
     public Enemy GetEnemy() => _enemyScript;

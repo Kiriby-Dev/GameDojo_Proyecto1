@@ -5,10 +5,18 @@ using UnityEngine.UI;
 
 public class CardBoard : MonoBehaviour
 {
-    public enum CardColor { Red, Yellow, Green, White }
-    
+    public enum CardColor
+    {
+        Red,
+        Yellow,
+        Green,
+        White
+    }
+
     [SerializeField] private Image cardImage;
     [SerializeField] private TextMeshProUGUI cardText;
+    
+    private ActionZone.ZoneType _cardType;
 
     public void ChangeImage(Sprite sprite)
     {
@@ -20,9 +28,19 @@ public class CardBoard : MonoBehaviour
         cardText.text = "+" + cardValue;
     }
 
+    public void ChangeCardType(ActionZone.ZoneType type)
+    {
+        _cardType = type;
+    }
+
     public int GetCardValue()
     {
         return int.Parse(cardText.text);
+    }
+
+    public ActionZone.ZoneType GetCardType()
+    {
+        return _cardType;
     }
 
     public void ChangeColor(CardColor color = CardColor.White)

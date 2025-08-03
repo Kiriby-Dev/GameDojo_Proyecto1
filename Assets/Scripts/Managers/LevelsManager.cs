@@ -1,24 +1,36 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class LevelsManager : MonoBehaviour
 {
+    public static event Action<QuestionData.Subject> OnSubjectChosen;
+    public static event Action OnGameWin;
+    
     [SerializeField] private GameManager gameManager;
+    
+    [Header("GameObjects")]
     [SerializeField] private GameObject levelButtonPrefab;
     [SerializeField] private GameObject levelsContainer;
     
     [Header("Config")]
-    [SerializeField] int cantLevels;
+    [SerializeField] private int cantLevels;
     [SerializeField] private StatsRange firstSubject;
     [SerializeField] private StatsRange secondSubject;
     [SerializeField] private StatsRange thirdSubject;
     [SerializeField] private StatsRange boss;
+    
+    [Header("Levels Icons")]
+    [SerializeField] private Sprite approved;
+    [SerializeField] private Sprite blocked;
+    [SerializeField] private Sprite able;
 
     private State[] _levels;
     private Button[] _levelsButtons;
+    
     private List<QuestionData.Subject> _subjects;
     private QuestionData.Subject _actualSubject;
     
@@ -26,22 +38,11 @@ public class LevelsManager : MonoBehaviour
     
     private Enemy _enemy;
     
-    public static event Action<QuestionData.Subject> OnSubjectChosen;
-    
-    public enum State
+    private enum State
     {
         Able,
         Blocked,
         Approved
-    }
-    
-    [System.Serializable]
-    public class StatsRange
-    {
-        public int minAttack;
-        public int maxAttack;
-        public int minDefense;
-        public int maxDefense;
     }
 
     private void Awake()
@@ -89,6 +90,9 @@ public class LevelsManager : MonoBehaviour
             BossBattle();
             return;
         }
+        
+        if (_actualSubject == QuestionData.Subject.Principal)
+            OnGameWin?.Invoke();
 
         int index = Random.Range(0, _subjects.Count);
         _actualSubject = _subjects[index];
@@ -123,7 +127,7 @@ public class LevelsManager : MonoBehaviour
         }
         
         if (stats != null)
-            _enemy.GenerateStats(stats.minAttack, stats.maxAttack, stats.minDefense, stats.maxDefense);
+            _enemy.SetEnemyStats(stats.minAttack, stats.maxAttack, stats.minDefense, stats.maxDefense);
     }
 
     public void AdvanceLevel()
@@ -138,15 +142,43 @@ public class LevelsManager : MonoBehaviour
             _levels[_currentLevel] = State.Able;
             _levelsButtons[_currentLevel].interactable = true;
         }
-        UpdateLevelsButtons();
+        UpdateLevelButton(_currentLevel);
     }
 
-    private void UpdateLevelsButtons()
+    private void UpdateLevelButton(int levelIndex = 0)
     {
-        for (int i = 0; i < _levels.Length; i++)
+        Button levelButton = _levelsButtons[levelIndex];
+        Image icon = null;
+        Transform stateIcon = levelButton.transform.parent.Find("StateIcon");
+
+        if (!stateIcon) return;
+        
+        icon = stateIcon.GetComponent<Image>();
+        
+        TextMeshProUGUI label = levelButton .GetComponentInChildren<TextMeshProUGUI>();
+
+        State state = _levels[levelIndex];
+        QuestionData.Subject subject = (levelIndex == _currentLevel) ? _actualSubject : QuestionData.Subject.Principal;
+
+        switch (state)
         {
-            State level = _levels[i]; 
-            //gameManager.GetUIManager().UpdateLevelButton(i, level, _actualSubject);
+            case State.Approved:
+                icon.sprite = approved;
+                icon.color = Color.green;
+                label.text = GetSubjectText(subject);
+                break;
+
+            case State.Blocked:
+                icon.sprite = blocked;
+                icon.color = Color.white;
+                label.text = "???";
+                break;
+
+            case State.Able:
+                icon.sprite = able;
+                icon.color = Color.white;
+                label.text = GetSubjectText(subject);
+                break;
         }
     }
 
@@ -170,11 +202,39 @@ public class LevelsManager : MonoBehaviour
         _levels[_currentLevel] = State.Able;
         _levelsButtons[_currentLevel].interactable = true;
     }
-
+    
+    private string GetSubjectText(QuestionData.Subject subject)
+    {
+        return subject switch
+        {
+            QuestionData.Subject.History => "Historia",
+            QuestionData.Subject.Science => "Ciencia",
+            QuestionData.Subject.Entertainment => "Entretenimiento",
+            QuestionData.Subject.Geography => "Geografia",
+            QuestionData.Subject.Principal => "Director",
+            _ => "???"
+        };
+    }
+    
+    private void UpdateLevelsButtons()
+    {
+        for (int i = 0; i < _levels.Length; i++)
+        {
+            UpdateLevelButton(i);
+        }
+    }
+    
+    [System.Serializable]
+    public class StatsRange
+    {
+        public int minAttack;
+        public int maxAttack;
+        public int minDefense;
+        public int maxDefense;
+    }
     #endregion
 
     #region Getters
     public QuestionData.Subject GetActualSubject() => _actualSubject;
     #endregion
-    
 }

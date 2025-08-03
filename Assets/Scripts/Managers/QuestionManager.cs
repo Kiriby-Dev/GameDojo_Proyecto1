@@ -9,71 +9,37 @@ using Random = UnityEngine.Random;
 
 public class QuestionManager : MonoBehaviour
 {
-    public static event Action<bool> OnAnswer;
-    
-    public GameManager gameManager;
-    public Timer timer;
-    
-    private QuestionData[] allQuestions;
-    private List<QuestionData> _historyEasy;
-    private List<QuestionData> _historyMedium;
-    private List<QuestionData> _historyHard;
-    
-    private List<QuestionData> _scienceEasy;
-    private List<QuestionData> _scienceMedium;
-    private List<QuestionData> _scienceHard;
-    
-    private List<QuestionData> _entertainmentEasy;
-    private List<QuestionData> _entertainmentMedium;
-    private List<QuestionData> _entertainmentHard;
-    
-    private List<QuestionData> _geographyEasy;
-    private List<QuestionData> _geographyMedium;
-    private List<QuestionData> _geographyHard;
-    
+    public static event Action<bool, Button> OnAnswer;
+
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private Timer timer;
+
+    private Dictionary<(QuestionData.Subject, QuestionData.Difficulty), List<QuestionData>> _questionBank;
+
     private QuestionData _selectedQuestion;
     private bool _playerHasAnswered;
     private bool _playerAnswersCorrectly;
     private bool _timeRanOut;
-    private int _actualCardIndex;
 
     private void Start()
     {
-        _historyEasy = new List<QuestionData>();
-        _historyMedium = new List<QuestionData>();
-        _historyHard = new List<QuestionData>();
-
-        _scienceEasy = new List<QuestionData>();
-        _scienceMedium = new List<QuestionData>();
-        _scienceHard = new List<QuestionData>();
-
-        _entertainmentEasy = new List<QuestionData>();
-        _entertainmentMedium = new List<QuestionData>();
-        _entertainmentHard = new List<QuestionData>();
-        
-        _geographyEasy = new List<QuestionData>();
-        _geographyMedium = new List<QuestionData>();
-        _geographyHard = new List<QuestionData>();
-
+        InitializeQuestionBank();
         LoadQuestions();
     }
     
     public IEnumerator StartQuestions()
     {
-        _actualCardIndex = 0;
         yield return StartCoroutine(GoThroughCards()); //Espera a que termine la corrutina antes de seguir.
     }
 
     //Recorre todas las cartas jugadas en la fase de colocación.
     private IEnumerator GoThroughCards()
     {
-        ActionZone cardsZone = gameManager.GetCardsZone();
-        
-        for (int i = 1; i < 6; i += 2)
+        CardBoard[] boardCards = gameManager.GetUIManager().GetBoardCards();
+
+        foreach (CardBoard card in boardCards)
         {
-            GameObject cardGo = cardsZone.GetActualCardZone(i);
-            yield return ProcessCard(cardGo);
-            gameManager.GetUIManager().ToggleButtonsInteraction(true);
+            yield return ProcessCard(card);
         }
     }
 
@@ -85,14 +51,14 @@ public class QuestionManager : MonoBehaviour
     - Inicia el timer.
     - Espera a que el jugador responda o el tiempo se acabe.
     - Verifica la respuesta seleccionada.*/
-    private IEnumerator ProcessCard(GameObject cardGo)
+    private IEnumerator ProcessCard(CardBoard card)
     {
-        if (!cardGo) yield break;
+        if (!card) yield break;
         
-        CardBoard card = cardGo.GetComponentInChildren<CardBoard>();
         int difficulty = card.GetCardValue();
 
-        SelectQuestion(difficulty);
+        SelectQuestion(difficulty - 1);
+        
         card.ChangeColor(CardBoard.CardColor.Yellow);
 
         _playerHasAnswered = false;
@@ -105,81 +71,44 @@ public class QuestionManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         
-        gameManager.GetUIManager().ResetAnswerColor();
+        gameManager.GetUIManager().ResetAnswersColors();
     }
     
     //Selecciona una pregunta dada una dificultad y la elimina de la lista correspondiente para no repetirla.
     private void SelectQuestion(int difficulty)
     {
         QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
-        
+
         if (subject == QuestionData.Subject.Principal)
         {
-            // Obtener todos los valores posibles del enum
-            var values = Enum.GetValues(typeof(QuestionData.Subject)).Cast<QuestionData.Subject>().ToList();
-
-            // Eliminar el valor 'Principal'
-            values.Remove(QuestionData.Subject.Principal);
-
-            // Elegir uno al azar
+            List<QuestionData.Subject> values = Enum.GetValues(typeof(QuestionData.Subject)).Cast<QuestionData.Subject>().Where(s => s != QuestionData.Subject.Principal).ToList();
             subject = values[Random.Range(0, values.Count)];
         }
-                
-        List<QuestionData> listToUse = null;
 
-        switch (subject)
+        QuestionData.Difficulty difficultyEnum = (QuestionData.Difficulty)difficulty;
+        var key = (subject, difficultyEnum);
+
+        if (_questionBank.TryGetValue(key, out var list) && list.Count > 0)
         {
-            case QuestionData.Subject.History:
-                listToUse = GetListByDifficulty(_historyEasy, _historyMedium, _historyHard, difficulty);
-                break;
-            case QuestionData.Subject.Science:
-                listToUse = GetListByDifficulty(_scienceEasy, _scienceMedium, _scienceHard, difficulty);
-                break;
-            case QuestionData.Subject.Entertainment:
-                listToUse = GetListByDifficulty(_entertainmentEasy, _entertainmentMedium, _entertainmentHard, difficulty);
-                break;
-            case QuestionData.Subject.Geography:
-                listToUse = GetListByDifficulty(_geographyEasy, _geographyMedium, _geographyHard, difficulty);
-                break;
+            int index = Random.Range(0, list.Count);
+            _selectedQuestion = list[index];
+            list.RemoveAt(index);
+
+            gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
         }
-
-        if (listToUse != null && listToUse.Count > 0)
+        else
         {
-            int i = Random.Range(0, listToUse.Count);
-            _selectedQuestion = listToUse[i];
-            listToUse.RemoveAt(i);
-        }
-
-        gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
-    }
-
-    private List<QuestionData> GetListByDifficulty(List<QuestionData> easy, List<QuestionData> medium, List<QuestionData> hard, int difficulty)
-    {
-        switch (difficulty)
-        {
-            case 1: return easy;
-            case 2: return medium;
-            case 3: return hard;
-            default: return null;
+            Debug.LogWarning($"No questions found for {subject} - {difficultyEnum}");
         }
     }
     
     //Indica que el jugador selecciono una respuesta.
     public void OnAnswerSelected(Button clickedButton)
     {
-        gameManager.GetUIManager().ToggleButtonsInteraction(false);
         string selectedText = clickedButton.GetComponentInChildren<TextMeshProUGUI>().text;
         _playerAnswersCorrectly = CheckAnswer(selectedText);
         _playerHasAnswered = true;
-        MarkSelectedAnswer(selectedText);
-    }
-
-    private void MarkSelectedAnswer(string selectedText)
-    {
-        if (!_playerAnswersCorrectly)
-            gameManager.GetUIManager().ShowSelectedAnswer(selectedText);
-        
-        gameManager.GetUIManager().ShowCorrectAnswer(_selectedQuestion.GetCorrectAnswer());
+        OnAnswer?.Invoke(_playerAnswersCorrectly, clickedButton);
     }
 
     //Verifica si la respuesta es correcta (pinta la carta de verde) o incorrecta (pinta la carta de rojo).
@@ -190,8 +119,7 @@ public class QuestionManager : MonoBehaviour
         if (_playerAnswersCorrectly)
         {
             card.ChangeColor(CardBoard.CardColor.Green);
-            ActionZone.ZoneType cardType = gameManager.GetCardType(_actualCardIndex);
-            gameManager.GetPlayer().AddStats(cardType, difficulty);
+            gameManager.GetPlayer().AddStats(card.GetCardType(), difficulty);
             gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.RightAnswer);
         }
         else
@@ -199,66 +127,49 @@ public class QuestionManager : MonoBehaviour
             card.ChangeColor(CardBoard.CardColor.Red);
             gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.WrongAnswer);
         }
-
-        _actualCardIndex++;
     }
 
     #endregion
-    
-    /*Toma todos los scriptable objects (preguntas) y los carga en la lista general.
-    Luego recorre esta lista y la separa en 3 distintas: fácil, medio y difícil*/
-    private void LoadQuestions()
+
+    #region LoadQuestions
+    private void InitializeQuestionBank()
     {
-        allQuestions = Resources.LoadAll<QuestionData>("Questions");
+        _questionBank = new Dictionary<(QuestionData.Subject, QuestionData.Difficulty), List<QuestionData>>();
 
-        foreach (var q in allQuestions)
+        foreach (QuestionData.Subject subject in Enum.GetValues(typeof(QuestionData.Subject)))
         {
-            if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.History)
-                _historyEasy.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.History)
-                _historyMedium.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.History)
-                _historyHard.Add(q);
+            if (subject == QuestionData.Subject.Principal) continue;
 
-            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Science)
-                _scienceEasy.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Science)
-                _scienceMedium.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Science)
-                _scienceHard.Add(q);
-
-            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Entertainment)
-                _entertainmentEasy.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Entertainment)
-                _entertainmentMedium.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Entertainment)
-                _entertainmentHard.Add(q);
-            
-            else if (q.difficulty == QuestionData.Difficulty.Easy && q.subject == QuestionData.Subject.Geography)
-                _geographyEasy.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Medium && q.subject == QuestionData.Subject.Geography)
-                _geographyMedium.Add(q);
-            else if (q.difficulty == QuestionData.Difficulty.Hard && q.subject == QuestionData.Subject.Geography)
-                _geographyHard.Add(q);
+            foreach (QuestionData.Difficulty diff in Enum.GetValues(typeof(QuestionData.Difficulty)))
+            {
+                _questionBank[(subject, diff)] = new List<QuestionData>();
+            }
         }
     }
 
-    #region Utilities
+    private void LoadQuestions()
+    {
+        var allQuestions = Resources.LoadAll<QuestionData>("Questions");
 
+        foreach (var question in allQuestions)
+        {
+            var key = (question.subject, question.difficulty);
+            if (_questionBank.ContainsKey(key))
+                _questionBank[key].Add(question);
+        }
+    }
+    #endregion
+
+    #region Utilities
     private bool CheckAnswer(string selectedText)
     {
         return selectedText == _selectedQuestion.GetCorrectAnswer();
     }
-    
-    private int GetCardDifficulty(GameObject cardGo)
-    {
-        string numberText = cardGo.GetComponentInChildren<TextMeshProUGUI>().text.Substring(1);
-        return int.Parse(numberText);
-    }
-
-    public bool PlayerHasAnswered() => _playerHasAnswered;
     public void PlayerAnswersCorrectly(bool correct) => _playerAnswersCorrectly = correct;
     public void TimeRanOut(bool ranOut) => _timeRanOut = ranOut;
+    #endregion
 
+    #region Getters
+    public bool PlayerHasAnswered() => _playerHasAnswered;
     #endregion
 }

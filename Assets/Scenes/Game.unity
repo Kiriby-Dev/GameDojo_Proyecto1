@@ -178,7 +178,6 @@ MonoBehaviour:
   discardZone: {fileID: 1768564638}
   attackZone: {fileID: 1127105426}
   defenseZone: {fileID: 609977973}
-  cardsZone: {fileID: 416686411}
 --- !u!1 &23774910
 GameObject:
   m_ObjectHideFlags: 0
@@ -4776,6 +4775,9 @@ MonoBehaviour:
     maxAttack: 4
     minDefense: 2
     maxDefense: 4
+  approved: {fileID: -2097567955323748348, guid: b1040b79c2716dd489546cccc97f585f, type: 3}
+  blocked: {fileID: 6496594122317640316, guid: e78e8bd8896897448bd776b51d20dfdc, type: 3}
+  able: {fileID: 0}
 --- !u!4 &672463620
 Transform:
   m_ObjectHideFlags: 0
@@ -10172,14 +10174,11 @@ MonoBehaviour:
   - {fileID: 1732412488}
   - {fileID: 1468865138}
   questionText: {fileID: 831318773}
-  answerButton1: {fileID: 324938919}
-  answerText1: {fileID: 1433253276}
-  answerButton2: {fileID: 562178716}
-  answerText2: {fileID: 735522352}
-  answerButton3: {fileID: 1354942198}
-  answerText3: {fileID: 546996274}
-  answerButton4: {fileID: 1420549778}
-  answerText4: {fileID: 1015606496}
+  answerButtons:
+  - {fileID: 324938919}
+  - {fileID: 562178716}
+  - {fileID: 1354942198}
+  - {fileID: 1420549778}
   levelImages:
   - {fileID: 0}
   - {fileID: 0}

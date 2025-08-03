@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ActionZone : MonoBehaviour
 {
     public GameManager gameManager;
-    public enum ZoneType { Attack, Defense , Discard, Cards}
+    public enum ZoneType { Attack, Defense , Discard}
     public ZoneType zoneType;
     
     private GameObject[] _cardsInZone;
@@ -19,7 +19,7 @@ public class ActionZone : MonoBehaviour
     private PhaseManager.GamePhase _currentPhase;
 
     public static event Action<int> OnDiscard;
-    public static event Action<Sprite, int> OnCardPlaced;
+    public static event Action<Sprite, int, ZoneType> OnCardPlaced;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class ActionZone : MonoBehaviour
     {
         GetZoneChildren();
     }
-    
+
     //Si la zona esta activa verifico si solté una carta ahí.
     private void Update()
     {
@@ -90,12 +90,12 @@ public class ActionZone : MonoBehaviour
             case ZoneType.Attack: 
                 _selectedCard.ChangeSprite(Card.CardSprites.Attack);
                 cardSprite = _selectedCard.GetCardSprite();
-                OnCardPlaced?.Invoke(cardSprite, cardValue);
+                OnCardPlaced?.Invoke(cardSprite, cardValue, ZoneType.Attack);
                 break;
             case ZoneType.Defense:
                 _selectedCard.ChangeSprite(Card.CardSprites.Defense);
                 cardSprite = _selectedCard.GetCardSprite();
-                OnCardPlaced?.Invoke(cardSprite, cardValue);
+                OnCardPlaced?.Invoke(cardSprite, cardValue, ZoneType.Defense);
                 break;
         }
         Transform slot = _cardsInZone[_cantCardsInZone].transform;
@@ -159,7 +159,7 @@ public class ActionZone : MonoBehaviour
     #endregion
 
     #region Getters
-    public GameObject GetActualCardZone(int i) => _cardsInZone[i];
+    //public GameObject GetActualCardZone(int i) => _cardsInZone[i];
     #endregion
 
     #region Animations

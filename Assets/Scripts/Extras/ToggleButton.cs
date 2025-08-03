@@ -13,7 +13,7 @@ public class ToggleButton : MonoBehaviour
     private void Awake()
     {
         _toggle = GetComponentInParent<Toggle>();
-        _checkMarkImage = this.gameObject.GetComponent<Image>();
+        _checkMarkImage = gameObject.GetComponent<Image>();
     }
 
     public void ChangeSprite()
