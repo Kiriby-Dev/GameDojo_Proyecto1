@@ -13,7 +13,6 @@ public class Player : Character
         
         DiscardPoints.OnFullPoints += HealCharacter;
         CombatManager.OnPlayerHealthChanged += ChangeLife;
-        GameFlowManager.OnGameStarted += ResetStats;
         GameFlowManager.OnGameStarted += ResetLife;
         HPBar.OnDeath += PlayerDie;
     }
@@ -22,7 +21,6 @@ public class Player : Character
     {
         DiscardPoints.OnFullPoints -= HealCharacter;
         CombatManager.OnPlayerHealthChanged -= ChangeLife;
-        GameFlowManager.OnGameStarted -= ResetStats;
         GameFlowManager.OnGameStarted -= ResetLife;
         HPBar.OnDeath -= PlayerDie;
     }

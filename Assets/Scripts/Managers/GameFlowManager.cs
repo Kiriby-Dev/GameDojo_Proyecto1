@@ -13,6 +13,7 @@ public class GameFlowManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     
     private bool _gameStarted;
+    private bool _levelEnded;
     private bool _isPaused;
     
     private AudioManager _audioManager;
@@ -54,6 +55,7 @@ public class GameFlowManager : MonoBehaviour
     
     public void StartLevel()
     {
+        _levelEnded = false;
         OnLevelStart?.Invoke();
     }
 
@@ -72,19 +74,29 @@ public class GameFlowManager : MonoBehaviour
 
     private void TriggerLevelVictory()
     {
+        if (_levelEnded) return;
+        _levelEnded = true;
+
+        gameManager.DeactivateGameObjects(false);
+        
         OnLevelOver?.Invoke();
         _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
     }
 
     private void TriggerVictory()
     {
+        if (_levelEnded) return;
+        _levelEnded = true;
+        
         OnGameEnded?.Invoke();
         _menuManager.GameOver(true);
     }
 
     private void TriggerDefeat()
     {
-        OnLevelOver?.Invoke();
+        if (_levelEnded) return;
+        _levelEnded = true;
+        
         OnGameEnded?.Invoke();
         
         _menuManager.GameOver(false);

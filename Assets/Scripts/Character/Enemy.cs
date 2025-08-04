@@ -17,14 +17,12 @@ public class Enemy : Character
         base.Awake(); // Llama al Awake de Character
         
         CombatManager.OnEnemyHealthChanged += TakeDamage;
-        GameFlowManager.OnGameStarted += ResetLife;
         HPBar.OnDeath += EnemyDie;
     }
 
     private void OnDestroy()
     {
         CombatManager.OnEnemyHealthChanged -= TakeDamage;
-        GameFlowManager.OnGameStarted -= ResetLife;
         HPBar.OnDeath -= EnemyDie;
     }
 

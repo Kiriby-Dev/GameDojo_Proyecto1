@@ -158,16 +158,10 @@ public class ActionZone : MonoBehaviour
 
     #endregion
 
-    #region Getters
-    //public GameObject GetActualCardZone(int i) => _cardsInZone[i];
-    #endregion
-
     #region Animations
-
     public void ToggleLightAnimation()
     {
         _animator.SetTrigger("LightWaving");
     }
-
     #endregion
 }

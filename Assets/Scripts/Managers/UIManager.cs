@@ -15,6 +15,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Canvas battleCanvas;
     [SerializeField] private Canvas gameCanvas;
     
+    [Header("Level Decoration")]
+    [SerializeField] private Image background;
+    [SerializeField] private Image table;
+    [SerializeField] private Sprite[] backgrounds;
+    [SerializeField] private Sprite[] tables;
+    
     [Header("Board")]
     [SerializeField] private TextMeshProUGUI boardAttackText;
     [SerializeField] private TextMeshProUGUI boardDefenseText;
@@ -33,6 +39,7 @@ public class UIManager : MonoBehaviour
     {
         ActionZone.OnCardPlaced += UpdateBoardCards;
         QuestionManager.OnAnswer += ChangeAnswersColors;
+        LevelsManager.OnSubjectChosen += ChangeLevelDecoration;
         Player.OnPlayerStatsChanged += UpdateBoardStats;
     }
 
@@ -40,6 +47,7 @@ public class UIManager : MonoBehaviour
     {
         ActionZone.OnCardPlaced -= UpdateBoardCards;
         QuestionManager.OnAnswer -= ChangeAnswersColors;
+        LevelsManager.OnSubjectChosen -= ChangeLevelDecoration;
         Player.OnPlayerStatsChanged -= UpdateBoardStats;
     }
 
@@ -53,6 +61,9 @@ public class UIManager : MonoBehaviour
         ResetBoardCardsColor();
         ResetAnswersColors();
         _cantCardsPlaced = 0;
+        boardAttackText.text = "0";
+        boardDefenseText.text = "0";
+        gameCanvas.enabled = true;
         boardCanvas.enabled = false;
         battleCanvas.enabled = false;
     }
@@ -127,6 +138,12 @@ public class UIManager : MonoBehaviour
         ChangeButtonColor(_correctAnswerButton, CardBoard.CardColor.Green);
         if (!playerAnswersCorrectly)
             ChangeButtonColor(selectedAnswer, CardBoard.CardColor.Red);
+    }
+
+    private void ChangeLevelDecoration(QuestionData.Subject subject)
+    {
+        background.sprite = backgrounds[(int)subject];
+        table.sprite = tables[(int)subject];
     }
 
     #region Modes

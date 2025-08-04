@@ -133,16 +133,18 @@ public class LevelsManager : MonoBehaviour
     public void AdvanceLevel()
     {
         _levels[_currentLevel] = State.Approved;
+        UpdateLevelButton(_currentLevel); // Actualiza el nivel actual como aprobado
+    
         _currentLevel++;
-        
+    
         ChooseRandomSubject();
-        
+    
         if (_currentLevel < _levels.Length)
         {
             _levels[_currentLevel] = State.Able;
             _levelsButtons[_currentLevel].interactable = true;
+            UpdateLevelButton(_currentLevel); // Actualiza el nuevo nivel desbloqueado
         }
-        UpdateLevelButton(_currentLevel);
     }
 
     private void UpdateLevelButton(int levelIndex = 0)

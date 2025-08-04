@@ -32,6 +32,7 @@ public class PhaseManager : MonoBehaviour
     private void EndPhases()
     {
         _gameOver = true;
+        StopAllCoroutines();
     }
 
     private void AdvancePhase()

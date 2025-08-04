@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}
   m_sharedMaterial: {fileID: -3069001873900614250, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}
@@ -458,10 +458,6 @@ MonoBehaviour:
   playerDialogs: []
   playerAttackText: {fileID: 7782285537643052993}
   playerDefenseText: {fileID: 7783482168959407643}
-  playerBoardAttackText: {fileID: 0}
-  playerBoardDefenseText: {fileID: 0}
-  playerFightAttackText: {fileID: 0}
-  playerFightDefenseText: {fileID: 0}
 --- !u!1 &3335779680268293728
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +750,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}
   m_sharedMaterial: {fileID: -3069001873900614250, guid: 1c4ea79192c87f74f8982a2d21273681, type: 2}

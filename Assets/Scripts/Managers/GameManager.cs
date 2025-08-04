@@ -49,11 +49,14 @@ public class GameManager : MonoBehaviour
     {
         _enemyScript.GenerateStats();
         uiManager.ResetVisuals();
+        _playerScript.ResetStats();
+        _enemyScript.ResetLife();
+        attackZone.ResetZone();
+        defenseZone.ResetZone();
     }
     
     private void EndGame()
     {
-        _enemyScript.ResetLife();
         menuManager.MenuLevelsButton();
         levelsManager.AdvanceLevel();
     }
@@ -87,6 +90,15 @@ public class GameManager : MonoBehaviour
         defenseZone.gameObject.SetActive(!toggle);
     }
 
+    private void DestroyCardsInZones()
+    {
+        foreach (Transform slot in playersHand.transform)
+        {
+            Transform card = slot.GetChild(0);
+            if (card)
+                Destroy(card.gameObject);
+        }
+    }
     #endregion
     
     #region Getters
