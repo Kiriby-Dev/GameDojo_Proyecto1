@@ -111,17 +111,17 @@ public class ActionZone : MonoBehaviour
         _selectedCard = other.gameObject.GetComponentInParent<Card>();
         _currentPhase = gameManager.GetPhaseManager().CurrentPhase;
         
-        /*if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
+        if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
         {
             _selectedCard.ToggleAnimator(true);
-            _selectedCard.PlayDiscardAnimation();
-        }*/
+            _selectedCard.PlayDiscardAnimation(true);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         _activeZone = false;
-        //_selectedCard.ToggleAnimator(false);
+        _selectedCard.PlayDiscardAnimation(false);
     }
 
     #region Utilities

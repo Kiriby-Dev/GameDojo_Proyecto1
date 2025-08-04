@@ -42,6 +42,7 @@ public class Card : MonoBehaviour
     private Camera _camera;
     private GameManager _gameManager;
     private PlayersHand _playersHand;
+    private CardSprites _lastSprite;
     private Animator _animator;
 
     private void Awake()
@@ -172,6 +173,7 @@ public class Card : MonoBehaviour
     public void ChangeSprite(CardSprites sprite)
     {
         cardSprite.sprite = sprites[(int)sprite];
+        _lastSprite = sprite;
     }
 
     public int GetParentIndex()
@@ -208,9 +210,20 @@ public class Card : MonoBehaviour
             _animator.SetTrigger("MoveLeft");
     }
 
-	public void PlayDiscardAnimation()
+	public void PlayDiscardAnimation(bool value)
     {
-        _animator.SetTrigger("Discard");
+        _animator.SetBool("Discard", value);
+    }
+    
+    public void OnDiscardOutFinished()
+    {
+        ToggleAnimator(false);
+        ChangeSprite(_lastSprite);
+    }
+
+    public void OnDiscardStart()
+    {
+        ChangeSprite(_lastSprite);
     }
 
     public void ToggleAnimator(bool state)

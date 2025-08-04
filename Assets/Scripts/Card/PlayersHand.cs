@@ -44,8 +44,8 @@ public class PlayersHand : MonoBehaviour
             GameObject card = Instantiate(cardPrefab, transform.GetChild(i));
             Card actualCard = card.GetComponent<Card>();
             int difficulty = actualCard.GenerateCardValue();
-            ChangeCardSprite(actualCard, difficulty);
             actualCard.ToggleAnimator(true);
+            ChangeCardSprite(actualCard, difficulty);
             card.name = "Card" + i;
             AddCardToHand();
         }
