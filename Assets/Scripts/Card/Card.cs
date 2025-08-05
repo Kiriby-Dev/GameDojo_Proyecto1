@@ -20,6 +20,10 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas textCanvas;
     [SerializeField] private SpriteRenderer cardSprite;
     [SerializeField] private List<Sprite> sprites;
+    
+    [Header("FX")]
+    [SerializeField] private GameObject paperDiscardEffect;
+    private Animator _paperDiscardAnimator;
 
     public enum CardSprites
     {
@@ -52,6 +56,8 @@ public class Card : MonoBehaviour
         _playersHand = _gameManager.GetPlayersHand();
         _animator = GetComponent<Animator>();
         _cardDifficulty = textCanvas.GetComponentInChildren<TextMeshProUGUI>();
+        
+        _paperDiscardAnimator = paperDiscardEffect.GetComponent<Animator>();
     }
 
     private void Update()
@@ -212,13 +218,41 @@ public class Card : MonoBehaviour
 
 	public void PlayDiscardAnimation(bool value)
     {
-        _animator.SetBool("Discard", value);
+        //_animator.SetBool("Discard", value);
+        print("Play Discard Animation");
+        StartCoroutine(nameof(DiscardCoroutine), value);
+    }
+
+    private IEnumerator DiscardCoroutine(bool value)
+    {
+        if (value)
+        {
+            cardSprite.gameObject.SetActive(false);
+            textCanvas.gameObject.SetActive(false);
+            shadowSprite.enabled = false;
+        
+            paperDiscardEffect.SetActive(true);
+            _paperDiscardAnimator.Play("Discard_Independant");
+        }
+        else
+        {
+            _paperDiscardAnimator.Play("DiscardOut_Independant");
+            yield return new WaitForSeconds(0.3f);
+            paperDiscardEffect.SetActive(false);
+            cardSprite.gameObject.SetActive(true);
+            textCanvas.gameObject.SetActive(true);
+            shadowSprite.enabled = true;
+        }
     }
     
+
     public void OnDiscardOutFinished()
     {
-        ToggleAnimator(false);
-        ChangeSprite(_lastSprite);
+        print("On Discard Out Finished!");
+        _paperDiscardAnimator.speed = -1;
+        _paperDiscardAnimator.Play("Discard_Independant");
+        //ToggleAnimator(false);
+        //ChangeSprite(_lastSprite);
     }
 
     public void OnDiscardStart()
