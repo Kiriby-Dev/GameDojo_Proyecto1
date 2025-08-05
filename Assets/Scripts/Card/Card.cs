@@ -217,7 +217,6 @@ public class Card : MonoBehaviour
 
     public void PlayDiscardAnimation(bool value)
     {
-        print("Play Discard Animation");
         StartCoroutine(nameof(DiscardCoroutine), value);
     }
 

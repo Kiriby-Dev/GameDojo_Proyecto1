@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class ActionZone : MonoBehaviour
 {
-    public GameManager gameManager;
     public enum ZoneType { Attack, Defense , Discard}
     public ZoneType zoneType;
     
@@ -48,7 +47,7 @@ public class ActionZone : MonoBehaviour
         if(_cantCardsInZone >= _cardsInZone.Length || !_isDropping || !_selectedCard || !_selectedCard.gameObject) return;
         _activeZone = false;
         
-        _currentPhase = gameManager.GetPhaseManager().CurrentPhase;
+        _currentPhase = GameManager.Instance.GetPhaseManager().CurrentPhase;
 
         switch (_currentPhase)
         {
@@ -69,14 +68,14 @@ public class ActionZone : MonoBehaviour
         OnDiscard?.Invoke(cardValue);
         Destroy(_selectedCard.gameObject);
         DisableSlotAndRemoveCard();
-        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.Discard);
     }
 
     private void DisableSlotAndRemoveCard()
     {
         int actualSlot = _selectedCard.transform.parent.GetSiblingIndex();
-        gameManager.GetPlayersHand().DisableSlot(actualSlot);
-        gameManager.GetPlayersHand().RemoveCardFromHand();
+        GameManager.Instance.GetPlayersHand().DisableSlot(actualSlot);
+        GameManager.Instance.GetPlayersHand().RemoveCardFromHand();
     }
 
     private void AddCardInZone()
@@ -102,18 +101,17 @@ public class ActionZone : MonoBehaviour
         _selectedCard.PutCardInSlot(slot);
         
         _cantCardsInZone++;
-        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.CardColocation);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         _activeZone = true;
         _selectedCard = other.gameObject.GetComponentInParent<Card>();
-        _currentPhase = gameManager.GetPhaseManager().CurrentPhase;
+        _currentPhase = GameManager.Instance.GetPhaseManager().CurrentPhase;
         
         if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
         {
-            _selectedCard.ToggleAnimator(true);
             _selectedCard.PlayDiscardAnimation(true);
         }
     }
@@ -121,7 +119,10 @@ public class ActionZone : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         _activeZone = false;
-        _selectedCard.PlayDiscardAnimation(false);
+        if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
+        {
+            _selectedCard.PlayDiscardAnimation(false);
+        }
     }
 
     #region Utilities
@@ -150,8 +151,8 @@ public class ActionZone : MonoBehaviour
     private IEnumerator DiscardCardsInZone(int i)
     {
         Card card = _cardsInZone[i].transform.GetChild(0).GetComponent<Card>();
-        Vector3 discardZonePosition = gameManager.GetDiscardZone().transform.position;
-        gameManager.GetPlayersHand().MoveCardToPosition(card, discardZonePosition, 0.5f);
+        Vector3 discardZonePosition = GameManager.Instance.GetDiscardZone().transform.position;
+        GameManager.Instance.GetPlayersHand().MoveCardToPosition(card, discardZonePosition, 0.5f);
         yield return new WaitForSeconds(0.51f);
         Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
     }

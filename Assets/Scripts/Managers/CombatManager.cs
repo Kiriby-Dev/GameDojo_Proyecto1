@@ -7,8 +7,6 @@ public class CombatManager : MonoBehaviour
     public static event Action<int> OnPlayerHealthChanged;
     public static event Action<int> OnEnemyHealthChanged;
     
-    [SerializeField] private GameManager gameManager;
-    
     [Header("Characters")]
     [SerializeField] private Animator playerFight;
     [SerializeField] private Animator enemyFight;
@@ -36,7 +34,7 @@ public class CombatManager : MonoBehaviour
         Enemy.OnEnemyStatsChanged += EnemyStats;
         Enemy.OnDeath += EnemyIsDead;
         
-        _audioManager = gameManager.GetAudioManager();
+        _audioManager = GameManager.Instance.GetAudioManager();
     }
 
     private void OnDestroy()

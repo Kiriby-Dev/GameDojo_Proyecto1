@@ -86,7 +86,7 @@ public class Player : Character
         {
             _hpBar.Heal(value);
         }
-        gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.Heal);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.Heal);
     }
     
     #endregion

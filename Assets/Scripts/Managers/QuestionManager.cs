@@ -10,8 +10,7 @@ using Random = UnityEngine.Random;
 public class QuestionManager : MonoBehaviour
 {
     public static event Action<bool, Button> OnAnswer;
-
-    [SerializeField] private GameManager gameManager;
+    
     [SerializeField] private Timer timer;
 
     private Dictionary<(QuestionData.Subject, QuestionData.Difficulty), List<QuestionData>> _questionBank;
@@ -35,7 +34,7 @@ public class QuestionManager : MonoBehaviour
     //Recorre todas las cartas jugadas en la fase de colocación.
     private IEnumerator GoThroughCards()
     {
-        CardBoard[] boardCards = gameManager.GetUIManager().GetBoardCards();
+        CardBoard[] boardCards = GameManager.Instance.GetUIManager().GetBoardCards();
 
         foreach (CardBoard card in boardCards)
         {
@@ -71,13 +70,13 @@ public class QuestionManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         
-        gameManager.GetUIManager().ResetAnswersColors();
+        GameManager.Instance.GetUIManager().ResetAnswersColors();
     }
     
     //Selecciona una pregunta dada una dificultad y la elimina de la lista correspondiente para no repetirla.
     private void SelectQuestion(int difficulty)
     {
-        QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
+        QuestionData.Subject subject = GameManager.Instance.GetLevelsManager().GetActualSubject();
 
         if (subject == QuestionData.Subject.Principal)
         {
@@ -94,7 +93,7 @@ public class QuestionManager : MonoBehaviour
             _selectedQuestion = list[index];
             list.RemoveAt(index);
 
-            gameManager.GetUIManager().ShowQuestion(_selectedQuestion);
+            GameManager.Instance.GetUIManager().ShowQuestion(_selectedQuestion);
         }
         else
         {
@@ -119,13 +118,13 @@ public class QuestionManager : MonoBehaviour
         if (_playerAnswersCorrectly)
         {
             card.ChangeColor(CardBoard.CardColor.Green);
-            gameManager.GetPlayer().AddStats(card.GetCardType(), difficulty);
-            gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.RightAnswer);
+            GameManager.Instance.GetPlayer().AddStats(card.GetCardType(), difficulty);
+            GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.RightAnswer);
         }
         else
         {
             card.ChangeColor(CardBoard.CardColor.Red);
-            gameManager.GetAudioManager().PlayAudio(AudioManager.AudioList.WrongAnswer);
+            GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.WrongAnswer);
         }
     }
 

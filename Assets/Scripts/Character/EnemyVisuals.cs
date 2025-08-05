@@ -25,31 +25,33 @@ public class EnemyVisuals : MonoBehaviour
 
     private void ChangeEnemy(QuestionData.Subject subject)
     {
-        if (!enemyName) return;
-        
+        string enemyText = "";
         switch (subject)
         {
             case QuestionData.Subject.History:
-                enemyName.text = "Srta. Anecdota";
+                enemyText = "Srta. Anecdota";
                 enemySprite.sprite = enemySprites[0];
                 break;
             case QuestionData.Subject.Science:
-                enemyName.text = "Dr. Chispa";
+                enemyText = "Dr. Chispa";
                 enemySprite.sprite = enemySprites[1];
                 break;
             case QuestionData.Subject.Entertainment:
-                enemyName.text = "Sr. Trailer";
+                enemyText = "Sr. Trailer";
                 enemySprite.sprite = enemySprites[2];
                 break;
             case QuestionData.Subject.Geography:
-                enemyName.text = "Srta. Brujula";
+                enemyText = "Srta. Brujula";
                 enemySprite.sprite = enemySprites[3];
                 break;
             case QuestionData.Subject.Principal:
-                enemyName.text = "Dir. Sabelotodo";
+                enemyText = "Dir. Sabelotodo";
                 enemySprite.sprite = enemySprites[4];
                 break;
         }
+
+        if (enemyName)
+            enemyName.text = enemyText;
     }
 
     private void UpdateEnemyStats(int currentAttack, int currentDefense)

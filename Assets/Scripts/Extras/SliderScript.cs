@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class SliderScript : MonoBehaviour
 {
     private Slider _slider;
-    private GameManager _gameManager;
     private AudioManager _audioManager;
 
     private void Awake()
@@ -15,8 +14,7 @@ public class SliderScript : MonoBehaviour
 
     private void Start()
     {
-        _gameManager = FindAnyObjectByType<GameManager>();
-        _audioManager = _gameManager.GetAudioManager();
+        _audioManager = GameManager.Instance.GetAudioManager();
         
         _slider.onValueChanged.AddListener((value) =>
         {

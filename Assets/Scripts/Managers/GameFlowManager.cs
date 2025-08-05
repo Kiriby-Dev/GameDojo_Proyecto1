@@ -9,8 +9,6 @@ public class GameFlowManager : MonoBehaviour
     public static event Action<bool> OnGamePaused;
     public static event Action OnLevelStart;
     public static event Action OnLevelOver;
-
-    [SerializeField] private GameManager gameManager;
     
     private bool _gameStarted;
     private bool _levelEnded;
@@ -37,8 +35,8 @@ public class GameFlowManager : MonoBehaviour
 
     private void Start()
     {
-        _audioManager = gameManager.GetAudioManager();
-        _menuManager = gameManager.GetMenuManager();
+        _audioManager = GameManager.Instance.GetAudioManager();
+        _menuManager = GameManager.Instance.GetMenuManager();
     }
 
     private void Update()
@@ -79,7 +77,7 @@ public class GameFlowManager : MonoBehaviour
         if (_levelEnded) return;
         _levelEnded = true;
 
-        gameManager.DeactivateGameObjects(false);
+        GameManager.Instance.DeactivateGameObjects(false);
         
         OnLevelOver?.Invoke();
         _audioManager.PlayAudio(AudioManager.AudioList.GameWin);

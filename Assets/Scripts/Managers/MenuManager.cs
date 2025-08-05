@@ -5,7 +5,7 @@ using UnityEngine;
 public class MenuManager : MonoBehaviour
 {
     [Header("GameObjects")]
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private TextMeshProUGUI pauseBottomButton;
     
     [Header("Canvas")]
     [SerializeField] private Canvas canvasMenu;
@@ -14,8 +14,6 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Canvas canvasTutorial;
     [SerializeField] private Canvas canvasGameOver;
     [SerializeField] private Canvas canvasCredits;
-
-    [SerializeField] private TextMeshProUGUI pauseBottomButton;
     
     private bool _gameStarted;
     private bool _isPaused;
@@ -42,8 +40,8 @@ public class MenuManager : MonoBehaviour
         DisableAllCanvas();
         canvasMenu.enabled = true;
         
-        _transitionManager = gameManager.GetTransitionManager();
-        _audioManager = gameManager.GetAudioManager();
+        _transitionManager = GameManager.Instance.GetTransitionManager();
+        _audioManager = GameManager.Instance.GetAudioManager();
     }
     
     private void StartGame()
@@ -117,7 +115,7 @@ public class MenuManager : MonoBehaviour
         if (!_gameStarted)
             TutorialButton();
         else
-            gameManager.GetGameFlowManager().Pause(); //Si el juego comenzó actúa como un reanudar
+            GameManager.Instance.GetGameFlowManager().Pause(); //Si el juego comenzó actúa como un reanudar
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayersHand : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private float cardSpacing;
     
@@ -56,7 +55,7 @@ public class PlayersHand : MonoBehaviour
     
     private void ChangeCardSprite(Card actualCard, int difficulty)
     {
-        QuestionData.Subject subject = gameManager.GetLevelsManager().GetActualSubject();
+        QuestionData.Subject subject = GameManager.Instance.GetLevelsManager().GetActualSubject();
         switch (subject)
         {
             case QuestionData.Subject.History:

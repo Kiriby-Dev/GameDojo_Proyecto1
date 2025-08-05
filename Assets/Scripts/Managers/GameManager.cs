@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [Header("Managers")]
     [SerializeField] private QuestionManager questionManager;
     [SerializeField] private PhaseManager phaseManager;
@@ -30,6 +32,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         GameFlowManager.OnLevelStart += StartGame;
         GameFlowManager.OnLevelOver += EndGame;
         
@@ -67,6 +79,11 @@ public class GameManager : MonoBehaviour
         _playerScript.ResetStats();
         _enemyScript.GenerateStats();
         uiManager.ResetVisuals();
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     #endregion

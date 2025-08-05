@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PhaseManager : MonoBehaviour
 {
-    public GameManager gameManager;
     public enum GamePhase {Draw, Discard, Colocation, Questions, Resolution}
     
     private GamePhase _currentPhase;
@@ -78,36 +77,36 @@ public class PhaseManager : MonoBehaviour
 
     private IEnumerator DrawPhase()
     {
-        gameManager.GetPlayersHand().DrawCards();
+        GameManager.Instance.GetPlayersHand().DrawCards();
         yield return new WaitForSeconds(0.5f);
     }
     
     private IEnumerator DiscardPhase()
     {
-        gameManager.UpdateZones(_currentPhase.ToString());
-        gameManager.GetDiscardZone().ToggleLightAnimation();
-        yield return new WaitUntil(() => gameManager.GetPlayersHand().CantCardsInHand() <= 3);
+        GameManager.Instance.UpdateZones(_currentPhase.ToString());
+        GameManager.Instance.GetDiscardZone().ToggleLightAnimation();
+        yield return new WaitUntil(() => GameManager.Instance.GetPlayersHand().CantCardsInHand() <= 3);
     }
     
     private IEnumerator ColocationPhase()
     {
-        gameManager.UpdateZones(_currentPhase.ToString());
-        gameManager.GetDiscardZone().ToggleLightAnimation();
-        yield return new WaitUntil(() => gameManager.GetPlayersHand().CantCardsInHand() <= 0);
+        GameManager.Instance.UpdateZones(_currentPhase.ToString());
+        GameManager.Instance.GetDiscardZone().ToggleLightAnimation();
+        yield return new WaitUntil(() => GameManager.Instance.GetPlayersHand().CantCardsInHand() <= 0);
     }
 
     private IEnumerator QuestionsPhase()
     {
-        yield return gameManager.GetUIManager().QuestionMode();
-        yield return gameManager.GetQuestionManager().StartQuestions();
+        yield return GameManager.Instance.GetUIManager().QuestionMode();
+        yield return GameManager.Instance.GetQuestionManager().StartQuestions();
     }
 
     private IEnumerator ResolutionPhase()
     {
-        yield return gameManager.GetUIManager().BattleMode();
-        yield return gameManager.GetCombatManager().ResolveCombat();
-        yield return gameManager.GetUIManager().NormalMode();
-        gameManager.EndTurn();
+        yield return GameManager.Instance.GetUIManager().BattleMode();
+        yield return GameManager.Instance.GetCombatManager().ResolveCombat();
+        yield return GameManager.Instance.GetUIManager().NormalMode();
+        GameManager.Instance.EndTurn();
     }
 
     #endregion
@@ -121,7 +120,7 @@ public class PhaseManager : MonoBehaviour
         set
         {
             _currentPhase = value;
-            gameManager.GetUIManager().UpdatePhaseText(_currentPhase);
+            GameManager.Instance.GetUIManager().UpdatePhaseText(_currentPhase);
         }
     }
 }

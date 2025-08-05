@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public GameManager gameManager;
     public Image timerFill;
     public float duration;
     public float lerpSpeed;
@@ -16,7 +15,7 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        _questionManager = gameManager.GetQuestionManager() ;
+        _questionManager = GameManager.Instance.GetQuestionManager() ;
     }
 
     private void Update()

@@ -144,12 +144,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21674067}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1142276263}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &21674069
 MonoBehaviour:
@@ -3102,7 +3102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cfcfe992961a34786078605db83b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   zoneType: 3
 --- !u!114 &416686412
 MonoBehaviour:
@@ -4193,7 +4192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cfcfe992961a34786078605db83b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   zoneType: 1
 --- !u!61 &609977974
 BoxCollider2D:
@@ -4752,7 +4750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3e303fa83c7ed40a10ff7aa8f99293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   levelButtonPrefab: {fileID: 6007173501893871791, guid: 904965ca3183a5e48a233ccf31053c6b, type: 3}
   levelsContainer: {fileID: 1754127848}
   cantLevels: 5
@@ -7888,7 +7885,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada156f1189e21f48ae9cb4d830f4c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
 --- !u!4 &1087813306
 Transform:
   m_ObjectHideFlags: 0
@@ -8084,7 +8080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cfcfe992961a34786078605db83b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   zoneType: 0
 --- !u!50 &1127105427
 Rigidbody2D:
@@ -8400,7 +8395,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 21674068}
   - {fileID: 1087813306}
   - {fileID: 2076459777}
   - {fileID: 1913410404}
@@ -8961,7 +8955,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fffc4dd3e4793ed45ab3c0f62830a1fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   playerFight: {fileID: 9061123370481805463}
   enemyFight: {fileID: 4148875959023355126}
 --- !u!1 &1228809618
@@ -10327,14 +10320,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e60b61e4380aa849b0c7d72c74c4c87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
+  pauseBottomButton: {fileID: 201963352}
   canvasMenu: {fileID: 991275008}
   canvasLevelsMenu: {fileID: 1993327133}
   canvasOptions: {fileID: 1050483420}
   canvasTutorial: {fileID: 278144880}
   canvasGameOver: {fileID: 1963665388}
   canvasCredits: {fileID: 2036565556}
-  pauseBottomButton: {fileID: 201963352}
 --- !u!1001 &1386947119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10705,7 +10697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2839408d590a3234faad1d61f7bb2559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   phaseText: {fileID: 686052633}
   boardCanvas: {fileID: 1190802649}
   battleCanvas: {fileID: 107840906}
@@ -13161,7 +13152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cfcfe992961a34786078605db83b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   zoneType: 2
 --- !u!95 &1768564639
 Animator:
@@ -13286,7 +13276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef78068dcbfc5ba4fb7112bfb0f21a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   timerFill: {fileID: 1798076084}
   duration: 15
   lerpSpeed: 5
@@ -13751,7 +13740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b17602b27e275d74bb902dda63f07645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
 --- !u!1 &1917731494
 GameObject:
   m_ObjectHideFlags: 0
@@ -14165,7 +14153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee915e188da07747a6fcec805adef2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   cardPrefab: {fileID: 3110436283706915347, guid: 632b8d8320d42914a93363d201b04360, type: 3}
   cardSpacing: 1.7
 --- !u!1 &1963665385
@@ -15342,7 +15329,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96d27ab1353df024496847ca495e7b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 21674069}
   timer: {fileID: 1789508700}
 --- !u!4 &2076459777
 Transform:
@@ -16692,3 +16678,4 @@ SceneRoots:
   - {fileID: 1855906465}
   - {fileID: 1142276263}
   - {fileID: 645242942}
+  - {fileID: 21674068}

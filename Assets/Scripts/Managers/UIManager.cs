@@ -7,8 +7,6 @@ using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
-    public GameManager gameManager;
-    
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI phaseText;
     [SerializeField] private Canvas boardCanvas;
@@ -54,7 +52,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        _transitionManager = gameManager.GetTransitionManager();
+        _transitionManager = GameManager.Instance.GetTransitionManager();
     }
 
     public void ResetVisuals()
@@ -156,7 +154,7 @@ public class UIManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(0.3f);
         
-        gameManager.DeactivateGameObjects(true);
+        GameManager.Instance.DeactivateGameObjects(true);
         boardCanvas.enabled = true;
         gameCanvas.enabled = false;
         
@@ -181,7 +179,7 @@ public class UIManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(0.3f);
         
-        gameManager.DeactivateGameObjects(false);
+        GameManager.Instance.DeactivateGameObjects(false);
         battleCanvas.enabled = false;
         gameCanvas.enabled = true;
         

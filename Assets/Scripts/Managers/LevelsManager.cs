@@ -10,8 +10,6 @@ public class LevelsManager : MonoBehaviour
     public static event Action<QuestionData.Subject> OnSubjectChosen;
     public static event Action OnGameWin;
     
-    [SerializeField] private GameManager gameManager;
-    
     [Header("GameObjects")]
     [SerializeField] private GameObject levelButtonPrefab;
     [SerializeField] private GameObject levelsContainer;
@@ -50,7 +48,7 @@ public class LevelsManager : MonoBehaviour
         GameFlowManager.OnLevelStart += SelectLevelDifficulty;
         
         _levels = new State[cantLevels];
-        _enemy = gameManager.GetEnemy();
+        _enemy = GameManager.Instance.GetEnemy();
     }
 
     private void OnDestroy()
