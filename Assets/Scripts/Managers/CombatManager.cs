@@ -35,7 +35,15 @@ public class CombatManager : MonoBehaviour
         Player.OnPlayerStatsChanged += PlayerStats;
         Enemy.OnEnemyStatsChanged += EnemyStats;
         Enemy.OnDeath += EnemyIsDead;
+        
         _audioManager = gameManager.GetAudioManager();
+    }
+
+    private void OnDestroy()
+    {
+        Player.OnPlayerStatsChanged -= PlayerStats;
+        Enemy.OnEnemyStatsChanged -= EnemyStats;
+        Enemy.OnDeath -= EnemyIsDead;
     }
 
     public IEnumerator ResolveCombat()
@@ -98,9 +106,9 @@ public class CombatManager : MonoBehaviour
     }
 
     #region Utilities
-    private void EnemyIsDead()
+    private void EnemyIsDead(bool isDead)
     {
-        _enemyIsDead = true;
+        _enemyIsDead = isDead;
     }
 
     private void PlayerStats(int currentAttack, int currentDefense)
@@ -119,11 +127,6 @@ public class CombatManager : MonoBehaviour
     {
         _damageDealt = _enemyDefense - _playerAttack;
         _damageTaken = _playerDefense - _enemyAttack;
-    }
-    
-    public void Reset()
-    {
-        _enemyIsDead = false;
     }
     #endregion
 }

@@ -26,7 +26,7 @@ public class Character : MonoBehaviour
         _hpBar.Damage(Mathf.Abs(value));
     }
 
-    public void ResetLife()
+    protected void ResetLife()
     {
         _hpBar.RestoreAllLife();
     }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9f6d54661556e5d44b0b38cebc9da737
+guid: ef308343b3a219f47a238377ffe37c0a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7121819778050679306
-    second: Mesa_0
+      213: 8944775640530844355
+    second: Sello3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mesa_0
+      name: Sello3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1920
-        height: 374
+        width: 738
+        height: 403
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a02ef09ea59c5d260800000000000000
-      internalID: 7121819778050679306
+      spriteID: 3ca7869bd0a322c70800000000000000
+      internalID: 8944775640530844355
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Mesa_0: 7121819778050679306
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

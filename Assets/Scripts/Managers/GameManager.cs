@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
         _enemyScript.GenerateStats();
         uiManager.ResetVisuals();
         _playerScript.ResetStats();
-        _enemyScript.ResetLife();
         attackZone.ResetZone();
         defenseZone.ResetZone();
     }

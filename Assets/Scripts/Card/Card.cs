@@ -218,12 +218,6 @@ public class Card : MonoBehaviour
     public void OnDiscardOutFinished()
     {
         ToggleAnimator(false);
-        ChangeSprite(_lastSprite);
-    }
-
-    public void OnDiscardStart()
-    {
-        ChangeSprite(_lastSprite);
     }
 
     public void ToggleAnimator(bool state)

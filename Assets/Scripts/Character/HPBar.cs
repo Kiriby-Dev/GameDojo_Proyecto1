@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HPBar : MonoBehaviour
 {
-    public static event Action OnDeath;
+    public static event Action<bool> OnDeath;
     
     [Header("Config")] 
     public int maxHp;
@@ -55,7 +55,7 @@ public class HPBar : MonoBehaviour
         {
             _isDead = true;
             _currentHp = 0;
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(true);
         }
         
         _targetFill = Mathf.Clamp01((float)_currentHp / maxHp);
@@ -77,6 +77,7 @@ public class HPBar : MonoBehaviour
         imageBar.fillAmount = 1f;
         _targetFill = 1f;
         _healthChanged = true;
+        OnDeath?.Invoke(false);
     }
 
     #region Getters

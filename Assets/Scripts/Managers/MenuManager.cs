@@ -13,6 +13,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Canvas canvasOptions;
     [SerializeField] private Canvas canvasTutorial;
     [SerializeField] private Canvas canvasGameOver;
+    [SerializeField] private Canvas canvasCredits;
 
     [SerializeField] private TextMeshProUGUI pauseBottomButton;
     
@@ -94,6 +95,7 @@ public class MenuManager : MonoBehaviour
         canvasOptions.enabled = false;
         canvasTutorial.enabled = false;
         canvasGameOver.enabled = false;
+        canvasCredits.enabled = false;
     }
     #endregion
     
@@ -133,5 +135,11 @@ public class MenuManager : MonoBehaviour
             canvasOptions.enabled = pause;
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
+
+    public void ToggleCredits(bool state)
+    {
+        canvasCredits.enabled = state;
+    }
+
     #endregion
 }

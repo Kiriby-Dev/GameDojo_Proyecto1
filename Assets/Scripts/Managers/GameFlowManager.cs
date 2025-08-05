@@ -72,8 +72,10 @@ public class GameFlowManager : MonoBehaviour
         OnGamePaused?.Invoke(_isPaused);
     }
 
-    private void TriggerLevelVictory()
+    private void TriggerLevelVictory(bool isEnemyDead)
     {
+        if (!isEnemyDead) return;
+        
         if (_levelEnded) return;
         _levelEnded = true;
 
@@ -92,8 +94,10 @@ public class GameFlowManager : MonoBehaviour
         _menuManager.GameOver(true);
     }
 
-    private void TriggerDefeat()
+    private void TriggerDefeat(bool isPalyerDead)
     {
+        if (!isPalyerDead) return;
+        
         if (_levelEnded) return;
         _levelEnded = true;
         

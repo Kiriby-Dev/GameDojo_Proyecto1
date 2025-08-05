@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 065c277056156274ab2707093facff45
+guid: 98ae95dd78d6cf54186d2171be9073e9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4319223254409371456
-    second: personajesV2_0
+      213: 1553686464037068047
+    second: PortaPapeles.1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: personajesV2_0
+      name: PortaPapeles.1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 321
-        height: 416
+        y: 1
+        width: 239
+        height: 122
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 04f5da86aa6f0fb30800000000000000
-      internalID: 4319223254409371456
+      spriteID: f0d13457b9dcf8510800000000000000
+      internalID: 1553686464037068047
       vertices: []
       indices: 
       edges: []
@@ -151,8 +151,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      personajesV2_0: 4319223254409371456
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

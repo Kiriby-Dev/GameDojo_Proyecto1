@@ -609,7 +609,7 @@ MonoBehaviour:
   enemySprite: {fileID: 8168540032646006681}
   enemySprites:
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
-  - {fileID: 21300000, guid: 065c277056156274ab2707093facff45, type: 3}
+  - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}

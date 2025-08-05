@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Player : Character
 {
     public static event Action<int, int> OnPlayerStatsChanged;
-    public static event Action OnDeath;
+    public static event Action<bool> OnDeath;
 
     protected override void Awake()
     {
@@ -25,9 +25,9 @@ public class Player : Character
         HPBar.OnDeath -= PlayerDie;
     }
 
-    private void PlayerDie()
+    private void PlayerDie(bool isDead)
     {
-        OnDeath?.Invoke();
+        OnDeath?.Invoke(isDead);
     }
 
     //Le añade ataque o defensa al jugador con el valor correspondiente.

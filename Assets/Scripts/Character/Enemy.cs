@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class Enemy : Character
 {
     public static event Action<int, int> OnEnemyStatsChanged;
-    public static event Action OnDeath;
+    public static event Action<bool> OnDeath;
 
     private int _minAttack;
     private int _maxAttack;
@@ -17,12 +17,14 @@ public class Enemy : Character
         base.Awake(); // Llama al Awake de Character
         
         CombatManager.OnEnemyHealthChanged += TakeDamage;
+        GameFlowManager.OnLevelStart += ResetLife;
         HPBar.OnDeath += EnemyDie;
     }
 
     private void OnDestroy()
     {
         CombatManager.OnEnemyHealthChanged -= TakeDamage;
+        GameFlowManager.OnLevelStart -= ResetLife;
         HPBar.OnDeath -= EnemyDie;
     }
 
@@ -41,8 +43,8 @@ public class Enemy : Character
         _maxDefense = maxDefense;
     }
 
-    private void EnemyDie()
+    private void EnemyDie(bool isDead)
     {
-        OnDeath?.Invoke();
+        OnDeath?.Invoke(isDead);
     }
 }
