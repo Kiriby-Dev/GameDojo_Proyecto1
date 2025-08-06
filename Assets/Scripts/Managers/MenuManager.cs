@@ -118,6 +118,7 @@ public class MenuManager : MonoBehaviour
         else
         {
             StartCoroutine(TransitionCoroutine(canvasMenu));
+            canvasPause.enabled = false;
             GameManager.Instance.GetGameFlowManager().Pause();
             _gameStarted = false;
         }

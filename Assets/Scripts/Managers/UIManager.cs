@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     
     [Header("Level Decoration")]
     [SerializeField] private Image background;
+    [SerializeField] private Image boardBackground;
     [SerializeField] private Image battleBackground;
     [SerializeField] private Image table;
     [SerializeField] private Sprite[] backgrounds;
@@ -142,6 +143,7 @@ public class UIManager : MonoBehaviour
     private void ChangeLevelDecoration(QuestionData.Subject subject)
     {
         background.sprite = backgrounds[(int)subject];
+        boardBackground.sprite = backgrounds[(int)subject];
         battleBackground.sprite = backgrounds[(int)subject];
         table.sprite = tables[(int)subject];
     }

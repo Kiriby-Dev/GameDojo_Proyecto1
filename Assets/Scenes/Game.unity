@@ -11372,6 +11372,7 @@ MonoBehaviour:
   battleCanvas: {fileID: 107840906}
   gameCanvas: {fileID: 1459641312}
   background: {fileID: 1066812833}
+  boardBackground: {fileID: 1737558134}
   battleBackground: {fileID: 557661543}
   table: {fileID: 1876787903}
   backgrounds:
@@ -13184,7 +13185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
