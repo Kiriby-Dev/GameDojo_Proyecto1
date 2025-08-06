@@ -324,6 +324,8 @@ public class PlayersHand : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform cardSlot = transform.GetChild(i);
+            if (cardSlot.childCount <= 0) return;
+            
             Transform card = cardSlot.GetChild(0);
             card.GetComponent<Card>().DisableInteraction(isDisabled);
         }

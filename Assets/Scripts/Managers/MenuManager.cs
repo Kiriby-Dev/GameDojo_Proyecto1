@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Canvas canvasTutorial;
     [SerializeField] private Canvas canvasGameOver;
     [SerializeField] private Canvas canvasCredits;
+    [SerializeField] private Canvas canvasPause;
     
     private bool _gameStarted;
     private bool _isPaused;
@@ -39,6 +40,7 @@ public class MenuManager : MonoBehaviour
     {
         DisableAllCanvas();
         canvasMenu.enabled = true;
+        TogglePauseCanvas(true);
         
         _transitionManager = GameManager.Instance.GetTransitionManager();
         _audioManager = GameManager.Instance.GetAudioManager();
@@ -54,11 +56,12 @@ public class MenuManager : MonoBehaviour
     private void StartLevel()
     {
         DisableAllCanvas();
+        TogglePauseCanvas(true);
     }
     
     public void GameOver(bool win)
     {
-        canvasGameOver.enabled = true;
+        TogglePauseCanvas(false);
         if (win)
             canvasGameOver.gameObject.GetComponent<Animator>().SetBool("Win", true);
         else
@@ -67,6 +70,7 @@ public class MenuManager : MonoBehaviour
 
     private IEnumerator TransitionCoroutine(Canvas canvas = null)
     {
+        TogglePauseCanvas(false);
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(0.3f);
         
@@ -86,7 +90,7 @@ public class MenuManager : MonoBehaviour
     }
 
     #region Utilities
-    private void DisableAllCanvas()
+    public void DisableAllCanvas()
     {
         canvasMenu.enabled = false;
         canvasLevelsMenu.enabled = false;
@@ -95,6 +99,12 @@ public class MenuManager : MonoBehaviour
         canvasGameOver.enabled = false;
         canvasCredits.enabled = false;
     }
+
+    public void TogglePauseCanvas(bool value)
+    {
+        canvasPause.enabled = value;
+    }
+
     #endregion
     
     #region Buttons
@@ -127,10 +137,7 @@ public class MenuManager : MonoBehaviour
     
     public void ToggleOptions(bool pause)
     {
-        if (_gameStarted)
-            MenuButton();
-        else
-            canvasOptions.enabled = pause;
+        canvasOptions.enabled = pause;
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 

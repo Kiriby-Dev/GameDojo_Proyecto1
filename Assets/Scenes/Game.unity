@@ -1453,8 +1453,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 21674069}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1087813305}
+        m_TargetAssemblyTypeName: GameFlowManager, Assembly-CSharp
         m_MethodName: Pause
         m_Mode: 1
         m_Arguments:
@@ -2756,7 +2756,7 @@ RectTransform:
   m_Children:
   - {fileID: 231705237}
   - {fileID: 712913894}
-  m_Father: {fileID: 1855906465}
+  m_Father: {fileID: 411282672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2981,6 +2981,7 @@ Transform:
   - {fileID: 1050483417}
   - {fileID: 1963665389}
   - {fileID: 2036565553}
+  - {fileID: 383309944}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &415044269
@@ -5310,7 +5311,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1365974838}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: HelpButton
+        m_MethodName: TutorialButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10327,6 +10328,7 @@ MonoBehaviour:
   canvasTutorial: {fileID: 278144880}
   canvasGameOver: {fileID: 1963665388}
   canvasCredits: {fileID: 2036565556}
+  canvasPause: {fileID: 383309947}
 --- !u!1001 &1386947119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13388,7 +13390,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 383309944}
   - {fileID: 107840903}
   - {fileID: 1190802646}
   - {fileID: 1459641313}

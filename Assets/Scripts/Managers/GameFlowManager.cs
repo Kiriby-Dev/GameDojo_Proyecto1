@@ -37,10 +37,13 @@ public class GameFlowManager : MonoBehaviour
     {
         _audioManager = GameManager.Instance.GetAudioManager();
         _menuManager = GameManager.Instance.GetMenuManager();
+        _levelEnded = true;
     }
 
     private void Update()
     {
+        if (!_gameStarted) return;
+        
         if (Input.GetKeyDown(KeyCode.Escape))
             Pause();
     }
@@ -53,8 +56,16 @@ public class GameFlowManager : MonoBehaviour
     
     public void StartLevel()
     {
-        _levelEnded = false;
-        OnLevelStart?.Invoke();
+        if (_levelEnded)
+        {
+            _levelEnded = false;
+            OnLevelStart?.Invoke();
+        }
+        else
+        {
+            _menuManager.DisableAllCanvas();
+            _menuManager.TogglePauseCanvas(true);
+        }
     }
 
     public void EndGame()
