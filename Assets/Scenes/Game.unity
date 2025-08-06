@@ -9122,7 +9122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1157098715
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14718,8 +14718,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1365974838}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: ToggleOptions
-        m_Mode: 6
+        m_MethodName: MenuButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

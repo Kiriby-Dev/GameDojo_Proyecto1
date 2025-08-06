@@ -48,7 +48,7 @@ public class GameFlowManager : MonoBehaviour
 
     public void StartGame()
     {
-        _gameStarted = !_gameStarted;
+        _gameStarted = true;
         OnGameStarted?.Invoke();
     }
     

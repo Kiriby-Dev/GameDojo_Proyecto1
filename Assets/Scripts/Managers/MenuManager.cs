@@ -50,7 +50,7 @@ public class MenuManager : MonoBehaviour
     
     private void StartGame()
     {
-        _gameStarted = !_gameStarted;
+        _gameStarted = true;
         StartCoroutine(TransitionCoroutine(canvasLevelsMenu));
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
@@ -113,7 +113,14 @@ public class MenuManager : MonoBehaviour
     #region Buttons
     public void MenuButton()
     {
-        StartCoroutine(TransitionCoroutine(canvasMenu));
+        if (!_gameStarted)
+            ToggleOptions(false);
+        else
+        {
+            StartCoroutine(TransitionCoroutine(canvasMenu));
+            GameManager.Instance.GetGameFlowManager().Pause();
+            _gameStarted = false;
+        }
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
