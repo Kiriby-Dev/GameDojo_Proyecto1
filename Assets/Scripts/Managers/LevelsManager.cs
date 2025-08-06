@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class LevelsManager : MonoBehaviour
 {
     public static event Action<QuestionData.Subject> OnSubjectChosen;
-    public static event Action OnGameWin;
     
     [Header("GameObjects")]
     [SerializeField] private GameObject levelButtonPrefab;
@@ -88,9 +87,6 @@ public class LevelsManager : MonoBehaviour
             BossBattle();
             return;
         }
-        
-        if (_actualSubject == QuestionData.Subject.Principal)
-            OnGameWin?.Invoke();
 
         int index = Random.Range(0, _subjects.Count);
         _actualSubject = _subjects[index];
@@ -123,9 +119,13 @@ public class LevelsManager : MonoBehaviour
                 stats = firstSubject;
                 break;
         }
-        
+
         if (stats != null)
+        {
             _enemy.SetEnemyStats(stats.minAttack, stats.maxAttack, stats.minDefense, stats.maxDefense);
+            _enemy.GenerateStats();
+        }
+        
     }
 
     public void AdvanceLevel()
@@ -224,7 +224,7 @@ public class LevelsManager : MonoBehaviour
         }
     }
     
-    [System.Serializable]
+    [Serializable]
     public class StatsRange
     {
         public int minAttack;

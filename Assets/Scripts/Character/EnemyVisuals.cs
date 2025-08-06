@@ -29,19 +29,19 @@ public class EnemyVisuals : MonoBehaviour
         switch (subject)
         {
             case QuestionData.Subject.History:
-                enemyText = "Srta. Anecdota";
+                enemyText = "Srta. Arqueloca";
                 enemySprite.sprite = enemySprites[0];
                 break;
             case QuestionData.Subject.Science:
-                enemyText = "Dr. Chispa";
+                enemyText = "Dr. Newtonazo";
                 enemySprite.sprite = enemySprites[1];
                 break;
             case QuestionData.Subject.Entertainment:
-                enemyText = "Sr. Trailer";
+                enemyText = "Lic. Chistemalo";
                 enemySprite.sprite = enemySprites[2];
                 break;
             case QuestionData.Subject.Geography:
-                enemyText = "Srta. Brujula";
+                enemyText = "Sr. Tierraplana";
                 enemySprite.sprite = enemySprites[3];
                 break;
             case QuestionData.Subject.Principal:

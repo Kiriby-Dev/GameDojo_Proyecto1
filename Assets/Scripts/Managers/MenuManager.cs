@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour
     {
         GameFlowManager.OnGamePaused += ToggleOptions;
         GameFlowManager.OnGameStarted += StartGame;
+        GameFlowManager.OnGameEnded += GameOver;
         GameFlowManager.OnLevelStart += StartLevel;
     }
 
@@ -33,6 +34,7 @@ public class MenuManager : MonoBehaviour
     {
         GameFlowManager.OnGamePaused -= ToggleOptions;
         GameFlowManager.OnGameStarted -= StartGame;
+        GameFlowManager.OnGameEnded -= GameOver;
         GameFlowManager.OnLevelStart -= StartLevel;
     }
 
@@ -59,9 +61,10 @@ public class MenuManager : MonoBehaviour
         TogglePauseCanvas(true);
     }
     
-    public void GameOver(bool win)
+    private void GameOver(bool win)
     {
         TogglePauseCanvas(false);
+        canvasGameOver.enabled = true;
         if (win)
             canvasGameOver.gameObject.GetComponent<Animator>().SetBool("Win", true);
         else

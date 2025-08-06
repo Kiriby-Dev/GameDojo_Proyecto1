@@ -18,14 +18,14 @@ public class Enemy : Character
         
         CombatManager.OnEnemyHealthChanged += TakeDamage;
         GameFlowManager.OnLevelStart += ResetLife;
-        HPBar.OnDeath += EnemyDie;
+        _hpBar.OnDeath += EnemyDie;
     }
 
     private void OnDestroy()
     {
         CombatManager.OnEnemyHealthChanged -= TakeDamage;
         GameFlowManager.OnLevelStart -= ResetLife;
-        HPBar.OnDeath -= EnemyDie;
+        _hpBar.OnDeath -= EnemyDie;
     }
 
     public void GenerateStats()
@@ -41,6 +41,11 @@ public class Enemy : Character
         _maxAttack = maxAttack;
         _minDefense = minDefense;
         _maxDefense = maxDefense;
+    }
+
+    public void KillEnemyDebug(int value)
+    {
+        TakeDamage(value);
     }
 
     private void EnemyDie(bool isDead)

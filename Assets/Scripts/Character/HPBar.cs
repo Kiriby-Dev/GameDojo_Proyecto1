@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HPBar : MonoBehaviour
 {
-    public static event Action<bool> OnDeath;
+    public event Action<bool> OnDeath;
     
     [Header("Config")] 
     public int maxHp;

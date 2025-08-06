@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,7 +36,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -59,16 +59,18 @@ public class GameManager : MonoBehaviour
     #region LevelLoop
     private void StartGame()
     {
-        _enemyScript.GenerateStats();
-        uiManager.ResetVisuals();
-        _playerScript.ResetStats();
-        attackZone.ResetZone();
-        defenseZone.ResetZone();
+        EndTurn();
     }
     
     private void EndGame()
     {
         menuManager.MenuLevelsButton();
+        StartCoroutine(WaitToAdvanceLevel());
+    }
+
+    private IEnumerator WaitToAdvanceLevel()
+    {
+        yield return new WaitForSeconds(0.3f);
         levelsManager.AdvanceLevel();
     }
 
@@ -105,16 +107,7 @@ public class GameManager : MonoBehaviour
         attackZone.gameObject.SetActive(!toggle);
         defenseZone.gameObject.SetActive(!toggle);
     }
-
-    private void DestroyCardsInZones()
-    {
-        foreach (Transform slot in playersHand.transform)
-        {
-            Transform card = slot.GetChild(0);
-            if (card)
-                Destroy(card.gameObject);
-        }
-    }
+    
     #endregion
     
     #region Getters

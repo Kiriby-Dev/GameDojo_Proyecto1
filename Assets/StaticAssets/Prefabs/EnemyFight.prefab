@@ -1074,7 +1074,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7191d904e8ca64f8d79f0c0ce18266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
 --- !u!114 &1794027200490005056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,8 +1091,8 @@ MonoBehaviour:
   enemySprites:
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
   - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
-  - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
-  - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
+  - {fileID: 21300000, guid: b28c975b1fe6f1c47a686469f74b17c0, type: 3}
+  - {fileID: 21300000, guid: eb4d8a986ec81b04da2152199f210107, type: 3}
   - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
   enemyDialogs: []
   enemyAttackText: {fileID: 3594460392598294310}

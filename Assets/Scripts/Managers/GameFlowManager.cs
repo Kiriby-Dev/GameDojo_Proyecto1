@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameFlowManager : MonoBehaviour
 {
     public static event Action OnGameStarted;
-    public static event Action OnGameEnded;
+    public static event Action<bool> OnGameEnded;
     public static event Action<bool> OnGamePaused;
     public static event Action OnLevelStart;
     public static event Action OnLevelOver;
@@ -21,7 +21,6 @@ public class GameFlowManager : MonoBehaviour
     {
         Player.OnDeath += TriggerDefeat;
         Enemy.OnDeath += TriggerLevelVictory;
-        LevelsManager.OnGameWin += TriggerVictory;
         MenuButton.OnLevelButtonClicked += StartLevel;
     }
 
@@ -29,7 +28,6 @@ public class GameFlowManager : MonoBehaviour
     {
         Player.OnDeath -= TriggerDefeat;
         Enemy.OnDeath -= TriggerLevelVictory;
-        LevelsManager.OnGameWin -= TriggerVictory;
         MenuButton.OnLevelButtonClicked -= StartLevel;
     }
 
@@ -70,7 +68,6 @@ public class GameFlowManager : MonoBehaviour
 
     public void EndGame()
     {
-        OnGameEnded?.Invoke();
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
         Application.Quit();
     }
@@ -84,8 +81,13 @@ public class GameFlowManager : MonoBehaviour
     private void TriggerLevelVictory(bool isEnemyDead)
     {
         if (!isEnemyDead) return;
-        
+        if (GameManager.Instance.GetLevelsManager().GetActualSubject() == QuestionData.Subject.Principal)
+        {
+            TriggerVictory();
+            return;
+        }
         if (_levelEnded) return;
+        
         _levelEnded = true;
 
         GameManager.Instance.DeactivateGameObjects(false);
@@ -94,25 +96,17 @@ public class GameFlowManager : MonoBehaviour
         _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
     }
 
-    private void TriggerVictory()
-    {
-        if (_levelEnded) return;
-        _levelEnded = true;
-        
-        OnGameEnded?.Invoke();
-        _menuManager.GameOver(true);
-    }
-
     private void TriggerDefeat(bool isPalyerDead)
     {
         if (!isPalyerDead) return;
         
-        if (_levelEnded) return;
-        _levelEnded = true;
-        
-        OnGameEnded?.Invoke();
-        
-        _menuManager.GameOver(false);
+        OnGameEnded?.Invoke(false);
         _audioManager.PlayAudio(AudioManager.AudioList.GameOver);
+    }
+    
+    private void TriggerVictory()
+    {
+        OnGameEnded?.Invoke(true);
+        _audioManager.PlayAudio(AudioManager.AudioList.GameWin);
     }
 }

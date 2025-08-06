@@ -6,13 +6,15 @@ using UnityEngine.UI;
 
 public class ImageGallery : MonoBehaviour
 {
-    public Image currentImage; // La imagen grande que muestra el sprite
-    public TextMeshProUGUI currentText;
-    public float typingSpeed;
-    public List<Sprite> imageList; // Lista de imágenes a mostrar
-    public List<string> textList;
-    public Button nextButton;
-    public Button prevButton;
+    [SerializeField] private Image currentImage; // La imagen grande que muestra el sprite
+    [SerializeField] private TextMeshProUGUI currentText;
+    [SerializeField] private TextMeshProUGUI currentPhaseText;
+    [SerializeField] private float typingSpeed;
+    [SerializeField] private List<Sprite> imageList; // Lista de imágenes a mostrar
+    [SerializeField] private List<string> textList;
+    [SerializeField] private List<string> phaseTextList;
+    [SerializeField] private Button nextButton;
+    [SerializeField] private Button prevButton;
 
     private int _currentIndex = 0;
 
@@ -39,6 +41,7 @@ public class ImageGallery : MonoBehaviour
         if (imageList.Count > 0 && currentImage && currentText)
         {
             currentImage.sprite = imageList[_currentIndex];
+            currentPhaseText.text = phaseTextList[_currentIndex];
             StopAllCoroutines();
             StartCoroutine(TextCoroutine());
         }

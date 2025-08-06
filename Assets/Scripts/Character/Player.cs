@@ -14,7 +14,7 @@ public class Player : Character
         DiscardPoints.OnFullPoints += HealCharacter;
         CombatManager.OnPlayerHealthChanged += ChangeLife;
         GameFlowManager.OnGameStarted += ResetLife;
-        HPBar.OnDeath += PlayerDie;
+        _hpBar.OnDeath += PlayerDie;
     }
 
     private void OnDestroy()
@@ -22,7 +22,7 @@ public class Player : Character
         DiscardPoints.OnFullPoints -= HealCharacter;
         CombatManager.OnPlayerHealthChanged -= ChangeLife;
         GameFlowManager.OnGameStarted -= ResetLife;
-        HPBar.OnDeath -= PlayerDie;
+        _hpBar.OnDeath -= PlayerDie;
     }
 
     private void PlayerDie(bool isDead)
@@ -64,7 +64,7 @@ public class Player : Character
         OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }
 
-    private void ChangeLife(int value)
+    public void ChangeLife(int value)
     {
         if (value < 0)
             TakeDamage(value);
