@@ -15,6 +15,7 @@ public class PlayerVisuals : MonoBehaviour
     {
         Player.OnPlayerStatsChanged += UpdatePlayerStats;
         DiscardPoints.OnFullPoints += PlayHealAnimation;
+        InputName.OnPlayerNameChanged += UpdatePlayerName;
         
         _animator = GetComponent<Animator>();
     }
@@ -23,6 +24,7 @@ public class PlayerVisuals : MonoBehaviour
     {
         Player.OnPlayerStatsChanged -= UpdatePlayerStats;
         DiscardPoints.OnFullPoints -= PlayHealAnimation;
+        InputName.OnPlayerNameChanged -= UpdatePlayerName;
     }
 
     private void UpdatePlayerName(string playerNameString)
