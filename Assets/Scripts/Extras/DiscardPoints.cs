@@ -53,6 +53,8 @@ public class DiscardPoints : MonoBehaviour
         _actualPoints = 0;
         _isFull = false;
         _index++;
+        if (_index > neededPoints.Length - 1)
+            _index--;
         UpdatePoints();
     }
     

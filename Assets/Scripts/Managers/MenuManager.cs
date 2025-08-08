@@ -6,6 +6,7 @@ public class MenuManager : MonoBehaviour
 {
     [Header("GameObjects")]
     [SerializeField] private TextMeshProUGUI pauseBottomButton;
+    [SerializeField] private GameObject menuLight;
     
     [Header("Canvas")]
     [SerializeField] private Canvas canvasMenu;
@@ -42,7 +43,7 @@ public class MenuManager : MonoBehaviour
     {
         DisableAllCanvas();
         canvasMenu.enabled = true;
-        TogglePauseCanvas(true);
+        TogglePauseCanvas(false);
         
         _transitionManager = GameManager.Instance.GetTransitionManager();
         _audioManager = GameManager.Instance.GetAudioManager();
@@ -51,6 +52,7 @@ public class MenuManager : MonoBehaviour
     private void StartGame()
     {
         _gameStarted = true;
+        menuLight.SetActive(false);
         StartCoroutine(TransitionCoroutine(canvasLevelsMenu));
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
@@ -121,7 +123,9 @@ public class MenuManager : MonoBehaviour
             canvasPause.enabled = false;
             GameManager.Instance.GetGameFlowManager().Pause();
             _gameStarted = false;
+            menuLight.SetActive(true);
         }
+        menuLight.SetActive(true);
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
 
@@ -143,9 +147,16 @@ public class MenuManager : MonoBehaviour
     public void TutorialButton()
     {
         StartCoroutine(TransitionCoroutine(canvasTutorial));
+        menuLight.SetActive(false);
         _audioManager.PlayAudio(AudioManager.AudioList.Click);
     }
-    
+
+    public void TutorialExitButton()
+    {
+        StartCoroutine(TransitionCoroutine(canvasMenu));
+        menuLight.SetActive(true);
+    }
+
     public void ToggleOptions(bool pause)
     {
         canvasOptions.enabled = pause;

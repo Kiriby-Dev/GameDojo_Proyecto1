@@ -7,15 +7,22 @@ public class PlayerVisuals : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] playerDialogs;
     [SerializeField] private TextMeshProUGUI playerAttackText;
     [SerializeField] private TextMeshProUGUI playerDefenseText;
+    [SerializeField] private ParticleSystem healEffect;
+    
+    private Animator _animator;
 
     private void Awake()
     {
         Player.OnPlayerStatsChanged += UpdatePlayerStats;
+        DiscardPoints.OnFullPoints += PlayHealAnimation;
+        
+        _animator = GetComponent<Animator>();
     }
 
     private void OnDestroy()
     {
         Player.OnPlayerStatsChanged -= UpdatePlayerStats;
+        DiscardPoints.OnFullPoints -= PlayHealAnimation;
     }
 
     private void UpdatePlayerName(string playerNameString)
@@ -28,5 +35,15 @@ public class PlayerVisuals : MonoBehaviour
     {
         playerAttackText.text = currentAttack.ToString();
         playerDefenseText.text = currentDefense.ToString();
+    }
+
+    private void PlayHealAnimation(int value)
+    {
+        _animator.SetTrigger("Heal");
+    }
+
+    private void PlayHealEffect()
+    {
+        healEffect.Play();
     }
 }
