@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9bb1b92f17d1194dadbb2f4a83774de, type: 3}
-  m_Name: Pregunta_59_Easy_History
+  m_Name: Pregunta_59_Hard_Entertainment
   m_EditorClassIdentifier: 
   question: "\"\xBFComo se llaman los creadores del increible juego \"\"No estudi\xE9
     para esto\"\"?\""
-  correctAnswer: "\"Nicol\xE1s"
+  correctAnswer: "Nicol\xE1s/Felipe/Pablo"
   wrongAnswers:
-  - ' Felipe y Pablo"'
-  - "\"Nicol\xE1s"
-  - ' Franco y Pedro"'
-  difficulty: 0
-  subject: 0
+  - "Nicol\xE1s/Franco/Pedro"
+  - Nacho/Felipe/Patricio
+  - Nahuel/Fabricio/Pablo
+  difficulty: 2
+  subject: 2

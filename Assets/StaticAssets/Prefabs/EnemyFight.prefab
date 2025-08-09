@@ -1090,10 +1090,10 @@ MonoBehaviour:
   enemySprite: {fileID: 3054103850659156600}
   enemySprites:
   - {fileID: 1378272685192228994, guid: 1cbf3ed7a288afa49b2c0358ab581346, type: 3}
-  - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
-  - {fileID: 21300000, guid: b28c975b1fe6f1c47a686469f74b17c0, type: 3}
+  - {fileID: 21300000, guid: 1f9a2725c7f38484b9997a9e5fa4fcb5, type: 3}
+  - {fileID: 21300000, guid: 4b149c44a3aca8a48bafb787461a2387, type: 3}
   - {fileID: 21300000, guid: eb4d8a986ec81b04da2152199f210107, type: 3}
-  - {fileID: -7740437642104516529, guid: 99fb1d7fdbb198b4c8e17b279ec35408, type: 3}
+  - {fileID: 21300000, guid: 24b0df7e239e7a848b54e9398deca374, type: 3}
   enemyDialogs: []
   enemyAttackText: {fileID: 3594460392598294310}
   enemyDefenseText: {fileID: 5007341234943614636}

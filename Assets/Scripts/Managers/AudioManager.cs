@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 public class AudioManager : MonoBehaviour
 {
@@ -44,12 +46,14 @@ public class AudioManager : MonoBehaviour
 
     public void ToggleMusic()
     {
+        PlayAudio(AudioList.Click);
         _musicMuted = !_musicMuted;
         SetMixerState("MusicVolume", _musicMuted);
     }
 
     public void ToggleSFX()
     {
+        PlayAudio(AudioList.Click);
         _sfxMuted = !_sfxMuted;
         SetMixerState("SFXVolume", _sfxMuted);
     }
@@ -57,6 +61,17 @@ public class AudioManager : MonoBehaviour
     public void SetMasterVolume(float volume)
     {
         mainMixer.SetFloat("MasterVolume", volume);
+    }
+    
+    public void SetSFXVolume(float volume)
+    {
+        mainMixer.SetFloat("SFXVolume", volume);
+        PlayAudio(AudioList.Click);
+    }
+    
+    public void SetMusicVolume(float volume)
+    {
+        mainMixer.SetFloat("MusicVolume", volume);
     }
 
     public void ToggleMaster()

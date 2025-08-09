@@ -494,6 +494,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3a861bdebd4e4e74ba7ccfeaccd2369a, type: 3}
   - {fileID: 21300000, guid: d92802bb5dbfba346be56df5e0ecad06, type: 3}
   - {fileID: 1751954403625066513, guid: 7ad0bb0b72890d849899d06a853eb3c3, type: 3}
+  - {fileID: 21300000, guid: b5da7ea5e7ba84943a77dc2b2f21e874, type: 3}
+  - {fileID: 21300000, guid: 6f6dc8ebd53f76f4ca26d1decb3f4078, type: 3}
+  - {fileID: 21300000, guid: 0db4db28ae6f3274a82d7ca29ccb72a4, type: 3}
   paperDiscardEffect: {fileID: 3494972645344114123}
 --- !u!95 &3184240237345956619
 Animator:

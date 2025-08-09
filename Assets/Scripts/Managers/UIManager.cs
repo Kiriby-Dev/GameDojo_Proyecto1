@@ -61,8 +61,6 @@ public class UIManager : MonoBehaviour
         ResetBoardCardsColor();
         ResetAnswersColors();
         _cantCardsPlaced = 0;
-        boardAttackText.text = "0";
-        boardDefenseText.text = "0";
         gameCanvas.enabled = true;
         boardCanvas.enabled = false;
         battleCanvas.enabled = false;

@@ -148,6 +148,17 @@ public class ActionZone : MonoBehaviour
         _cantCardsInZone = 0;
     }
 
+    public void DestroyCardsInZone()
+    {
+        if (zoneType == ZoneType.Discard) return;
+        
+        for (int i = 0; i < _cantCardsInZone; i++)
+        {
+            Destroy(_cardsInZone[i].transform.GetChild(0).gameObject);
+        }
+        _cantCardsInZone = 0;
+    }
+
     private IEnumerator DiscardCardsInZone(int i)
     {
         Card card = _cardsInZone[i].transform.GetChild(0).GetComponent<Card>();

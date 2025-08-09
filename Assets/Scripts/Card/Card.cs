@@ -33,6 +33,7 @@ public class Card : MonoBehaviour
         ScienceEasy, ScienceMedium, ScienceHard,
         EntertainmentEasy, EntertainmentMedium, EntertainmentHard,
         GeographyEasy, GeographyMedium, GeographyHard,
+        PrincipalEasy, PrincipalMedium, PrincipalHard,
     };
 
     private bool _isReturning;
@@ -158,7 +159,10 @@ public class Card : MonoBehaviour
             transform.Find("DropZone").gameObject.SetActive(false);
         }
         else
+        {
             GetComponent<Collider2D>().enabled = true;
+            transform.Find("DropZone").gameObject.SetActive(true);
+        }
     }
 
     public int GenerateCardValue()
@@ -242,7 +246,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void ToggleAnimator(bool state)
+    private void ToggleAnimator(bool state)
     {
         _animator.enabled = state;
     }

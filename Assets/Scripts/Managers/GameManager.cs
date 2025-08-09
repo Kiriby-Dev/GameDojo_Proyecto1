@@ -59,12 +59,16 @@ public class GameManager : MonoBehaviour
     #region LevelLoop
     private void StartGame()
     {
-        EndTurn();
+        _enemyScript.GenerateStats();
+        _playerScript.ResetStats();
+        uiManager.ResetVisuals();
     }
     
     private void EndGame()
     {
         menuManager.MenuLevelsButton();
+        attackZone.DestroyCardsInZone();
+        defenseZone.DestroyCardsInZone();
         StartCoroutine(WaitToAdvanceLevel());
     }
 
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         attackZone.ResetZone();
         defenseZone.ResetZone();
-        _playerScript.ResetStats();
+        _playerScript.ResetAttack();
         _enemyScript.GenerateStats();
         uiManager.ResetVisuals();
     }
@@ -107,7 +111,13 @@ public class GameManager : MonoBehaviour
         attackZone.gameObject.SetActive(!toggle);
         defenseZone.gameObject.SetActive(!toggle);
     }
-    
+
+    public void ResetPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        Debug.Log("Todos los PlayerPrefs han sido borrados.");
+    }
     #endregion
     
     #region Getters

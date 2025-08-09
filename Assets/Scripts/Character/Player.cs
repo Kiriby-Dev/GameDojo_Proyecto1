@@ -13,6 +13,7 @@ public class Player : Character
         
         DiscardPoints.OnFullPoints += HealCharacter;
         CombatManager.OnPlayerHealthChanged += ChangeLife;
+        CombatManager.OnPlayerBlockAttack += SetDefense;
         GameFlowManager.OnGameStarted += ResetLife;
         _hpBar.OnDeath += PlayerDie;
     }
@@ -21,6 +22,7 @@ public class Player : Character
     {
         DiscardPoints.OnFullPoints -= HealCharacter;
         CombatManager.OnPlayerHealthChanged -= ChangeLife;
+        CombatManager.OnPlayerBlockAttack -= SetDefense;
         GameFlowManager.OnGameStarted -= ResetLife;
         _hpBar.OnDeath -= PlayerDie;
     }
@@ -51,7 +53,13 @@ public class Player : Character
         CurrentDefense = 0;
         OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }
-    
+
+    public void ResetAttack()
+    {
+        CurrentAttack = 0;
+        OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
+    }
+
     private void AddAttack(int value)
     {
         CurrentAttack += value;
@@ -61,6 +69,15 @@ public class Player : Character
     private void AddDefense(int value)
     {
         CurrentDefense += value;
+        OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
+    }
+
+    private void SetDefense(int value)
+    {
+        if (value > 0)
+            CurrentDefense = value;
+        else
+            CurrentDefense = 0;
         OnPlayerStatsChanged?.Invoke(CurrentAttack, CurrentDefense);
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CombatManager : MonoBehaviour
 {
     public static event Action<int> OnPlayerHealthChanged;
+    public static event Action<int> OnPlayerBlockAttack;
     public static event Action<int> OnEnemyHealthChanged;
     
     [Header("Characters")]
@@ -61,6 +62,7 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(0.35f);
             
             ManageReaction(_damageTaken, Character.CharacterType.Player);
+            OnPlayerBlockAttack?.Invoke(_damageTaken);
             
             yield return new WaitForSeconds(2f);
         }

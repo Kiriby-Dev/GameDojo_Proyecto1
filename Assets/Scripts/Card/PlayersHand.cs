@@ -114,6 +114,20 @@ public class PlayersHand : MonoBehaviour
                         break;
                 }
                 break;
+            case QuestionData.Subject.Principal:
+                switch (difficulty)
+                {
+                    case 1:
+                        actualCard.ChangeSprite(Card.CardSprites.PrincipalEasy);
+                        break;
+                    case 2:
+                        actualCard.ChangeSprite(Card.CardSprites.PrincipalMedium);
+                        break;
+                    case 3:
+                        actualCard.ChangeSprite(Card.CardSprites.PrincipalHard);
+                        break;
+                }
+                break;
         }
     }
 
@@ -324,10 +338,11 @@ public class PlayersHand : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform cardSlot = transform.GetChild(i);
-            if (cardSlot.childCount <= 0) return;
-            
-            Transform card = cardSlot.GetChild(0);
-            card.GetComponent<Card>().DisableInteraction(isDisabled);
+            if (cardSlot.childCount > 0)
+            {
+                Transform card = cardSlot.GetChild(0);
+                card.GetComponent<Card>().DisableInteraction(isDisabled);
+            }
         }
     }
 
