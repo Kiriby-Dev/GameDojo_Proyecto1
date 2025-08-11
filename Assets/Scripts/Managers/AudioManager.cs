@@ -21,7 +21,13 @@ public class AudioManager : MonoBehaviour
         Hurt
     }
 
+    public enum MusicList
+    {
+        Menu,
+    }
+
     [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField] private List<AudioClip> musicList;
 
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource musicSource;
@@ -31,11 +37,19 @@ public class AudioManager : MonoBehaviour
     private bool _masterMuted;
     private bool _sfxMuted;
     private bool _musicMuted;
-
+    
     public void PlayAudio(AudioList clipName, float pitch = 1.0f, bool oneShoot = true)
     {
         sfxSource.pitch = pitch;
         sfxSource.PlayOneShot(audioClips[(int)clipName]);
+    }
+
+    public void PlayMusic(MusicList songName, float pitch = 1.0f)
+    {
+        musicSource.pitch = pitch;
+        musicSource.clip = musicList[(int)songName];
+        musicSource.loop = true;
+        musicSource.Play();
     }
 
     public void PlayAudioPitched(AudioList clipName, bool oneShoot = true)

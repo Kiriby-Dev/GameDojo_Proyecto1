@@ -59,11 +59,22 @@ public class GameManager : MonoBehaviour
     #region LevelLoop
     private void StartGame()
     {
+        StartCoroutine(PlayVsAnimation());
         _enemyScript.GenerateStats();
         _playerScript.ResetStats();
         uiManager.ResetVisuals();
     }
-    
+
+    private IEnumerator PlayVsAnimation()
+    {
+        transitionManager.PlayVsTransition("Vs", levelsManager.GetActualSubject().ToString());
+        yield return new WaitForSeconds(2f);
+        transitionManager.PlayTransition("Fade", "Fade");
+        yield return new WaitForSeconds(2f);
+        transitionManager.HideVsCanvas();
+        transitionManager.PlayTransition("Fade", "FadeOut");
+    }
+
     private void EndGame()
     {
         menuManager.MenuLevelsButton();

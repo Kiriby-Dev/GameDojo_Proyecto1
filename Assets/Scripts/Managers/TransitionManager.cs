@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TransitionManager : MonoBehaviour
 {
+    [SerializeField] private GameObject vsCanvas;
+    
     [System.Serializable]
     public class NamedAnimator
     {
@@ -26,5 +28,25 @@ public class TransitionManager : MonoBehaviour
         }
 
         Debug.LogWarning($"No se encontró la transición '{animation}'");
+    }
+
+    public void PlayVsTransition(string gameObject, string animation)
+    {
+        if (gameObject == "") return;
+        foreach (var entry in animators)
+        {
+            if (entry.name == gameObject)
+            {
+                entry.animator.gameObject.SetActive(true);
+                entry.animator.Play(animation); 
+                return;
+            }
+        }
+        
+    }
+
+    public void HideVsCanvas()
+    {
+        vsCanvas.SetActive(false);
     }
 }

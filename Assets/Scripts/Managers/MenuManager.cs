@@ -47,6 +47,7 @@ public class MenuManager : MonoBehaviour
         
         _transitionManager = GameManager.Instance.GetTransitionManager();
         _audioManager = GameManager.Instance.GetAudioManager();
+        _audioManager.PlayMusic(AudioManager.MusicList.Menu);
     }
     
     private void StartGame()
@@ -59,10 +60,16 @@ public class MenuManager : MonoBehaviour
 
     private void StartLevel()
     {
+        StartCoroutine(WaitToStartLevel());
+    }
+
+    private IEnumerator WaitToStartLevel()
+    {
+        yield return new WaitForSeconds(0.5f);
         DisableAllCanvas();
         TogglePauseCanvas(true);
     }
-    
+
     private void GameOver(bool win)
     {
         TogglePauseCanvas(false);
