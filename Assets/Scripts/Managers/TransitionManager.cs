@@ -45,8 +45,13 @@ public class TransitionManager : MonoBehaviour
         
     }
 
-    public void HideVsCanvas()
+    public void ToggleVsCanvas(bool value)
     {
-        vsCanvas.SetActive(false);
+        vsCanvas.SetActive(value);
+    }
+
+    public void DisableActualSubjectAnimation(string actualSubject)
+    {
+        vsCanvas.transform.Find(actualSubject).gameObject.SetActive(false);
     }
 }

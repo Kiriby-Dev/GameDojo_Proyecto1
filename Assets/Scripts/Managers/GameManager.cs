@@ -67,12 +67,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PlayVsAnimation()
     {
+        transitionManager.ToggleVsCanvas(true);
         transitionManager.PlayVsTransition("Vs", levelsManager.GetActualSubject().ToString());
         yield return new WaitForSeconds(2f);
         transitionManager.PlayTransition("Fade", "Fade");
         yield return new WaitForSeconds(2f);
-        transitionManager.HideVsCanvas();
+        transitionManager.ToggleVsCanvas(false);
         transitionManager.PlayTransition("Fade", "FadeOut");
+        transitionManager.DisableActualSubjectAnimation(levelsManager.GetActualSubject().ToString());
     }
 
     private void EndGame()
