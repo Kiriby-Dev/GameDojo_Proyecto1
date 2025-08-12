@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image boardBackground;
     [SerializeField] private Image battleBackground;
     [SerializeField] private Image table;
+    [SerializeField] private Image border;
     [SerializeField] private Sprite[] backgrounds;
     [SerializeField] private Sprite[] tables;
     
@@ -144,6 +145,10 @@ public class UIManager : MonoBehaviour
         boardBackground.sprite = backgrounds[(int)subject];
         battleBackground.sprite = backgrounds[(int)subject];
         table.sprite = tables[(int)subject];
+        if (subject == QuestionData.Subject.Principal)
+            border.enabled = true;
+        else
+            border.enabled = false;
     }
 
     #region Modes
@@ -159,6 +164,8 @@ public class UIManager : MonoBehaviour
         gameCanvas.enabled = false;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.PaperBreaking);
     }
 
     public IEnumerator BattleMode()
@@ -170,6 +177,8 @@ public class UIManager : MonoBehaviour
         battleCanvas.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.PaperBreaking);
         yield return new WaitForSeconds(2f);
     }
 
@@ -184,6 +193,8 @@ public class UIManager : MonoBehaviour
         gameCanvas.enabled = true;
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.PaperBreaking);
         yield return new WaitForSeconds(2f);
     }
     #endregion

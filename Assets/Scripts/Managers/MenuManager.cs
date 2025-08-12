@@ -86,6 +86,9 @@ public class MenuManager : MonoBehaviour
         _transitionManager.PlayTransition("Paper", "TransitionIn");
         yield return new WaitForSeconds(0.3f);
         
+        if (GameManager.Instance.GetAudioManager().GetActualMusic() != AudioManager.MusicList.Menu)
+            GameManager.Instance.GetAudioManager().PlayMusicWithFade(AudioManager.MusicList.Menu);
+        
         DisableAllCanvas();
         if (canvas)
             canvas.enabled = true;
@@ -99,6 +102,8 @@ public class MenuManager : MonoBehaviour
         }
         
         _transitionManager.PlayTransition("Paper", "TransitionOut");
+        yield return new WaitForSeconds(0.2f);
+        GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.PaperBreaking);
     }
 
     #region Utilities

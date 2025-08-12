@@ -61,9 +61,18 @@ public class GameFlowManager : MonoBehaviour
         }
         else
         {
-            _menuManager.DisableAllCanvas();
-            _menuManager.TogglePauseCanvas(true);
+            StartCoroutine(PlayFadeTransition());
         }
+        _audioManager.PlayMusicWithFade(AudioManager.MusicList.Game);
+    }
+
+    private IEnumerator PlayFadeTransition()
+    {
+        GameManager.Instance.GetTransitionManager().PlayTransition("Fade", "Fade");
+        yield return new WaitForSeconds(1f);
+        _menuManager.DisableAllCanvas();
+        _menuManager.TogglePauseCanvas(true);
+        GameManager.Instance.GetTransitionManager().PlayTransition("Fade", "FadeOut");
     }
 
     public void EndGame()

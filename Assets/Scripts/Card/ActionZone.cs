@@ -113,15 +113,21 @@ public class ActionZone : MonoBehaviour
         if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
         {
             _selectedCard.PlayDiscardAnimation(true);
+            GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.CrumpledPaper);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         _activeZone = false;
+
         if (zoneType == ZoneType.Discard && _currentPhase == PhaseManager.GamePhase.Discard)
         {
-            _selectedCard.PlayDiscardAnimation(false);
+            if (_selectedCard && _selectedCard.gameObject && !_isDropping)
+            {
+                _selectedCard.PlayDiscardAnimation(false);
+                GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.CrumpledPaper, 2f);
+            }
         }
     }
 

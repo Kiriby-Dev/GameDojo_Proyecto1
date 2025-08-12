@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -18,14 +19,20 @@ public class AudioManager : MonoBehaviour
         CardColocation,
         Discard,
         Heal,
-        Hurt
+        Hurt,
+        Bell,
+        CrumpledPaper,
+        PaperBreaking,
     }
 
     public enum MusicList
     {
         Menu,
+        Game,
     }
 
+    [SerializeField] private float fadeDuration;
+    
     [SerializeField] private List<AudioClip> audioClips;
     [SerializeField] private List<AudioClip> musicList;
 
@@ -37,6 +44,7 @@ public class AudioManager : MonoBehaviour
     private bool _masterMuted;
     private bool _sfxMuted;
     private bool _musicMuted;
+    private MusicList _actualMusic;
     
     public void PlayAudio(AudioList clipName, float pitch = 1.0f, bool oneShoot = true)
     {
@@ -50,6 +58,39 @@ public class AudioManager : MonoBehaviour
         musicSource.clip = musicList[(int)songName];
         musicSource.loop = true;
         musicSource.Play();
+        _actualMusic = songName;
+    }
+    
+    public void PlayMusicWithFade(MusicList songName, float pitch = 1.0f)
+    {
+        _actualMusic = songName;
+        StartCoroutine(FadeMusic(musicList[(int)songName]));
+    }
+    
+    private IEnumerator FadeMusic(AudioClip newClip)
+    {
+        float startVolume = musicSource.volume;
+
+        // Fade out
+        while (musicSource.volume > 0)
+        {
+            musicSource.volume -= startVolume * Time.deltaTime / fadeDuration;
+            yield return null;
+        }
+
+        musicSource.Stop();
+        musicSource.clip = newClip;
+        musicSource.loop = true;
+        musicSource.Play();
+
+        // Fade in
+        while (musicSource.volume < startVolume)
+        {
+            musicSource.volume += startVolume * Time.deltaTime / fadeDuration;
+            yield return null;
+        }
+
+        musicSource.volume = startVolume; // Asegurar que termine en el volumen exacto
     }
 
     public void PlayAudioPitched(AudioList clipName, bool oneShoot = true)
@@ -98,4 +139,6 @@ public class AudioManager : MonoBehaviour
     {
         mainMixer.SetFloat(parameter, (muted) ? -80.0f : 0.0f);
     }
+    
+    public MusicList GetActualMusic() => _actualMusic;
 }

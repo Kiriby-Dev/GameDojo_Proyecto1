@@ -22,7 +22,7 @@ public class TransitionManager : MonoBehaviour
             if (entry.name == gameObject)
             {
                 entry.animator.gameObject.SetActive(true);
-                entry.animator.SetTrigger(animation); 
+                entry.animator.SetTrigger(animation);
                 return;
             }
         }
@@ -38,7 +38,8 @@ public class TransitionManager : MonoBehaviour
             if (entry.name == gameObject)
             {
                 entry.animator.gameObject.SetActive(true);
-                entry.animator.Play(animation); 
+                entry.animator.Play(animation);
+                GameManager.Instance.GetAudioManager().PlayAudio(AudioManager.AudioList.Bell);
                 return;
             }
         }
